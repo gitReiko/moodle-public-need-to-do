@@ -28,3 +28,5 @@ $string['needtodo:viewteachersworkonsite'] = 'Просмотр работы уч
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';
 $string['pluginname'] = 'Нужно сделать';
+$string['teacherscohort_tool'] = 'Глобальная группа учителей, с которыми будет работать блок';
+$string['teacherscohort'] = 'Глобальная группа учителей';

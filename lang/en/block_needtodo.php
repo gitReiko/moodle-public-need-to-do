@@ -29,3 +29,5 @@ $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
 $string['pluginname'] = 'Need to do block';
 $string['pluginname'] = 'Need to do';
+$string['teacherscohort_tool'] = 'Teachers cohort, with which the block will work';
+$string['teacherscohort'] = 'Teachers cohort';

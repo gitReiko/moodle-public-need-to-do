@@ -67,4 +67,10 @@ class block_needtodo extends block_base {
             'my' => true,
         ];
     }
+
+    public function has_config() 
+    {
+        return true;
+    }
+    
 }
