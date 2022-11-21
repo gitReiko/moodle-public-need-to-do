@@ -23,6 +23,7 @@
  */
 
 $capabilities = [
+
     'block/needtodo:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
@@ -31,6 +32,7 @@ $capabilities = [
         ],
         'clonepermissionsfrom' => 'moodle/my:manageblocks'
     ],
+
     'block/needtodo:addinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
@@ -41,4 +43,23 @@ $capabilities = [
         ],
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ],
+
+    'block/needtodo:viewteachersworkonsite' => [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW
+        ]
+    ],
+
+    'block/needtodo:viewteachersworkincategory' => [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSECAT,
+        'archetypes' => [
+            'manager' => CAP_ALLOW
+        ]
+    ],
+
 ];

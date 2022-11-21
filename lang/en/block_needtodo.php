@@ -22,7 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Need to do block';
-$string['pluginname'] = 'Need to do';
+$string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
+$string['needtodo:viewteachersworkincategory'] = 'View the work of teachers from cohort in the course category';
+$string['needtodo:viewteachersworkonsite'] = 'View the work of teachers from cohort on the site';
 $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
+$string['pluginname'] = 'Need to do block';
+$string['pluginname'] = 'Need to do';

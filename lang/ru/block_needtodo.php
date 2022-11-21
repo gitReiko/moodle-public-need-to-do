@@ -22,6 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Нужно сделать';
+$string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
+$string['needtodo:viewteachersworkincategory'] = 'Просмотр работы учителей глобальной группы в категории курсов';
+$string['needtodo:viewteachersworkonsite'] = 'Просмотр работы учителей глобальной группы на сайте';
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';
+$string['pluginname'] = 'Нужно сделать';
