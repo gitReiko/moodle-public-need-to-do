@@ -3,6 +3,7 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../lib/getters/common.php';
+require_once __DIR__.'/../components/messanger/database_writer.php';
 
 /**
  * Writes data to the database.
@@ -23,8 +24,6 @@ class Main
     function __construct() 
     {
         $this->teachers = $this->get_all_monitored_teachers();
-
-        print_r($this->teachers);
     }
 
     /**
@@ -34,9 +33,9 @@ class Main
      */
     public function write_to_database() : void
     {
-        foreach($this->teachers as $teacher)
+        if(is_array($this->teachers))
         {
-            // chat messages
+            $this->write_messsanger($this->teachers);
             // forum posts
             // quiz works
             // assign works
@@ -73,6 +72,19 @@ class Main
     {
         $teachersIds = new \NTD\Classes\Lib\Getters\Common;
         return $teachersIds->get_cohort_teachers_from_global_settings();
+    }
+
+    /**
+     * Writes messanger related information to database.
+     * 
+     * @return void
+     */
+    private function write_messsanger() : void 
+    {
+        $messangerWriter = new \NTD\Classes\Components\Messanger\DatabaseWriter(
+            $this->teachers
+        );
+        $messangerWriter->write();
     }
 
 
