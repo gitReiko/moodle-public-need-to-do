@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once __DIR__.'/classes/renderer/content.php';
+
 class block_needtodo extends block_base {
 
     /**
@@ -48,7 +50,8 @@ class block_needtodo extends block_base {
         $this->content = new stdClass();
         $this->content->footer = '';
 
-        $this->content->text = 'YOUR DATA GOES HERE';
+        $ntdContent = new \NTD\Classes\Renderer\Content;
+        $this->content->text = $ntdContent->get_content();
 
         return $this->content;
     }
