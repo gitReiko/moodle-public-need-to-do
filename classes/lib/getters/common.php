@@ -21,7 +21,7 @@ class Common
         global $DB;
 
         $where = array(
-            'cohortid' => get_config('block_needtodo', 'teacherscohort')
+            'cohortid' => get_config('block_needtodo', 'monitored_teachers_cohort')
         );
 
         return $DB->get_records('cohort_members', $where, '', 'userid as id');

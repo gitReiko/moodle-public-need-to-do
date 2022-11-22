@@ -38,25 +38,15 @@ $capabilities = [
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => [
-            'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         ],
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ],
 
-    'block/needtodo:viewteachersworkonsite' => [
+    'block/needtodo:monitorteachersonsite' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-            'manager' => CAP_ALLOW
-        ]
-    ],
-
-    'block/needtodo:viewteachersworkincategory' => [
-        'riskbitmask' => RISK_PERSONAL,
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSECAT,
         'archetypes' => [
             'manager' => CAP_ALLOW
         ]

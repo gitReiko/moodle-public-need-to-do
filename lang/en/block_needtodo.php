@@ -23,11 +23,10 @@
  */
 
 $string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
-$string['needtodo:viewteachersworkincategory'] = 'View the work of teachers from cohort in the course category';
-$string['needtodo:viewteachersworkonsite'] = 'View the work of teachers from cohort on the site';
+$string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
 $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
 $string['pluginname'] = 'Need to do block';
 $string['pluginname'] = 'Need to do';
-$string['teacherscohort_tool'] = 'Teachers cohort, with which the block will work';
-$string['teacherscohort'] = 'Teachers cohort';
+$string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';
+$string['monitored_teachers_cohort'] = 'Monitored teachers cohort';

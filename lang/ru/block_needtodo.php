@@ -23,10 +23,9 @@
  */
 
 $string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
-$string['needtodo:viewteachersworkincategory'] = 'Просмотр работы учителей глобальной группы в категории курсов';
-$string['needtodo:viewteachersworkonsite'] = 'Просмотр работы учителей глобальной группы на сайте';
+$string['needtodo:monitorteachersonsite'] = 'Контроль за работой учителей на сайте';
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';
 $string['pluginname'] = 'Нужно сделать';
-$string['teacherscohort_tool'] = 'Глобальная группа учителей, с которыми будет работать блок';
-$string['teacherscohort'] = 'Глобальная группа учителей';
+$string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';
+$string['monitored_teachers_cohort'] = 'Гл. группа контролируемых учителей';

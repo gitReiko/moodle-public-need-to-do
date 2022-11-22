@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   =  2022112102;
+$plugin->version   =  2022112201;
 $plugin->requires  =  2016112900;
 $plugin->component =  'block_needtodo';
 

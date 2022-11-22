@@ -2,9 +2,9 @@
 
 $settings->add(
     new admin_setting_configtext(
-        'block_needtodo/teacherscohort', 
-        get_string('teacherscohort', 'block_needtodo'), 
-        get_string('teacherscohort_tool', 'block_needtodo'), 
+        'block_needtodo/monitored_teachers_cohort', 
+        get_string('monitored_teachers_cohort', 'block_needtodo'), 
+        get_string('monitored_teachers_cohort_tool', 'block_needtodo'), 
         1, 
         PARAM_INT
     )
