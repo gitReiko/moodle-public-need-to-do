@@ -3,6 +3,7 @@
 namespace NTD\Classes\Renderer;
 
 require_once __DIR__.'/../lib/getters/common.php';
+require_once __DIR__.'/../database_writer/main.php';
 
 /**
  * Forms the content of block Need to do.
@@ -18,8 +19,8 @@ class Content
     public function get_content() : string 
     {
 
-        $cohorts = new \NTD\Classes\Lib\Getters\Common;
-        print_r($cohorts->get_cohort_teachers_from_global_settings());
+        $writer = new \NTD\Classes\DatabaseWriter\Main;
+        $writer->write_to_database();
 
 
         return 'from block';

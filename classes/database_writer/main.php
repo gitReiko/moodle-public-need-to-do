@@ -22,7 +22,25 @@ class Main
      */
     function __construct() 
     {
-        //
+        $this->teachers = $this->get_all_monitored_teachers();
+
+        print_r($this->teachers);
+    }
+
+    /**
+     * Writes all necessary for block data into database.
+     * 
+     * @return void 
+     */
+    public function write_to_database() : void
+    {
+        foreach($this->teachers as $teacher)
+        {
+            // chat messages
+            // forum posts
+            // quiz works
+            // assign works
+        }
     }
 
     /**
@@ -30,10 +48,31 @@ class Main
      * 
      * @return array of all monitored teachers, if they exist
      * @return null if not
+     * 
+     * @todo handle teachers from custom block instances
      */
     private function get_all_monitored_teachers() 
     {
-        //
+        $teachersIds = $this->get_teachers_from_global_settings();
+        // add teachers ids from custom block instances
+        // unique teachers ids
+
+        // add teachers fullnames
+        // sort ascending
+
+        return $teachersIds;
+    }
+
+    /**
+     * Return teachers id from cohort which is defined in the global settings.
+     * 
+     * @return array of teachers ids, if they exist
+     * @return null if not
+     */
+    private function get_teachers_from_global_settings() 
+    {
+        $teachersIds = new \NTD\Classes\Lib\Getters\Common;
+        return $teachersIds->get_cohort_teachers_from_global_settings();
     }
 
 
