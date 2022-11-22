@@ -34,6 +34,30 @@ class Common
     }
 
     /**
+     * Returns in database condition from teachers array.
+     * 
+     * @param array of teachers
+     * 
+     * @return string in database condition
+     */
+    public static function get_teachers_in_database_condition(array $teachers) : string 
+    {
+        $inCondition = ' IN (';
+
+        foreach($teachers as $teacher)
+        {
+            $inCondition.= $teacher->id.',';
+        }
+
+        // Remove the last comma.
+        $inCondition = substr($inCondition, 0, -1);
+
+        $inCondition.= ') ';
+
+        return $inCondition;
+    }
+
+    /**
      * Return array of users from user and cohort_members database tables.
      * 
      * Returns only active users.
