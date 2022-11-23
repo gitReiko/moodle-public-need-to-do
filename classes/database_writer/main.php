@@ -70,8 +70,7 @@ class Main
      */
     private function get_teachers_from_global_settings() 
     {
-        $teachersIds = new \NTD\Classes\Lib\Getters\Common;
-        return $teachersIds->get_cohort_teachers_from_global_settings();
+        return \NTD\Classes\Lib\Getters\Common::get_cohort_teachers_from_global_settings();
     }
 
     /**

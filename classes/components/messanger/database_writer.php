@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Components\Messanger;
 
+use \NTD\Classes\Lib\Getters\Common as cGetter;
+
 /**
  * Writes messanger related information to database.
  * 
@@ -24,15 +26,11 @@ class DatabaseWriter
     {
         $this->teachers = $teachers;
 
-        $messages = $this->get_unreaded_messages();
+        $messages = $this->get_teachers_with_all_unreaded_messages();
 
-        // mdl_message_popup
-        // mdl_messages
-        // mdl_message_conversations
-        // get message for
-        // filter non user
+        // write to database
 
-        print_r($messages);
+        print_r($this->teachers);
     }
 
     /**
@@ -46,27 +44,100 @@ class DatabaseWriter
     }
 
     /**
-     * Returns all unreaded messages.
+     * Returns all unreaded messages send to teachers.
      * 
-     * @return array if messages exists
-     * @return null if not
+     * @return array of teachers with unreaded messages
      */
-    private function get_unreaded_messages()
+    private function get_teachers_with_all_unreaded_messages()
+    {
+        foreach($this->teachers as $teacher)
+        {
+            $teacher->messagesCount = 0;
+            $teacher->messagesFrom = array();
+
+            $messages = $this->get_all_teacher_messages($teacher->id);
+
+            foreach($messages as $message)
+            {
+                if($this->is_message_readed($message))
+                {
+                    continue;
+                }
+                else 
+                {
+                    if($this->is_message_from_user_doesnt_exist($teacher->messagesFrom, $message))
+                    {
+                        $teacher->messagesFrom[] = $message->useridfrom;
+                    }
+
+                    $teacher->messagesCount++;
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns all messages send to teacher.
+     * 
+     * @param int of teacher id
+     * 
+     * @return array of sended messages 
+     */
+    private function get_all_teacher_messages(int $teacherId)
     {
         global $DB;
 
-        $sql = 'SELECT m.id, mcm.userid, mcm.conversationid 
-                FROM {message_popup} AS mp 
-                INNER JOIN {messages} AS m 
-                ON mp.messageid = m.id 
-                INNER JOIN {message_conversation_members} AS mcm
-                ON m.conversationid = mcm.conversationid
-                WHERE mp.isread = 0
-                AND m.useridfrom <> mcm.userid';
+        $sql = "SELECT m.id, m.useridfrom, mcm.userid AS useridto, m.conversationid 
+                FROM {messages} AS m 
+                INNER JOIN {message_conversation_members} AS mcm 
+                ON m.conversationid = mcm.conversationid 
+                WHERE m.useridfrom <> mcm.userid
+                AND mcm.userid = ?";
 
-        $params = array();
+        $params = array($teacherId);
 
         return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Returns true if message is readed.
+     * 
+     * @param stdClass message
+     * 
+     * @return bool read status of the message
+     */
+    private function is_message_readed(\stdClass $message) : bool 
+    {
+        global $DB;
+
+        $where = array(
+            'userid' => $message->useridto,
+            'messageid' => $message->id,
+            'action' => 1
+        );
+
+        return $DB->record_exists('message_user_actions', $where);
+    }
+
+    /**
+     * Returns true if message from user doesn't exist.
+     * 
+     * @param array of messages from users
+     * @param stdClass of current message
+     * 
+     * @return bool of existence of a message
+     */
+    private function is_message_from_user_doesnt_exist(array $messagesFrom, \stdClass $message) : bool 
+    {
+        foreach($messagesFrom as $messageFrom)
+        {
+            if($messageFrom == $message->useridfrom)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
