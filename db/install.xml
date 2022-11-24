@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/needtodo/db" VERSION="20221124" COMMENT="XMLDB file for Moodle blocks/needtodo"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+
+<TABLES>
+
+    <TABLE NAME="block_needtodo" COMMENT="Contains the data necessary for the work of block needtodo.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" />
+        <FIELD NAME="component" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the component for which information was collected (assign, forum, quiz and etc.)" />
+        <FIELD NAME="teacherid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Contains ids from user table." />
+        <FIELD NAME="info" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" COMMENT="Information about the work to be done by the teacher. The data is stored in JSON format and processed by the component when rendering the block." />
+        <FIELD NAME="updatetime" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Time when the information was collected." />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for block_needtodo."/>
+      </KEYS>
+    </TABLE>
+
+</TABLES>
+</XMLDB>
