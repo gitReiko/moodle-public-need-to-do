@@ -27,8 +27,6 @@ class DatabaseWriter
     {
         $this->teachers = $teachers;
         $this->add_unreaded_messages_to_teachers();
-
-        print_r($this->teachers);
     }
 
     /**
@@ -39,7 +37,25 @@ class DatabaseWriter
     public function write() : void
     {
         $this->remove_unnecessary_teachers();
-        // write data to database
+        
+        foreach($this->teachers as $teacher)
+        {
+
+            if($this->is_teacher_have_unreaded_messages($teacher))
+            {
+                $cache = $this->get_database_record($teacher);
+
+                if($this->is_teacher_exists_in_database($teacher->id))
+                {
+                    $cache->id = $this->get_record_id($cache);
+                    $this->update_record_in_database($cache);
+                }
+                else 
+                {
+                    $this->add_record_to_database($cache);
+                }
+            }
+        }
     }
 
     /**
@@ -166,6 +182,106 @@ class DatabaseWriter
         $params = array(Enums::MESSANGER);
 
         $DB->execute($sql, $params);
+    }
+
+    /**
+     * Returns true if teacher exists in database.
+     * 
+     * @param int teacher id
+     * 
+     * @return bool 
+     */
+    private function is_teacher_exists_in_database(int $teacherId) : bool 
+    {
+        global $DB;
+
+        $where = array(
+            'component' => Enums::MESSANGER,
+            'teacherid' => $teacherId
+        );
+
+        return $DB->record_exists('block_needtodo', $where);
+    }
+
+    /**
+     * Returns database entry.
+     * 
+     * @param stdClass teacher
+     * 
+     * @return stdClass cache which stores information about teacher's unread messages
+     */
+    private function get_database_record(\stdClass $teacher) : \stdClass 
+    {
+        $cache = new \stdClass;
+        $cache->component = Enums::MESSANGER;
+        $cache->teacherid = $teacher->id;
+        $cache->info = json_encode($teacher->messages);
+        $cache->updatetime = time();
+        return $cache;
+    }
+
+    /**
+     * Returns true if teacher have unreaded messages.
+     * 
+     * @param stdClass teacher
+     * 
+     * @return bool 
+     */
+    private function is_teacher_have_unreaded_messages(\stdClass $teacher) : bool 
+    {
+        if(empty($teacher->messages->count))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * Adds record to database.
+     * 
+     * @param stdClass $cache which stores information about teacher's unread messages.
+     * 
+     * @return void 
+     */
+    private function add_record_to_database(\stdClass $cache) : void 
+    {
+        global $DB;
+        $DB->insert_record('block_needtodo', $cache);
+    }
+
+    /**
+     * Returns id of database record.
+     * 
+     * @param stdClass $cache which stores information about teacher's unread messages.
+     * 
+     * @return id of database record.
+     */
+    private function get_record_id(\stdClass $cache) : int 
+    {
+        global $DB;
+
+        $where = array(
+            'component' => $cache->component,
+            'teacherid' => $cache->teacherid
+        );
+
+        return $DB->get_field('block_needtodo', 'id', $where);
+    }
+
+    /**
+     * Updates record in database.
+     * 
+     * @param stdClass $cache which stores information about teacher's unread messages. 
+     * 
+     * @return void 
+     */
+    private function update_record_in_database($cache) : void 
+    {
+        global $DB;
+        $DB->update_record('block_needtodo', $cache);
     }
 
 }
