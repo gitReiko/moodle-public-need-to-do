@@ -2,7 +2,7 @@
 
 namespace NTD\Classes\Components\Messanger;
 
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use NTD\Classes\Lib\Getters\Common as cGetter;
 use NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -43,16 +43,16 @@ class DatabaseWriter
 
             if($this->is_teacher_have_unreaded_messages($teacher))
             {
-                $cache = $this->get_database_record($teacher);
+                $needtodo = $this->get_needtodo_record($teacher);
 
-                if($this->is_teacher_exists_in_database($teacher->id))
+                if($this->is_needtodo_record_exists_in_database($teacher->id))
                 {
-                    $cache->id = $this->get_record_id($cache);
-                    $this->update_record_in_database($cache);
+                    $needtodo->id = $this->get_needtodo_record_id($needtodo);
+                    $this->update_needtodo_record_in_database($needtodo);
                 }
                 else 
                 {
-                    $this->add_record_to_database($cache);
+                    $this->add_needtodo_record_to_database($needtodo);
                 }
             }
         }
@@ -185,13 +185,13 @@ class DatabaseWriter
     }
 
     /**
-     * Returns true if teacher exists in database.
+     * Returns true if needtodo record exists in database.
      * 
      * @param int teacher id
      * 
      * @return bool 
      */
-    private function is_teacher_exists_in_database(int $teacherId) : bool 
+    private function is_needtodo_record_exists_in_database(int $teacherId) : bool 
     {
         global $DB;
 
@@ -204,20 +204,20 @@ class DatabaseWriter
     }
 
     /**
-     * Returns database entry.
+     * Returns needtodo record for database.
      * 
      * @param stdClass teacher
      * 
-     * @return stdClass cache which stores information about teacher's unread messages
+     * @return stdClass needtodo record for database
      */
-    private function get_database_record(\stdClass $teacher) : \stdClass 
+    private function get_needtodo_record(\stdClass $teacher) : \stdClass 
     {
-        $cache = new \stdClass;
-        $cache->component = Enums::MESSANGER;
-        $cache->teacherid = $teacher->id;
-        $cache->info = json_encode($teacher->unreadedMessages);
-        $cache->updatetime = time();
-        return $cache;
+        $needtodo = new \stdClass;
+        $needtodo->component = Enums::MESSANGER;
+        $needtodo->teacherid = $teacher->id;
+        $needtodo->info = json_encode($teacher->unreadedMessages);
+        $needtodo->updatetime = time();
+        return $needtodo;
     }
 
     /**
@@ -240,48 +240,48 @@ class DatabaseWriter
     }
 
     /**
-     * Adds record to database.
+     * Adds needtodo record to database.
      * 
-     * @param stdClass $cache which stores information about teacher's unread messages.
+     * @param stdClass $needtodo record for database
      * 
      * @return void 
      */
-    private function add_record_to_database(\stdClass $cache) : void 
+    private function add_needtodo_record_to_database(\stdClass $needtodo) : void 
     {
         global $DB;
-        $DB->insert_record('block_needtodo', $cache);
+        $DB->insert_record('block_needtodo', $needtodo);
     }
 
     /**
-     * Returns id of database record.
+     * Returns id of database needtodo record.
      * 
-     * @param stdClass $cache which stores information about teacher's unread messages.
+     * @param stdClass $needtodo record for database
      * 
-     * @return id of database record.
+     * @return id of database needtodo record.
      */
-    private function get_record_id(\stdClass $cache) : int 
+    private function get_needtodo_record_id(\stdClass $needtodo) : int 
     {
         global $DB;
 
         $where = array(
-            'component' => $cache->component,
-            'teacherid' => $cache->teacherid
+            'component' => $needtodo->component,
+            'teacherid' => $needtodo->teacherid
         );
 
         return $DB->get_field('block_needtodo', 'id', $where);
     }
 
     /**
-     * Updates record in database.
+     * Updates needtodo record in database.
      * 
-     * @param stdClass $cache which stores information about teacher's unread messages. 
+     * @param stdClass $needtodo record for database 
      * 
      * @return void 
      */
-    private function update_record_in_database($cache) : void 
+    private function update_needtodo_record_in_database($needtodo) : void 
     {
         global $DB;
-        $DB->update_record('block_needtodo', $cache);
+        $DB->update_record('block_needtodo', $needtodo);
     }
 
 }
