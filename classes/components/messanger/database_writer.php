@@ -3,6 +3,7 @@
 namespace NTD\Classes\Components\Messanger;
 
 use \NTD\Classes\Lib\Getters\Common as cGetter;
+use NTD\Classes\Lib\Enums as Enums; 
 
 /**
  * Writes messanger related information to database.
@@ -37,6 +38,7 @@ class DatabaseWriter
      */
     public function write() : void
     {
+        $this->remove_unnecessary_teachers();
         // write data to database
     }
 
@@ -139,6 +141,31 @@ class DatabaseWriter
         }
 
         return true;
+    }
+
+    /**
+     * Removes all unnecessary teacher.
+     * 
+     * Deletes: suspended users, deleted users
+     * or users not more enrolled in the cohort.
+     * 
+     * The cohort specified in the global block settings
+     * 
+     */
+    private function remove_unnecessary_teachers() : void 
+    {
+        global $DB;
+
+        $teachersInCondition = cGetter::get_teachers_in_database_condition($this->teachers);
+
+        $sql = "DELETE
+                FROM {block_needtodo}
+                WHERE component = ?
+                AND teacherid NOT {$teachersInCondition}";
+
+        $params = array(Enums::MESSANGER);
+
+        $DB->execute($sql, $params);
     }
 
 }

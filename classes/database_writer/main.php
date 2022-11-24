@@ -3,6 +3,7 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../lib/getters/common.php';
+require_once __DIR__.'/../lib/enums.php';
 require_once __DIR__.'/../components/messanger/database_writer.php';
 
 /**
