@@ -25,10 +25,7 @@ class DatabaseWriter
     function __construct(array $teachers)
     {
         $this->teachers = $teachers;
-
-        $messages = $this->get_teachers_with_all_unreaded_messages();
-
-        // write to database
+        $this->add_unreaded_messages_to_teachers();
 
         print_r($this->teachers);
     }
@@ -44,18 +41,22 @@ class DatabaseWriter
     }
 
     /**
-     * Returns all unreaded messages send to teachers.
+     * Adds all unreaded messages to teachers.
      * 
      * @return array of teachers with unreaded messages
      */
-    private function get_teachers_with_all_unreaded_messages()
+    private function add_unreaded_messages_to_teachers()
     {
         foreach($this->teachers as $teacher)
         {
-            $teacher->messagesCount = 0;
-            $teacher->messagesFrom = array();
-
             $messages = $this->get_all_teacher_messages($teacher->id);
+
+            if(count($messages)) 
+            {
+                $teacher->messages = new \stdClass;
+                $teacher->messages->count = 0;
+                $teacher->messages->fromUsers = array();
+            }
 
             foreach($messages as $message)
             {
@@ -65,12 +66,12 @@ class DatabaseWriter
                 }
                 else 
                 {
-                    if($this->is_message_from_user_doesnt_exist($teacher->messagesFrom, $message))
+                    if($this->is_message_from_user_doesnt_exist($teacher->messages->fromUsers, $message))
                     {
-                        $teacher->messagesFrom[] = $message->useridfrom;
+                        $teacher->messages->fromUsers[] = $message->useridfrom;
                     }
 
-                    $teacher->messagesCount++;
+                    $teacher->messages->count++;
                 }
             }
         }
