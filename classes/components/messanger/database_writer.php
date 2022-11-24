@@ -67,42 +67,42 @@ class DatabaseWriter
     {
         foreach($this->teachers as $teacher)
         {
-            $messages = $this->get_all_teacher_messages($teacher->id);
+            $unreadedMessages = $this->get_all_teacher_unreaded_messages($teacher->id);
 
-            if(count($messages)) 
+            if(count($unreadedMessages)) 
             {
-                $teacher->messages = new \stdClass;
-                $teacher->messages->count = 0;
-                $teacher->messages->fromUsers = array();
+                $teacher->unreadedMessages = new \stdClass;
+                $teacher->unreadedMessages->count = 0;
+                $teacher->unreadedMessages->fromUsers = array();
             }
 
-            foreach($messages as $message)
+            foreach($unreadedMessages as $unreaded)
             {
-                if($this->is_message_readed($message))
+                if($this->is_message_readed($unreaded))
                 {
                     continue;
                 }
                 else 
                 {
-                    if($this->is_message_from_user_doesnt_exist($teacher->messages->fromUsers, $message))
+                    if($this->is_message_from_user_doesnt_exist($teacher->unreadedMessages->fromUsers, $unreaded))
                     {
-                        $teacher->messages->fromUsers[] = $message->useridfrom;
+                        $teacher->unreadedMessages->fromUsers[] = $unreaded->useridfrom;
                     }
 
-                    $teacher->messages->count++;
+                    $teacher->unreadedMessages->count++;
                 }
             }
         }
     }
 
     /**
-     * Returns all messages send to teacher.
+     * Returns all teacher unreaded messages.
      * 
-     * @param int of teacher id
+     * @param int teacher id
      * 
-     * @return array of sended messages 
+     * @return array of all teacher unreaded messages 
      */
-    private function get_all_teacher_messages(int $teacherId)
+    private function get_all_teacher_unreaded_messages(int $teacherId)
     {
         global $DB;
 
@@ -215,7 +215,7 @@ class DatabaseWriter
         $cache = new \stdClass;
         $cache->component = Enums::MESSANGER;
         $cache->teacherid = $teacher->id;
-        $cache->info = json_encode($teacher->messages);
+        $cache->info = json_encode($teacher->unreadedMessages);
         $cache->updatetime = time();
         return $cache;
     }
@@ -229,7 +229,7 @@ class DatabaseWriter
      */
     private function is_teacher_have_unreaded_messages(\stdClass $teacher) : bool 
     {
-        if(empty($teacher->messages->count))
+        if(empty($teacher->unreadedMessages->count))
         {
             return false;
         }
