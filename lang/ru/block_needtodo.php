@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['info_about_other_users'] = 'Информация о других пользователях';
 $string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';
 $string['monitored_teachers_cohort'] = 'Гл. группа контролируемых учителей';
 $string['needtodo:monitorteachersonsite'] = 'Контроль за работой учителей на сайте';
