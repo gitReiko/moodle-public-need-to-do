@@ -22,10 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
+$string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';
+$string['monitored_teachers_cohort'] = 'Гл. группа контролируемых учителей';
 $string['needtodo:monitorteachersonsite'] = 'Контроль за работой учителей на сайте';
+$string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';
 $string['pluginname'] = 'Нужно сделать';
-$string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';
-$string['monitored_teachers_cohort'] = 'Гл. группа контролируемых учителей';
+$string['update_data'] = 'Обновить данные';

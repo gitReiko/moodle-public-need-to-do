@@ -22,11 +22,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
+$string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';
+$string['monitored_teachers_cohort'] = 'Monitored teachers cohort';
 $string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
+$string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
 $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
 $string['pluginname'] = 'Need to do block';
 $string['pluginname'] = 'Need to do';
-$string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';
-$string['monitored_teachers_cohort'] = 'Monitored teachers cohort';
+$string['update_data'] = 'Update data';
