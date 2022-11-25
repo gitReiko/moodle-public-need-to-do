@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Renderer;
 
+require_once __DIR__.'/../components/messanger/renderer/manager.php';
+
 /**
  * Forms part of the block for the manager.
  */
@@ -17,6 +19,7 @@ class Manager
     {
         $manager = $this->get_new_line();
         $manager.= $this->get_manager_header();
+        $manager.= $this->get_messanger_part();
 
         return $manager;
     }
@@ -40,7 +43,19 @@ class Manager
     {
         $text = get_string('info_about_other_users', 'block_needtodo');
         $text = \html_writer::tag('b', $text);
+        $text = \html_writer::tag('p', $text);
         return $text;
+    }
+
+    /**
+     * Returns manager part of block content related to messanger.
+     * 
+     * @return string manager part of block content related to messanger
+     */
+    private function get_messanger_part() : string 
+    {
+        $renderer = new \NTD\Classes\Components\Messanger\Renderer\Manager;
+        return $renderer->get_messanger_part();
     }
 
 }

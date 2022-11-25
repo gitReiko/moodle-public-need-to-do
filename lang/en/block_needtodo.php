@@ -23,6 +23,7 @@
  */
 
 $string['info_about_other_users'] = 'Information about other users';
+$string['messages_not_readed_by_users'] = 'Messages not read by users';
 $string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';
 $string['monitored_teachers_cohort'] = 'Monitored teachers cohort';
 $string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
