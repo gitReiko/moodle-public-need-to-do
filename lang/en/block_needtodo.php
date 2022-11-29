@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['cache_data'] = 'Data caching for block Need to do block';
 $string['info_about_other_users'] = 'Information about other users';
 $string['messages_not_readed_by_users'] = 'Messages not read by users';
 $string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';

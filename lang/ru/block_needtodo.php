@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['cache_data'] = 'Кэширование данных для блока Нужно сделать';
 $string['info_about_other_users'] = 'Информация о других пользователях';
 $string['messages_not_readed_by_users'] = 'Сообщения, не прочитанные пользователями';
 $string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';

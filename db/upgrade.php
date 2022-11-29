@@ -44,4 +44,5 @@ function xmldb_block_needtodo_upgrade($oldversion)
         upgrade_block_savepoint(true, 2022112401, 'needtodo');
     }
 
+    return true;
 }

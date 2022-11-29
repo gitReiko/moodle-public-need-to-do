@@ -15,22 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version metadata for the block_needtodo plugin.
+ * Task schedule configuration for the plugintype_pluginname plugin.
  *
  * @package   block_needtodo
  * @copyright 2022, Denis Makouski khornau@gmail.com
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   =  2022112900;
-$plugin->requires  =  2016112900;
-$plugin->component =  'block_needtodo';
-
-/*
-$plugin->dependencies = [
-    'mod_forum' => 2022042100,
-    'mod_data' => 2022042100
-];
-*/
+$tasks = array(
+    array(
+        'classname' => '\block_needtodo\task\cache_data',
+        'blocking' => 0,
+        'minute' => '*/5',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 0
+    )
+);
