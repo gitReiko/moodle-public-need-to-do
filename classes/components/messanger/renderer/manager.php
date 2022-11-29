@@ -48,8 +48,8 @@ class Manager
             $row->email = $teacher->email;
             $row->phone1 = $teacher->phone1;
             $row->phone2 = $teacher->phone2;
-            $row->messagesCount = $messages->count;
-            $row->fromUsers = $messages->fromUsers;
+            $row->messagesCount = $messages->unreadedMessages->count;
+            $row->fromUsers = $messages->unreadedMessages->fromUsers;
 
             $data[] = $row;
         }

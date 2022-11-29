@@ -58,6 +58,26 @@ class Common
     }
 
     /**
+     * Returns user from user table. 
+     * 
+     * @param int $user id
+     * 
+     * @return stdClass user from user table 
+     */
+    public static function get_user(int $userId)
+    {
+        global $DB;
+
+        $where = array('id' => $userId);
+
+        $user = $DB->get_record('user', $where);
+
+        $user->fullname = fullname($user, true);
+
+        return $user;
+    }
+
+    /**
      * Return array of users from user and cohort_members database tables.
      * 
      * Returns only active users.

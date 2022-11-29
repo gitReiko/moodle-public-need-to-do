@@ -26,6 +26,7 @@ class DatabaseWriter
     function __construct(array $teachers)
     {
         $this->teachers = $teachers;
+        $this->add_teachers_data_to_info_field();
         $this->add_unreaded_messages_to_teachers();
     }
 
@@ -59,11 +60,30 @@ class DatabaseWriter
     }
 
     /**
-     * Adds all unreaded messages to teachers.
+     * Adds teachers data to teachers info field.
      * 
-     * @return array of teachers with unreaded messages
+     * @return void 
      */
-    private function add_unreaded_messages_to_teachers()
+    private function add_teachers_data_to_info_field() : void  
+    {
+        foreach($this->teachers as $teacher)
+        {
+            $teacher->info = new \stdClass;
+            $teacher->info->teacher = new \stdClass;
+            $teacher->info->teacher->id = $teacher->id;
+            $teacher->info->teacher->name = $teacher->fullname;
+            $teacher->info->teacher->email = $teacher->email;
+            $teacher->info->teacher->phone1 = $teacher->phone1;
+            $teacher->info->teacher->phone2 = $teacher->phone2;
+        }
+    }
+
+    /**
+     * Adds all unreaded messages to teachers info field.
+     * 
+     * @return void 
+     */
+    private function add_unreaded_messages_to_teachers() : void 
     {
         foreach($this->teachers as $teacher)
         {
@@ -71,9 +91,9 @@ class DatabaseWriter
 
             if(count($unreadedMessages)) 
             {
-                $teacher->unreadedMessages = new \stdClass;
-                $teacher->unreadedMessages->count = 0;
-                $teacher->unreadedMessages->fromUsers = array();
+                $teacher->info->unreadedMessages = new \stdClass;
+                $teacher->info->unreadedMessages->count = 0;
+                $teacher->info->unreadedMessages->fromUsers = array();
             }
 
             foreach($unreadedMessages as $unreaded)
@@ -84,13 +104,20 @@ class DatabaseWriter
                 }
                 else 
                 {
-                    if($this->is_message_from_user_doesnt_exist($teacher->unreadedMessages->fromUsers, $unreaded))
+                    if($this->is_message_from_user_doesnt_exist($teacher->info->unreadedMessages->fromUsers, $unreaded))
                     {
-                        $teacher->unreadedMessages->fromUsers[] = $unreaded->useridfrom;
+                        $teacher->info->unreadedMessages->fromUsers[] = $unreaded->useridfrom;
                     }
 
-                    $teacher->unreadedMessages->count++;
+                    $teacher->info->unreadedMessages->count++;
                 }
+            }
+
+            if($this->is_messages_users_exists($teacher))
+            {
+                $teacher->info->unreadedMessages->fromUsers = $this->get_from_users_with_names(
+                    $teacher->info->unreadedMessages->fromUsers
+                );
             }
         }
     }
@@ -136,6 +163,55 @@ class DatabaseWriter
         );
 
         return $DB->record_exists('message_user_actions', $where);
+    }
+
+    /**
+     * Returns true if messages users exists.
+     * 
+     * @param stdClass teacher
+     * 
+     * @return bool if messages users exists
+     */
+    private function is_messages_users_exists(\stdClass $teacher) : bool 
+    {
+        if(!empty($teacher->info->unreadedMessages->fromUsers))
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns from user array with names
+     * 
+     * @param array messages from users
+     * 
+     * @return array messages with names
+     */
+    private function get_from_users_with_names(array $fromUsers) 
+    {
+        $users = array();
+
+        foreach($fromUsers as $fromUser)
+        {
+            $temp = cGetter::get_user($fromUser);
+
+            $user = new \stdClass;
+            $user->id = $fromUser;
+            $user->name = $temp->fullname;
+
+            $users[] = $user;
+        }
+
+        usort($users, function($a, $b)
+        {
+            return strcmp($a->name, $b->name);
+        });
+
+        return $users;
     }
 
     /**
@@ -215,7 +291,7 @@ class DatabaseWriter
         $needtodo = new \stdClass;
         $needtodo->component = Enums::MESSANGER;
         $needtodo->teacherid = $teacher->id;
-        $needtodo->info = json_encode($teacher->unreadedMessages);
+        $needtodo->info = json_encode($teacher->info);
         $needtodo->updatetime = time();
         return $needtodo;
     }
@@ -229,7 +305,7 @@ class DatabaseWriter
      */
     private function is_teacher_have_unreaded_messages(\stdClass $teacher) : bool 
     {
-        if(empty($teacher->unreadedMessages->count))
+        if(empty($teacher->info->unreadedMessages->count))
         {
             return false;
         }
