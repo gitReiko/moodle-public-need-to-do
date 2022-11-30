@@ -106,7 +106,11 @@ class DatabaseWriter
                 {
                     if($this->is_message_from_user_doesnt_exist($teacher->info->unreadedMessages->fromUsers, $unreaded))
                     {
-                        $teacher->info->unreadedMessages->fromUsers[] = $unreaded->useridfrom;
+                        $teacher->info->unreadedMessages->fromUsers[] = $this->get_unread_user($unreaded->useridfrom);
+                    }
+                    else 
+                    {
+                        $this->increase_unreaded_count($teacher->info->unreadedMessages->fromUsers, $unreaded);
                     }
 
                     $teacher->info->unreadedMessages->count++;
@@ -115,9 +119,7 @@ class DatabaseWriter
 
             if($this->is_messages_users_exists($teacher))
             {
-                $teacher->info->unreadedMessages->fromUsers = $this->get_from_users_with_names(
-                    $teacher->info->unreadedMessages->fromUsers
-                );
+                $this->add_names_to_unread_users($teacher->info->unreadedMessages->fromUsers);
             }
         }
     }
@@ -174,44 +176,35 @@ class DatabaseWriter
      */
     private function is_messages_users_exists(\stdClass $teacher) : bool 
     {
-        if(!empty($teacher->info->unreadedMessages->fromUsers))
+        if(empty($teacher->info->unreadedMessages->fromUsers))
         {
-            return true;
+            return false;
         }
         else 
         {
-            return false;
+            return true;
         }
     }
 
     /**
-     * Returns from user array with names
+     * Adds names to unread users and sorts users by names
      * 
      * @param array messages from users
      * 
      * @return array messages with names
      */
-    private function get_from_users_with_names(array $fromUsers) 
+    private function add_names_to_unread_users(array $fromUsers) 
     {
-        $users = array();
-
         foreach($fromUsers as $fromUser)
         {
-            $temp = cGetter::get_user($fromUser);
-
-            $user = new \stdClass;
-            $user->id = $fromUser;
-            $user->name = $temp->fullname;
-
-            $users[] = $user;
+            $temp = cGetter::get_user($fromUser->id);
+            $fromUser->name = $temp->fullname;
         }
 
-        usort($users, function($a, $b)
+        usort($fromUsers, function($a, $b)
         {
             return strcmp($a->name, $b->name);
         });
-
-        return $users;
     }
 
     /**
@@ -226,13 +219,47 @@ class DatabaseWriter
     {
         foreach($messagesFrom as $messageFrom)
         {
-            if($messageFrom == $message->useridfrom)
+            if($messageFrom->id == $message->useridfrom)
             {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Returns unread user.
+     * 
+     * @param int user id
+     * 
+     * @return stdClass 
+     */
+    private function get_unread_user(int $userId) : \stdClass 
+    {
+        $user = new \stdClass;
+        $user->id = $userId;
+        $user->count = 1;
+        return $user;
+    }
+
+    /**
+     * Increases count of student unreaded messages.
+     * 
+     * @param array unreaded students
+     * @param stdClass unreaded item message
+     * 
+     * @return void 
+     */
+    private function increase_unreaded_count(array $fromUsers, \stdClass $unreaded) : void 
+    {
+        foreach($fromUsers as $fromUser)
+        {
+            if($fromUser->id == $unreaded->useridfrom)
+            {
+                $fromUser->count++;
+            }
+        }
     }
 
     /**

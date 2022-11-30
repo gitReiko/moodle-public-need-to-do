@@ -60,12 +60,16 @@ class Lib
 
         foreach($value->unreadedMessages->fromUsers as $fromUser)
         {
+            $attr = array('class' => 'ntd-undone-work');
+            $text = $fromUser->count;
+            $unreadedCount = \html_writer::tag('span', $text, $attr);
+
             $attr = array(
                 'class' => 'ntd-hidden-box ntd-level-2',
                 'data-teacher' => $value->teacher->id,
                 'data-user' => $fromUser->id
             );
-            $text = $fromUser->name;
+            $text = $fromUser->name.' ('.$unreadedCount.')';
             $lines.= \html_writer::tag('div', $text, $attr);
         }
 
