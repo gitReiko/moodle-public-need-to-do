@@ -7,6 +7,7 @@ require_once __DIR__.'/../lib/common.php';
 require_once __DIR__.'/../lib/enums.php';
 require_once __DIR__.'/../database_writer/main.php';
 require_once 'manager.php';
+require_once 'my_work.php';
 require_once 'update_button.php';
 
 use NTD\Classes\Lib\Common as cLib; 
@@ -34,6 +35,7 @@ class Content
     public function get_content() : string 
     {
         $content = $this->get_update_button();
+        $content.= $this->get_my_work();
 
         if(cLib::is_user_site_manager())
         {
@@ -71,6 +73,17 @@ class Content
     {
         $renderer = new UpdateButton;
         return $renderer->get_update_button();
+    }
+
+    /**
+     * Returns my work part of the block.
+     * 
+     * @return string my works part of the block
+     */
+    private function get_my_work() : string 
+    {
+        $renderer = new MyWork;
+        return $renderer->get_my_work();
     }
 
     /**

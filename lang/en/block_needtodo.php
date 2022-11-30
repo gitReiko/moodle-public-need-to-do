@@ -24,9 +24,10 @@
 
 $string['cache_data'] = 'Data caching for block Need to do block';
 $string['info_about_other_users'] = 'Information about other users';
-$string['messages_not_readed_by_users'] = 'Messages not read by users';
+$string['messages_not_read_in_chat'] = 'Messages unread in chat';
 $string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';
 $string['monitored_teachers_cohort'] = 'Monitored teachers cohort';
+$string['my_work'] = 'My work';
 $string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
 $string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
 $string['pluginname:addinstance'] = 'Add a new Need to do block';

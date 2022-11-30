@@ -24,9 +24,10 @@
 
 $string['cache_data'] = 'Кэширование данных для блока Нужно сделать';
 $string['info_about_other_users'] = 'Информация о других пользователях';
-$string['messages_not_readed_by_users'] = 'Сообщения, не прочитанные пользователями';
+$string['messages_not_read_in_chat'] = 'Сообщения не прочитанные в чате';
 $string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';
 $string['monitored_teachers_cohort'] = 'Гл. группа контролируемых учителей';
+$string['my_work'] = 'Моя работа';
 $string['needtodo:monitorteachersonsite'] = 'Контроль за работой учителей на сайте';
 $string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';

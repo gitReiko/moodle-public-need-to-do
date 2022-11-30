@@ -84,8 +84,8 @@ class Manager
      */
     private function get_messanger_header() : string 
     {
-        $attr = array('style' => 'text-decoration: underline');
-        $text = get_string('messages_not_readed_by_users', 'block_needtodo');
+        $attr = array('class' => 'ntd-messanger-header');
+        $text = get_string('messages_not_read_in_chat', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
     }
 

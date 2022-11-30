@@ -46,3 +46,19 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+
+.ntd-my-work-header 
+{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: large;
+    color: darkred;
+    cursor: default;
+}
+
+.ntd-messanger-header
+{
+    font-style: italic;
+    cursor: default;
+}
+
