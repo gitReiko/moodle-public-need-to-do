@@ -1,0 +1,27 @@
+
+.ntd-undone-work
+{
+    color: red;
+}
+
+.ntd-expandable-box
+{
+    cursor: pointer;
+}
+
+.ntd-hidden-box 
+{
+    display: none;
+}
+
+.ntd-level-1::before 
+{
+    content: "› ";
+}
+
+.ntd-level-2 
+{
+    margin-left: 10px;
+    background: #fff3dd;
+}
+

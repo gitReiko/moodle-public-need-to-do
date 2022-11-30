@@ -53,6 +53,8 @@ class block_needtodo extends block_base {
         $ntdContent = new \NTD\Classes\Renderer\Content;
         $this->content->text = $ntdContent->get_content();
 
+        $this->page->requires->js('/blocks/needtodo/js/common.js');
+
         return $this->content;
     }
 

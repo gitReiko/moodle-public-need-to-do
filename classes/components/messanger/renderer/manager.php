@@ -31,8 +31,7 @@ class Manager
     public function get_messanger_part() : string 
     {
         $msgr = $this->get_messanger_header();
-
-        print_r($this->data);
+        $msgr.= $this->get_teachers_list();
         
         return $msgr;
     }
@@ -88,5 +87,72 @@ class Manager
         $text = get_string('messages_not_readed_by_users', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
     }
+
+    /**
+     * Returns list of teachers with unreaded messages.
+     * 
+     * @return string teachers list
+     */
+    private function get_teachers_list() : string 
+    {
+        $list = '';
+
+        foreach($this->data as $value)
+        {
+            $list.= $this->get_teacher_line($value);
+            $list.= $this->get_unreaded_from_lines($value);
+        }
+
+        return $list;
+    }
+
+    /**
+     * Returns line which display teacher name and number of unreaded messages.
+     * 
+     * @param stdClass all data about one teacher
+     * 
+     * @return string teacher line
+     */
+    private function get_teacher_line(\stdClass $value) : string 
+    {
+        $attr = array('class' => 'ntd-undone-work');
+        $text = $value->unreadedMessages->count;
+        $unreadedCount = \html_writer::tag('span', $text, $attr);
+
+        $teacherName = $value->teacher->name;
+
+        $attr = array(
+            'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline',
+            'data-teacher' => $value->teacher->id
+        );
+        $line = $teacherName.' ('.$unreadedCount.')';
+        return \html_writer::tag('div', $line, $attr);
+    }
+
+    /**
+     * Returns lines which display users whose messages are unread.
+     * 
+     * @param stdClass all data about one teacher
+     * 
+     * @return string unreaded lines
+     */
+    private function get_unreaded_from_lines(\stdClass $value) : string 
+    {
+        $lines = '';
+
+        foreach($value->unreadedMessages->fromUsers as $fromUser)
+        {
+            $attr = array(
+                'class' => 'ntd-hidden-box ntd-level-2',
+                'data-teacher' => $value->teacher->id,
+                'data-user' => $fromUser->id
+            );
+            $text = $fromUser->name;
+            $lines.= \html_writer::tag('div', $text, $attr);
+        }
+
+        return $lines;
+    }
+
 
 }
