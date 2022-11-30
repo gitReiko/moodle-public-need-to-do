@@ -2,6 +2,10 @@
 
 namespace NTD\Classes\Components\Messanger\Renderer;
 
+require_once __DIR__.'/lib.php';
+
+use NTD\Classes\Lib\Enums as Enums;
+
 /**
  * Returns my work part of block related to messanger.
  */
@@ -10,14 +14,14 @@ class MyWork
     /**
      * Data necessary for rendering
      */
-    //private $data;
+    private $data;
 
     /**
      * Prepares data for class.
      */
     function __construct()
     {
-        //$this->prepare_data_for_rendering();
+        $this->prepare_data_for_rendering();
     }
 
     /**
@@ -27,22 +31,42 @@ class MyWork
      */
     public function get_messanger_part() : string 
     {
-        $msgr = $this->get_messanger_header();
-        //$msgr.= $this->get_my_unread_messages();
+        $msgr = '';
+
+        if(!empty($this->data))
+        {
+            $msgr = Lib::get_messanger_header();
+            $msgr.= $this->get_my_unread_messages();
+        }
         
         return $msgr;
     }
 
     /**
-     * Returns messanger header. 
-     * 
-     * @return string messanger header
+     * Prepares data necessary for rendering.
      */
-    private function get_messanger_header() : string 
+    private function prepare_data_for_rendering() : void 
     {
-        $attr = array('class' => 'ntd-messanger-header');
-        $text = get_string('messages_not_read_in_chat', 'block_needtodo');
-        return \html_writer::tag('p', $text, $attr);
+        global $DB, $USER;
+
+        $where = array(
+            'component' => Enums::MESSANGER,
+            'teacherid' => $USER->id
+        );
+
+        $this->data = json_decode($DB->get_field('block_needtodo', 'info', $where));
+    }
+
+    /**
+     * Returns messages unread by the teacher.
+     * 
+     * @return string unread messages
+     */
+    private function get_my_unread_messages() : string 
+    {
+        $list = Lib::get_teacher_line($this->data);
+        $list.= Lib::get_unreaded_from_lines($this->data);
+        return $list;
     }
 
 

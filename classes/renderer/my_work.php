@@ -17,10 +17,16 @@ class MyWork
      */
     public function get_my_work() : string 
     {
-        $myWork = $this->get_my_works_header();
-        $myWork.= $this->get_messanger_part();
+        $myWork = $this->get_messanger_part();
 
-        return $myWork;
+        if(empty($myWork))
+        {
+            return '';
+        }
+        else 
+        {
+            return $this->get_my_works_header().$myWork;
+        }
     }
 
     /**

@@ -58,6 +58,7 @@
 
 .ntd-messanger-header
 {
+    margin-bottom: 4px;
     font-style: italic;
     cursor: default;
 }
