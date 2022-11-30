@@ -3,6 +3,7 @@
 namespace NTD\Classes\Components\Messanger\Renderer;
 
 use NTD\Classes\Lib\Getters\Common as cGetter;
+use NTD\Classes\Lib\Common as cLib;
 use NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -122,8 +123,9 @@ class Manager
         $teacherName = $value->teacher->name;
 
         $attr = array(
-            'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline',
-            'data-teacher' => $value->teacher->id
+            'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline ntd-tooltip',
+            'data-teacher' => $value->teacher->id,
+            'title' => cLib::get_teacher_contacts($value->teacher)
         );
         $line = $teacherName.' ('.$unreadedCount.')';
         return \html_writer::tag('div', $line, $attr);
