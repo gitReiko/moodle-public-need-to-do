@@ -73,7 +73,7 @@ class Lib
             {
                 $attr2 = array(
                     'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-pointer',
-                    'onclick' => 'window.location.replace("/message/index.php");'
+                    'onclick' => 'window.location.replace("/message/index.php");' // redirect to link 
                 );
             }
             else 
