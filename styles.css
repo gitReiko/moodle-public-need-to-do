@@ -25,6 +25,16 @@
     background: #fff3dd;
 }
 
+.ntd-cursor-default 
+{
+    cursor: default;
+}
+
+.ntd-cursor-pointer 
+{
+    cursor: pointer;
+}
+
 .ntd-tooltip-box
 {
     position:absolute;

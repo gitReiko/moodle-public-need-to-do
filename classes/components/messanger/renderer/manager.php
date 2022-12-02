@@ -86,12 +86,13 @@ class Manager
      */
     private function get_teachers_list() : string 
     {
+        $linkToChat = false;
         $list = '';
 
         foreach($this->data as $value)
         {
             $list.= Lib::get_teacher_line($value);
-            $list.= Lib::get_unreaded_from_lines($value);
+            $list.= Lib::get_unreaded_from_lines($value, $linkToChat);
         }
 
         return $list;

@@ -54,7 +54,7 @@ class Lib
      * 
      * @return string unreaded lines
      */
-    public static function get_unreaded_from_lines(\stdClass $value) : string 
+    public static function get_unreaded_from_lines(\stdClass $value, bool $linkToChat = false) : string 
     {
         $lines = '';
 
@@ -65,10 +65,26 @@ class Lib
             $unreadedCount = \html_writer::tag('span', $text, $attr);
 
             $attr = array(
-                'class' => 'ntd-hidden-box ntd-level-2',
                 'data-teacher' => $value->teacher->id,
                 'data-user' => $fromUser->id
             );
+
+            if($linkToChat)
+            {
+                $attr2 = array(
+                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-pointer',
+                    'onclick' => 'window.location.replace("/message/index.php");'
+                );
+            }
+            else 
+            {
+                $attr2 = array(
+                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-default'
+                );
+            }
+
+            $attr = array_merge($attr, $attr2);
+
             $text = $fromUser->name.' ('.$unreadedCount.')';
             $lines.= \html_writer::tag('div', $text, $attr);
         }

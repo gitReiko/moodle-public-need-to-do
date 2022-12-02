@@ -64,8 +64,9 @@ class MyWork
      */
     private function get_my_unread_messages() : string 
     {
+        $linkToChat = true;
         $list = Lib::get_teacher_line($this->data);
-        $list.= Lib::get_unreaded_from_lines($this->data);
+        $list.= Lib::get_unreaded_from_lines($this->data, $linkToChat);
         return $list;
     }
 
