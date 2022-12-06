@@ -22,7 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['block_instance_setup'] = 'Block instance setup';
 $string['cache_data'] = 'Data caching for block Need to do block';
+$string['cohort_not_exist'] = 'No cohort exists. Create a cohort to use this setting.';
+$string['config_local_cohort_help'] = 'The block will only work with teachers from the selected cohort. If the selected cohort does not exist, then the block\'s global setting will be used.';
+$string['config_local_cohort'] = 'Work with a cohort';
 $string['info_about_other_users'] = 'Information about other users';
 $string['last_name_sent'] = 'Last message sent';
 $string['message_sent_by'] = 'Message sent by';
@@ -30,11 +34,12 @@ $string['messages_not_read_in_chat'] = 'Messages unread in chat';
 $string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whose work will be monitored by the block.';
 $string['monitored_teachers_cohort'] = 'Monitored teachers cohort';
 $string['my_work'] = 'My work';
-$string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
 $string['needtodo:monitorteachersincategory'] = 'Monitoring the work of teachers in the course category';
+$string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
 $string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
 $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
 $string['pluginname'] = 'Need to do block';
 $string['pluginname'] = 'Need to do';
 $string['update_data'] = 'Update data';
+$string['use_settings_below'] = 'Use the settings below';

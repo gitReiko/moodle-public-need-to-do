@@ -77,5 +77,10 @@ class block_needtodo extends block_base {
     {
         return true;
     }
+
+    public function instance_allow_multiple()
+    {
+        return true;
+    }
     
 }

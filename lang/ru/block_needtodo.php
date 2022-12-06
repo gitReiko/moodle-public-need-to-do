@@ -22,7 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['block_instance_setup'] = 'Настройка экземпляра блока';
 $string['cache_data'] = 'Кэширование данных для блока Нужно сделать';
+$string['cohort_not_exist'] = 'Не существует ни одной группы. Создайте глобальную группу, чтобы использовать эту настройку.';
+$string['config_local_cohort_help'] = 'Блок будет работать только с преподавателями из выбранной глобальной группы. Если выбранная глобальная группа не существует, то будет использоваться глобальная настройка блока.';
+$string['config_local_cohort'] = 'Работать с глобальной группой';
 $string['info_about_other_users'] = 'Информация о других пользователях';
 $string['last_name_sent'] = 'Последнее сообщение отправлено';
 $string['message_sent_by'] = 'Сообщение отправил(а)';
@@ -37,3 +41,4 @@ $string['pluginname:addinstance'] = 'Добавить новый блок Нуж
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';
 $string['pluginname'] = 'Нужно сделать';
 $string['update_data'] = 'Обновить данные';
+$string['use_settings_below'] = 'Использовать приведённые ниже настройки';
