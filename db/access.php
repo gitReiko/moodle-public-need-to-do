@@ -52,4 +52,13 @@ $capabilities = [
         ]
     ],
 
+    'block/needtodo:monitorteachersincategory' => [
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSECAT,
+        'archetypes' => [
+            'manager' => CAP_ALLOW
+        ]
+    ],
+
 ];

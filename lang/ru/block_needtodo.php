@@ -30,6 +30,7 @@ $string['messages_not_read_in_chat'] = 'Сообщения не прочитан
 $string['monitored_teachers_cohort_tool'] = 'Глобальная группа контролируемых учителей, работу которых будет отслеживать блок.';
 $string['monitored_teachers_cohort'] = 'Гл. группа контролируемых учителей';
 $string['my_work'] = 'Моя работа';
+$string['needtodo:monitorteachersincategory'] = 'Контроль за работой учителей в категории курсов';
 $string['needtodo:monitorteachersonsite'] = 'Контроль за работой учителей на сайте';
 $string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';

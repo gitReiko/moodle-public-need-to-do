@@ -31,6 +31,7 @@ $string['monitored_teachers_cohort_tool'] = 'A cohort of monitored teachers whos
 $string['monitored_teachers_cohort'] = 'Monitored teachers cohort';
 $string['my_work'] = 'My work';
 $string['needtodo:monitorteachersonsite'] = 'Monitoring the work of teachers on the site';
+$string['needtodo:monitorteachersincategory'] = 'Monitoring the work of teachers in the course category';
 $string['needtodo:myaddinstance'] = 'Add a new «Need to do» block to the My Moodle page';
 $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
