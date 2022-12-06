@@ -18,7 +18,7 @@ class Common
      * @return array of teachers if there are users in the cohort.
      * @return null if the cohort is empty.
      */
-    public static function get_cohort_teachers_from_global_settings()
+    public static function get_teachers_from_global_block_settings()
     {
         $cohortId = get_config('block_needtodo', 'monitored_teachers_cohort');
 
@@ -30,6 +30,21 @@ class Common
             $teachers = self::sort_teachers_by_fullname($teachers); 
         }
 
+        return $teachers;
+    }
+
+    /**
+     * Return array of teachers which contains only the user who wants to update the data.
+     * 
+     * Required for users who wants to update their data.
+     * 
+     * @return array teachers with only user
+     */
+    public static function get_teachers_array_with_user_only()
+    {
+        global $USER;
+        $teachers = array($USER);
+        $teachers = self::add_fullnames_to_teachers_array($teachers);
         return $teachers;
     }
 

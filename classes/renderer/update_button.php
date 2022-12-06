@@ -23,7 +23,11 @@ class UpdateButton
 
         if(cLib::is_user_site_manager())
         {
-            $btn.= $this->get_update_all_site_data_param();
+            $btn.= $this->get_param_update_data_on_site_level();
+        }
+        else 
+        {
+            $btn.= $this->get_param_update_data_on_user_level();
         }
         
         $btn.= $this->get_button();
@@ -45,16 +49,31 @@ class UpdateButton
     }
 
     /**
-     * Returns param required to update all site data.
+     * Returns param required to update the data at the site level.
      * 
-     * @return string param required to update all site data
+     * @return string param required to update 
      */
-    private function get_update_all_site_data_param() : string 
+    private function get_param_update_data_on_site_level() : string 
     {
         $attr = array(
             'type' => 'hidden',
             'name' => Enums::NEEDTODO_UPDATE_BUTTON,
-            'value' => Enums::NEEDTODO_SITE_UPDATE
+            'value' => Enums::UPDATE_DATA_ON_SITE_LEVEL
+        );
+        return \html_writer::empty_tag('input', $attr);
+    }
+
+    /**
+     * Returns param required to update the data at the user level.
+     * 
+    * @return string param required to update 
+     */
+    private function get_param_update_data_on_user_level() : string 
+    {
+        $attr = array(
+            'type' => 'hidden',
+            'name' => Enums::NEEDTODO_UPDATE_BUTTON,
+            'value' => Enums::UPDATE_DATA_ON_USER_LEVEL
         );
         return \html_writer::empty_tag('input', $attr);
     }

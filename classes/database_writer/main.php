@@ -6,6 +6,9 @@ require_once __DIR__.'/../lib/getters/common.php';
 require_once __DIR__.'/../lib/enums.php';
 require_once __DIR__.'/../components/messanger/database_writer.php';
 
+use \NTD\Classes\Lib\Getters\Common as cGetter;
+use NTD\Classes\Lib\Enums as Enums; 
+
 /**
  * Writes data to the database.
  * 
@@ -14,6 +17,14 @@ require_once __DIR__.'/../components/messanger/database_writer.php';
  */
 class Main 
 {
+
+    /**
+     * The level at which data can be updated.
+     * 
+     * Can be site, course category or user.
+     */
+    private $updateLevel;
+
     /**
      * All teachers whose work is monitored by the block
      */
@@ -22,9 +33,10 @@ class Main
     /**
      * Prepares data for the class.
      */
-    function __construct() 
+    function __construct(string $updateLevel) 
     {
-        $this->teachers = $this->get_all_monitored_teachers();
+        $this->updateLevel = $updateLevel;
+        $this->teachers = $this->get_teachers();
     }
 
     /**
@@ -36,7 +48,7 @@ class Main
     {
         if(is_array($this->teachers))
         {
-            $this->write_messsanger($this->teachers);
+            $this->write_messsanger();
             // forum posts
             // quiz works
             // assign works
@@ -44,34 +56,31 @@ class Main
     }
 
     /**
-     * Returns all teachers whose work is monitored by the block.
+     * Returns all teachers whose work data needs to be updated.
      * 
-     * @return array of all monitored teachers, if they exist
+     * @return array if teachers exist
      * @return null if not
      * 
      * @todo handle teachers from custom block instances
      */
-    private function get_all_monitored_teachers() 
+    private function get_teachers() 
     {
-        $teachersIds = $this->get_teachers_from_global_settings();
-        // add teachers ids from custom block instances
-        // unique teachers ids
-
-        // add teachers fullnames
-        // sort ascending
-
-        return $teachersIds;
-    }
-
-    /**
-     * Return teachers id from cohort which is defined in the global settings.
-     * 
-     * @return array of teachers ids, if they exist
-     * @return null if not
-     */
-    private function get_teachers_from_global_settings() 
-    {
-        return \NTD\Classes\Lib\Getters\Common::get_cohort_teachers_from_global_settings();
+        if($this->updateLevel === Enums::UPDATE_DATA_ON_SITE_LEVEL)
+        {
+            return cGetter::get_teachers_from_global_block_settings();
+        }
+        else if($this->updateLevel === Enums::UPDATE_DATA_ON_COURSE_CATEGORY_LEVEL)
+        {
+            //return $this->get_teachers_from_local_block_settings();
+        }
+        else if($this->updateLevel === Enums::UPDATE_DATA_ON_USER_LEVEL)
+        {
+            return cGetter::get_teachers_array_with_user_only();
+        }
+        else 
+        {
+            throw new \Exception('Update data on unknown level (block Need to do).');
+        }
     }
 
     /**
@@ -82,7 +91,7 @@ class Main
     private function write_messsanger() : void 
     {
         $messangerWriter = new \NTD\Classes\Components\Messanger\DatabaseWriter(
-            $this->teachers
+            $this->teachers 
         );
         $messangerWriter->write();
     }

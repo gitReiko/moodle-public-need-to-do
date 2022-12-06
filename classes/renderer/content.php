@@ -52,15 +52,12 @@ class Content
      */
     private function update_data_if_necessary() : void 
     {
-        $update = optional_param(Enums::NEEDTODO_UPDATE_BUTTON, null, PARAM_TEXT);
+        $updateLevel = optional_param(Enums::NEEDTODO_UPDATE_BUTTON, null, PARAM_TEXT);
 
-        switch($update)
+        if($updateLevel !== null)
         {
-            case Enums::NEEDTODO_SITE_UPDATE :
-
-                $writer = new \NTD\Classes\DatabaseWriter\Main;
-                $writer->write_to_database();
-                break;
+            $writer = new \NTD\Classes\DatabaseWriter\Main($updateLevel);
+            $writer->write_to_database();
         }
     }
 

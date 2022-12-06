@@ -66,7 +66,7 @@ class Manager
     {
         global $DB;
 
-        $teachers = cGetter::get_cohort_teachers_from_global_settings();
+        $teachers = cGetter::get_teachers_from_global_block_settings();
         $teachersInCondition = cGetter::get_teachers_in_database_condition($teachers);
 
         $sql = "SELECT * 
