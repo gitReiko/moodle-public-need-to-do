@@ -77,7 +77,7 @@ class Content
      */
     private function get_update_button() : string 
     {
-        $renderer = new UpdateButton;
+        $renderer = new UpdateButton($this->config);
         return $renderer->get_update_button();
     }
 

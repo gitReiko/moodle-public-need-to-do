@@ -21,7 +21,7 @@ class MainWeb extends Main
     /**
      * Block instance config.
      */
-    private $config;
+    protected $config;
 
     /**
      * The level at which data can be updated.
@@ -59,9 +59,9 @@ class MainWeb extends Main
         {
             return cGetter::get_teachers_from_global_block_settings();
         }
-        else if($this->updateLevel === Enums::UPDATE_DATA_ON_COURSE_CATEGORY_LEVEL)
+        else if($this->updateLevel === Enums::UPDATE_DATA_ON_BLOCK_INSTANCE_LEVEL)
         {
-            //return $this->get_teachers_from_local_block_settings();
+            return cGetter::get_teachers_for_block_instance($this->config->local_cohort);
         }
         else if($this->updateLevel === Enums::UPDATE_DATA_ON_USER_LEVEL)
         {
@@ -71,6 +71,20 @@ class MainWeb extends Main
         {
             throw new \Exception('Update data on unknown level (block Need to do).');
         }
+    }
+
+    /**
+     * Writes messanger related information to database.
+     * 
+     * @return void
+     */
+    protected function write_messsanger() : void 
+    {
+        $messangerWriter = new \NTD\Classes\Components\Messanger\DatabaseWriter(
+            $this->teachers,
+            $this->updateLevel
+        );
+        $messangerWriter->write();
     }
 
 }

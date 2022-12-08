@@ -19,13 +19,19 @@ class DatabaseWriter
     private $teachers;
 
     /**
+     * Level on which data must be updated.
+     */
+    private $updateLevel;
+
+    /**
      * Prepares data for the class.
      * 
      * @param array of all teachers whose work is monitored by the block
      */
-    function __construct(array $teachers)
+    function __construct(array $teachers, string $updateLevel)
     {
         $this->teachers = $teachers;
+        $this->updateLevel = $updateLevel;
         $this->prepare_teachers_info_field();
     }
 
@@ -36,7 +42,10 @@ class DatabaseWriter
      */
     public function write() : void
     {
-        $this->remove_unnecessary_teachers();
+        if($this->updateLevel === Enums::UPDATE_DATA_ON_SITE_LEVEL)
+        {
+            $this->remove_unnecessary_teachers();
+        }
         
         foreach($this->teachers as $teacher)
         {

@@ -17,6 +17,11 @@ abstract class Main
 {
 
     /**
+     * Block instance config.
+     */
+    protected $config;
+
+    /**
      * The level at which data can be updated.
      * 
      * Can be site, course category or user.
@@ -54,13 +59,7 @@ abstract class Main
      * 
      * @return void
      */
-    protected function write_messsanger() : void 
-    {
-        $messangerWriter = new \NTD\Classes\Components\Messanger\DatabaseWriter(
-            $this->teachers 
-        );
-        $messangerWriter->write();
-    }
+    abstract protected function write_messsanger() : void ;
 
 
 

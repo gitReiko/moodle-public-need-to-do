@@ -13,6 +13,21 @@ class UpdateButton
 {
 
     /**
+     * Block instance config.
+     */
+    private $config;
+
+    /**
+     * Prepares data and updates data if necessary.
+     * 
+     * @param stdClass $config
+     */
+    function __construct(\stdClass $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Returns an update button for a block in html format.
      * 
      * @return string update button for a block
@@ -23,7 +38,14 @@ class UpdateButton
 
         if(cLib::is_user_site_manager())
         {
-            $btn.= $this->get_param_update_data_on_site_level();
+            if($this->config->use_local_settings)
+            {
+                $btn.= $this->get_param_update_data_on_block_instance_level();
+            }
+            else 
+            {
+                $btn.= $this->get_param_update_data_on_site_level();
+            }
         }
         else 
         {
@@ -46,6 +68,22 @@ class UpdateButton
     {
         $attr = array('method' => 'post');
         return \html_writer::start_tag('form', $attr);
+    }
+
+    
+    /**
+     * Returns param required to update the data at block instance level.
+     * 
+     * @return string param required to update 
+     */
+    private function get_param_update_data_on_block_instance_level() : string 
+    {
+        $attr = array(
+            'type' => 'hidden',
+            'name' => Enums::NEEDTODO_UPDATE_BUTTON,
+            'value' => Enums::UPDATE_DATA_ON_BLOCK_INSTANCE_LEVEL
+        );
+        return \html_writer::empty_tag('input', $attr);
     }
 
     /**
