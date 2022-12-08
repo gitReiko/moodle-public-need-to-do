@@ -14,6 +14,11 @@ use NTD\Classes\Lib\Enums as Enums;
 class Manager  
 {
     /**
+     * Block instance config.
+     */
+    private $config;
+
+    /**
      * Data necessary for rendering
      */
     private $data;
@@ -21,8 +26,9 @@ class Manager
     /**
      * Prepares data for class.
      */
-    function __construct()
+    function __construct($config)
     {
+        $this->config = $config;
         $this->prepare_data_for_rendering();
     }
 

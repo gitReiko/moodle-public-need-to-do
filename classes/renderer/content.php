@@ -5,7 +5,7 @@ namespace NTD\Classes\Renderer;
 require_once __DIR__.'/../lib/getters/common.php';
 require_once __DIR__.'/../lib/common.php';
 require_once __DIR__.'/../lib/enums.php';
-require_once __DIR__.'/../database_writer/main.php';
+require_once __DIR__.'/../database_writer/main_web.php';
 require_once 'manager.php';
 require_once 'my_work.php';
 require_once 'update_button.php';
@@ -20,10 +20,19 @@ class Content
 {
 
     /**
-     * Updates data if necessary.
+     * Block instance config.
      */
-    function __construct()
+    private $config;
+
+    /**
+     * Prepares data and updates data if necessary.
+     * 
+     * @param stdClass $config
+     */
+    function __construct(\stdClass $config)
     {
+        $this->config = $config;
+
         $this->update_data_if_necessary();
     }
 
@@ -56,7 +65,7 @@ class Content
 
         if($updateLevel !== null)
         {
-            $writer = new \NTD\Classes\DatabaseWriter\Main($updateLevel);
+            $writer = new \NTD\Classes\DatabaseWriter\MainWeb($this->config, $updateLevel);
             $writer->write_to_database();
         }
     }
@@ -90,7 +99,7 @@ class Content
      */
     private function get_manager_part_of_block() : string 
     {
-        $renderer = new Manager;
+        $renderer = new Manager($this->config);
         return $renderer->get_manager_part();
     }
 

@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['block_instance_name'] = 'Название экземпляра блока';
 $string['block_instance_setup'] = 'Настройка экземпляра блока';
 $string['cache_data'] = 'Кэширование данных для блока Нужно сделать';
 $string['cohort_not_exist'] = 'Не существует ни одной группы. Создайте глобальную группу, чтобы использовать эту настройку.';

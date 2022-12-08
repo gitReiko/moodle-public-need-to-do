@@ -33,25 +33,28 @@ class block_needtodo_edit_form extends block_edit_form
         // Section header title
         $mform->addElement('header', 'config_header', get_string('block_instance_setup', 'block_needtodo'));
 
-        // Use local block settings
+        // Use custom settings for block instance
         $mform->addElement('selectyesno', 'config_use_local_settings', get_string('use_settings_below', 'block_needtodo'));
         $mform->setDefault('config_use_local_settings', 0);
 
-        // Cohorts selector
+        // Block instance name
+        $mform->addElement('text', 'config_block_name', get_string('block_instance_name', 'block_needtodo'), array('maxlength' => 255, 'size' => 50));
+        $mform->setType('config_block_name', PARAM_RAW);
 
-        // Cohorts options
+        // Cohorts selector
         $cohorts = $DB->get_records('cohort', array(), 'name', 'id,name');
+
+        $cohortsoptions = array();
+        
         if($cohorts === null)
         {
-            $cohortsoptions = array(0 => get_string('cohort_not_exist', 'block_needtodo'));
+            $cohortsoptions += array(0 => get_string('cohort_not_exist', 'block_needtodo'));
         }
         else 
         {
-            $cohortsoptions = array();
-
             foreach($cohorts as $cohort)
             {
-                $cohortsoptions = array_merge($cohortsoptions, array($cohort->id => $cohort->name));
+                $cohortsoptions += array($cohort->id => $cohort->name);
             }
         }
 

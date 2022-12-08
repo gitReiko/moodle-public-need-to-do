@@ -36,6 +36,28 @@ class block_needtodo extends block_base {
     }
 
     /**
+     * Sets custom block instance name.
+     */
+    function specialization() 
+    {
+        if($this->config->use_local_settings)
+        {
+            if(empty($this->config->block_name))
+            {
+                $this->title = get_string('pluginname', 'block_needtodo');
+            }
+            else 
+            {
+                $this->title = $this->config->block_name;
+            }
+        }
+        else
+        {
+            $this->title = get_string('pluginname', 'block_needtodo');
+        }
+    }
+
+    /**
      * Gets the block contents.
      *
      * @return string The block HTML.
@@ -50,7 +72,7 @@ class block_needtodo extends block_base {
         $this->content = new stdClass();
         $this->content->footer = '';
 
-        $ntdContent = new \NTD\Classes\Renderer\Content;
+        $ntdContent = new \NTD\Classes\Renderer\Content($this->config);
         $this->content->text = $ntdContent->get_content();
 
         $this->page->requires->js('/blocks/needtodo/js/common.js');
