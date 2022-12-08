@@ -9,7 +9,7 @@ class Common
 {
     
     /**
-     * Return array of teachers with which the block will work.
+     * Returns the teachers with whom the block works.
      * 
      * Based on the cohort specified in the global block settings.
      * 
@@ -22,6 +22,29 @@ class Common
     {
         $cohortId = get_config('block_needtodo', 'monitored_teachers_cohort');
 
+        $teachers = self::get_users_from_cohort($cohortId);
+
+        if(is_array($teachers))
+        {
+            $teachers = self::add_fullnames_to_teachers_array($teachers);
+            $teachers = self::sort_teachers_by_fullname($teachers); 
+        }
+
+        return $teachers;
+    }
+
+    /**
+     * Returns the teachers with whom the block works.
+     * 
+     * This function expects cohort id from block instance.
+     * 
+     * Returns only active users.
+     * 
+     * @return array of teachers if there are users in the cohort.
+     * @return null if the cohort is empty.
+     */
+    public static function get_teachers_for_block_instance(int $cohortId)
+    {
         $teachers = self::get_users_from_cohort($cohortId);
 
         if(is_array($teachers))

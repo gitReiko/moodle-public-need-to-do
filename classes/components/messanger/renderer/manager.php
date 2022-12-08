@@ -39,8 +39,13 @@ class Manager
      */
     public function get_messanger_part() : string 
     {
-        $msgr = Lib::get_messanger_header();
-        $msgr.= $this->get_teachers_list();
+        $msgr = '';
+
+        if(!empty($this->data))
+        {
+            $msgr.= Lib::get_messanger_header();
+            $msgr.= $this->get_teachers_list();
+        }
         
         return $msgr;
     }
@@ -72,7 +77,7 @@ class Manager
     {
         global $DB;
 
-        $teachers = cGetter::get_teachers_from_global_block_settings();
+        $teachers = $this->get_teachers();
         $teachersInCondition = cGetter::get_teachers_in_database_condition($teachers);
 
         $sql = "SELECT * 
@@ -83,6 +88,23 @@ class Manager
         $params = array(Enums::MESSANGER);
 
         return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Returns teachers from global or local settings.
+     * 
+     * @return array teachers 
+     */
+    private function get_teachers()
+    {
+        if($this->config->use_local_settings)
+        {
+            return cGetter::get_teachers_for_block_instance($this->config->local_cohort);
+        }
+        else
+        {
+            return cGetter::get_teachers_from_global_block_settings();
+        }
     }
 
     /**
