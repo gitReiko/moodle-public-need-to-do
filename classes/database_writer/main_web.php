@@ -19,9 +19,9 @@ class MainWeb extends Main
 {
 
     /**
-     * Block instance config.
+     * Block instance params.
      */
-    protected $config;
+    protected $params;
 
     /**
      * The level at which data can be updated.
@@ -38,9 +38,9 @@ class MainWeb extends Main
     /**
      * Prepares data for the class.
      */
-    function __construct(\stdClass $config, string $updateLevel) 
+    function __construct(\stdClass $params, string $updateLevel) 
     {
-        $this->config = $config;
+        $this->params = $params;
         $this->updateLevel = $updateLevel;
         $this->teachers = $this->get_teachers();
     }
@@ -57,11 +57,11 @@ class MainWeb extends Main
     {
         if($this->updateLevel === Enums::UPDATE_DATA_ON_SITE_LEVEL)
         {
-            return cGetter::get_teachers_from_global_block_settings();
+            return cGetter::get_teachers_for_block_instance($this->params->cohort);
         }
         else if($this->updateLevel === Enums::UPDATE_DATA_ON_BLOCK_INSTANCE_LEVEL)
         {
-            return cGetter::get_teachers_for_block_instance($this->config->local_cohort);
+            return cGetter::get_teachers_for_block_instance($this->params->cohort);
         }
         else if($this->updateLevel === Enums::UPDATE_DATA_ON_USER_LEVEL)
         {

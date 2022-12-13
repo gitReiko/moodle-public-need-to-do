@@ -14,9 +14,9 @@ use NTD\Classes\Lib\Enums as Enums;
 class Manager  
 {
     /**
-     * Block instance config.
+     * Block instance params.
      */
-    private $config;
+    private $params;
 
     /**
      * Data necessary for rendering
@@ -26,9 +26,9 @@ class Manager
     /**
      * Prepares data for class.
      */
-    function __construct($config)
+    function __construct(\stdClass $params)
     {
-        $this->config = $config;
+        $this->params = $params;
         $this->prepare_data_for_rendering();
     }
 
@@ -97,14 +97,7 @@ class Manager
      */
     private function get_teachers()
     {
-        if($this->config->use_local_settings)
-        {
-            return cGetter::get_teachers_for_block_instance($this->config->local_cohort);
-        }
-        else
-        {
-            return cGetter::get_teachers_from_global_block_settings();
-        }
+        return cGetter::get_teachers_for_block_instance($this->params->cohort);
     }
 
     /**

@@ -13,18 +13,18 @@ class UpdateButton
 {
 
     /**
-     * Block instance config.
+     * Block instance params.
      */
-    private $config;
+    private $params;
 
     /**
      * Prepares data and updates data if necessary.
      * 
-     * @param stdClass $config
+     * @param stdClass $params
      */
-    function __construct(\stdClass $config)
+    function __construct(\stdClass $params)
     {
-        $this->config = $config;
+        $this->params = $params;
     }
 
     /**
@@ -38,7 +38,7 @@ class UpdateButton
 
         if(cLib::is_user_site_manager())
         {
-            if($this->config->use_local_settings)
+            if($this->params->use_local_settings)
             {
                 $btn.= $this->get_param_update_data_on_block_instance_level();
             }

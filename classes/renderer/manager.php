@@ -11,16 +11,16 @@ class Manager
 {
 
     /**
-     * Block instance config.
+     * Block instance params.
      */
-    private $config;
+    private $params;
 
     /**
      * Prepares data.
      */
-    function __construct(\stdClass $config)
+    function __construct(\stdClass $params)
     {
-        $this->config = $config;
+        $this->params = $params;
     }
 
     /**
@@ -67,7 +67,7 @@ class Manager
      */
     private function get_messanger_part() : string 
     {
-        $renderer = new \NTD\Classes\Components\Messanger\Renderer\Manager($this->config);
+        $renderer = new \NTD\Classes\Components\Messanger\Renderer\Manager($this->params);
         return $renderer->get_messanger_part();
     }
 

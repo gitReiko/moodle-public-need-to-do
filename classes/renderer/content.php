@@ -20,18 +20,18 @@ class Content
 {
 
     /**
-     * Block instance config.
+     * Block instance params.
      */
-    private $config;
+    private $params;
 
     /**
      * Prepares data and updates data if necessary.
      * 
-     * @param stdClass $config
+     * @param stdClass $params
      */
-    function __construct(\stdClass $config)
+    function __construct(\stdClass $params)
     {
-        $this->config = $config;
+        $this->params = $params;
 
         $this->update_data_if_necessary();
     }
@@ -65,7 +65,7 @@ class Content
 
         if($updateLevel !== null)
         {
-            $writer = new \NTD\Classes\DatabaseWriter\MainWeb($this->config, $updateLevel);
+            $writer = new \NTD\Classes\DatabaseWriter\MainWeb($this->params, $updateLevel);
             $writer->write_to_database();
         }
     }
@@ -77,7 +77,7 @@ class Content
      */
     private function get_update_button() : string 
     {
-        $renderer = new UpdateButton($this->config);
+        $renderer = new UpdateButton($this->params);
         return $renderer->get_update_button();
     }
 
@@ -99,7 +99,7 @@ class Content
      */
     private function get_manager_part_of_block() : string 
     {
-        $renderer = new Manager($this->config);
+        $renderer = new Manager($this->params);
         return $renderer->get_manager_part();
     }
 

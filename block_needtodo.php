@@ -27,6 +27,11 @@ require_once __DIR__.'/classes/renderer/content.php';
 class block_needtodo extends block_base {
 
     /**
+     * Blocks instance params.
+     */
+    private $params;
+
+    /**
      * Initialises the block.
      *
      * @return void
@@ -36,25 +41,15 @@ class block_needtodo extends block_base {
     }
 
     /**
-     * Sets custom block instance name.
+     * Sets block instance params.
+     * 
+     * Sets block instance name.
      */
     function specialization() 
     {
-        if($this->config->use_local_settings)
-        {
-            if(empty($this->config->block_name))
-            {
-                $this->title = get_string('pluginname', 'block_needtodo');
-            }
-            else 
-            {
-                $this->title = $this->config->block_name;
-            }
-        }
-        else
-        {
-            $this->title = get_string('pluginname', 'block_needtodo');
-        }
+        $this->params = $this->get_block_instance_params();
+
+        $this->title = $this->params->name;
     }
 
     /**
@@ -72,7 +67,7 @@ class block_needtodo extends block_base {
         $this->content = new stdClass();
         $this->content->footer = '';
 
-        $ntdContent = new \NTD\Classes\Renderer\Content($this->config);
+        $ntdContent = new \NTD\Classes\Renderer\Content($this->params);
         $this->content->text = $ntdContent->get_content();
 
         $this->page->requires->js('/blocks/needtodo/js/common.js');
@@ -103,6 +98,31 @@ class block_needtodo extends block_base {
     public function instance_allow_multiple()
     {
         return true;
+    }
+
+    /**
+     * Rerurns block instance params.
+     * 
+     * @return stdClass block instance params
+     */
+    private function get_block_instance_params()
+    {
+        $params = new \stdClass;
+
+        if(empty($this->config->use_local_settings))
+        {
+            $params->name = get_string('pluginname', 'block_needtodo');
+            $params->cohort = get_config('block_needtodo', 'monitored_teachers_cohort');
+            $params->use_local_settings = false;
+        }
+        else 
+        {
+            $params->name = $this->config->block_name;
+            $params->cohort = $this->config->local_cohort;
+            $params->use_local_settings = true;
+        }
+
+        return $params;
     }
     
 }

@@ -41,7 +41,7 @@ abstract class Main
      * @todo блок некорректно работает с кроном (гет тичерс - условие елсе).
      * @todo разделить функцию на 2 для гуи и для скрона
      * @todo крон должен просчитывать учителей из всех групп для всех курсов
-     * @todo образение к параметру $this->config->courses_load_type
+     * @todo образение к параметру $this->params->courses_load_type
      */
     public function write_to_database() : void
     {
