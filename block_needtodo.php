@@ -101,7 +101,9 @@ class block_needtodo extends block_base {
     }
 
     /**
-     * Rerurns block instance params.
+     * Returns block instance params.
+     * 
+     * From global settings or local block instance.
      * 
      * @return stdClass block instance params
      */
@@ -111,12 +113,14 @@ class block_needtodo extends block_base {
 
         if(empty($this->config->use_local_settings))
         {
+            $params->instance = $this->instance->id;
             $params->name = get_string('pluginname', 'block_needtodo');
             $params->cohort = get_config('block_needtodo', 'monitored_teachers_cohort');
             $params->use_local_settings = false;
         }
         else 
         {
+            $params->instance = $this->instance->id;
             $params->name = $this->config->block_name;
             $params->cohort = $this->config->local_cohort;
             $params->use_local_settings = true;

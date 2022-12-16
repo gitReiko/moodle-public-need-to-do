@@ -25,6 +25,11 @@ class Content
     private $params;
 
     /**
+     * Level on which data must be updated.
+     */
+    private $updateLevel;
+
+    /**
      * Prepares data and updates data if necessary.
      * 
      * @param stdClass $params
@@ -32,6 +37,7 @@ class Content
     function __construct(\stdClass $params)
     {
         $this->params = $params;
+        $this->updateLevel = $this->get_update_level_from_post();
 
         $this->update_data_if_necessary();
     }
@@ -46,12 +52,23 @@ class Content
         $content = $this->get_update_button();
         $content.= $this->get_my_work();
 
-        if(cLib::is_user_site_manager())
+        if(cLib::is_user_can_monitor_other_users())
         {
             $content.= $this->get_manager_part_of_block();
         }
 
         return $content;
+    }
+
+    /**
+     * Returns update level of data update if it exists.
+     * 
+     * @return string of update level
+     * @return null if not exists
+     */
+    private function get_update_level_from_post()
+    {
+        return optional_param(Enums::NEEDTODO_UPDATE_BUTTON, null, PARAM_TEXT);;
     }
 
     /**
@@ -61,12 +78,49 @@ class Content
      */
     private function update_data_if_necessary() : void 
     {
-        $updateLevel = optional_param(Enums::NEEDTODO_UPDATE_BUTTON, null, PARAM_TEXT);
-
-        if($updateLevel !== null)
+        if($this->is_update_necessary())
         {
-            $writer = new \NTD\Classes\DatabaseWriter\MainWeb($this->params, $updateLevel);
-            $writer->write_to_database();
+            if($this->is_update_necessary_for_this_block_instance())
+            {
+                $writer = new \NTD\Classes\DatabaseWriter\MainWeb($this->params, $this->updateLevel);
+                $writer->write_to_database();
+            }
+        }
+    }
+
+    /**
+     * Returns true if update necessary.
+     * 
+     * @return bool 
+     */
+    private function is_update_necessary() 
+    {
+        if($this->updateLevel)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if update necessary for this block instance.
+     * 
+     * @return bool 
+     */
+    private function is_update_necessary_for_this_block_instance()
+    {
+        $blockInstance = optional_param(Enums::BLOCK_INSTANCE, null, PARAM_TEXT);
+
+        if($blockInstance == $this->params->instance)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
         }
     }
 

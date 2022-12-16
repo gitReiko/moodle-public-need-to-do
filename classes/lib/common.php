@@ -6,25 +6,33 @@ class Common
 {
 
     /**
-     * Returns true if user is site manager.
+     * Return true if user can monitor other users.
      * 
-     * @return bool
+     * @param int course category id
+     * 
+     * @return bool 
      */
-    public static function is_user_site_manager() : bool 
+    public static function is_user_can_monitor_other_users(int $courseCategoryId = null) : bool 
     {
         $systemcontext = \context_system::instance();
 
-        if (has_capability('block/needtodo:monitorteachersonsite', $systemcontext)) 
+        if(has_capability('block/needtodo:monitorteachersonsite', $systemcontext)) 
         {
             return true;
         }
-        else 
-        {
-            return false;
-        }
-    }
 
-    //public static function is_user_category_manager()
+        if($courseCategoryId)
+        {
+            $categorycontext = context_coursecat::instance($courseCategoryId);
+
+            if(has_capability('block/needtodo:monitorteachersincategory', $categorycontext)) 
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     /**
      * Returns teacher contacts prepared for render.

@@ -36,22 +36,16 @@ class UpdateButton
     {
         $btn = $this->get_html_form_start();
 
-        if(cLib::is_user_site_manager())
+        if(cLib::is_user_can_monitor_other_users())
         {
-            if($this->params->use_local_settings)
-            {
-                $btn.= $this->get_param_update_data_on_block_instance_level();
-            }
-            else 
-            {
-                $btn.= $this->get_param_update_data_on_site_level();
-            }
+            $btn.= $this->get_param_update_data_on_block_instance_level();
         }
         else 
         {
             $btn.= $this->get_param_update_data_on_user_level();
         }
         
+        $btn.= $this->get_param_block_instance();
         $btn.= $this->get_button();
 
         $btn.= $this->get_html_form_end();
@@ -87,21 +81,6 @@ class UpdateButton
     }
 
     /**
-     * Returns param required to update the data at the site level.
-     * 
-     * @return string param required to update 
-     */
-    private function get_param_update_data_on_site_level() : string 
-    {
-        $attr = array(
-            'type' => 'hidden',
-            'name' => Enums::NEEDTODO_UPDATE_BUTTON,
-            'value' => Enums::UPDATE_DATA_ON_SITE_LEVEL
-        );
-        return \html_writer::empty_tag('input', $attr);
-    }
-
-    /**
      * Returns param required to update the data at the user level.
      * 
     * @return string param required to update 
@@ -112,6 +91,23 @@ class UpdateButton
             'type' => 'hidden',
             'name' => Enums::NEEDTODO_UPDATE_BUTTON,
             'value' => Enums::UPDATE_DATA_ON_USER_LEVEL
+        );
+        return \html_writer::empty_tag('input', $attr);
+    }
+
+    /**
+     * Returns block instance param. 
+     * 
+     * It is needed because there can be multiple instances of the block on the page.
+     * 
+     * @return string block instance param
+     */
+    private function  get_param_block_instance() : string 
+    {
+        $attr = array(
+            'type' => 'hidden',
+            'name' => Enums::BLOCK_INSTANCE,
+            'value' => $this->params->instance
         );
         return \html_writer::empty_tag('input', $attr);
     }

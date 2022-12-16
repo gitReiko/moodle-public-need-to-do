@@ -14,21 +14,10 @@ use NTD\Classes\Lib\Enums as Enums;
  * 
  * This data is subsequently used by the renderer to quickly form a block.
  * 
+ * @todo крон должен просчитывать учителей из всех групп для всех курсов
  */
-class MainWeb extends Main 
+class MainTask extends Main 
 {
-
-    /**
-     * Block instance params.
-     */
-    protected $params;
-
-    /**
-     * The level at which data can be updated.
-     * 
-     * Can be site, course category or user.
-     */
-    protected $updateLevel;
 
     /**
      * All teachers whose work is monitored by the block
@@ -38,33 +27,24 @@ class MainWeb extends Main
     /**
      * Prepares data for the class.
      */
-    function __construct(\stdClass $params, string $updateLevel) 
+    function __construct() 
     {
-        $this->params = $params;
-        $this->updateLevel = $updateLevel;
         $this->teachers = $this->get_teachers();
     }
 
     /**
-     * Returns all teachers whose work data needs to be updated.
+     * Returns all teachers from global and local settings whose work data needs to be updated.
      * 
      * @return array if teachers exist
      * @return null if not
      */
     protected function get_teachers() 
     {
-        if($this->updateLevel === Enums::UPDATE_DATA_ON_BLOCK_INSTANCE_LEVEL)
-        {
-            return cGetter::get_teachers_for_block_instance($this->params->cohort);
-        }
-        else if($this->updateLevel === Enums::UPDATE_DATA_ON_USER_LEVEL)
-        {
-            return cGetter::get_teachers_array_with_user_only();
-        }
-        else 
-        {
-            throw new \Exception('Update data on unknown level (block Need to do).');
-        }
+        $teachers = cGetter::get_teachers_from_global_block_settings();
+
+        // all block instances
+
+        return $teachers;
     }
 
     /**
@@ -76,7 +56,7 @@ class MainWeb extends Main
     {
         $messangerWriter = new \NTD\Classes\Components\Messanger\DatabaseWriter(
             $this->teachers,
-            $this->updateLevel
+            Enums::UPDATE_DATA_ON_SITE_LEVEL
         );
         $messangerWriter->write();
     }

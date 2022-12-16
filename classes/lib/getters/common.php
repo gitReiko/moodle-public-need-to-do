@@ -78,21 +78,28 @@ class Common
      * 
      * @return string in database condition
      */
-    public static function get_teachers_in_database_condition(array $teachers) : string 
+    public static function get_teachers_in_database_condition(array $teachers)  
     {
-        $inCondition = ' IN (';
-
-        foreach($teachers as $teacher)
+        if(empty($teachers))
         {
-            $inCondition.= $teacher->id.',';
+            return null;
         }
+        else 
+        {
+            $inCondition = ' IN (';
 
-        // Remove the last comma.
-        $inCondition = substr($inCondition, 0, -1);
-
-        $inCondition.= ') ';
-
-        return $inCondition;
+            foreach($teachers as $teacher)
+            {
+                $inCondition.= $teacher->id.',';
+            }
+    
+            // Remove the last comma.
+            $inCondition = substr($inCondition, 0, -1);
+    
+            $inCondition.= ') ';
+    
+            return $inCondition;
+        }
     }
 
     /**

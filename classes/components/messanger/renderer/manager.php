@@ -80,14 +80,22 @@ class Manager
         $teachers = $this->get_teachers();
         $teachersInCondition = cGetter::get_teachers_in_database_condition($teachers);
 
-        $sql = "SELECT * 
-                FROM {block_needtodo} 
-                WHERE component = ? 
-                AND teacherid {$teachersInCondition}";
+        // Teachers may not exist
+        if($teachersInCondition)
+        {
+            $sql = "SELECT * 
+            FROM {block_needtodo} 
+            WHERE component = ? 
+            AND teacherid {$teachersInCondition}";
 
-        $params = array(Enums::MESSANGER);
+            $params = array(Enums::MESSANGER);
 
-        return $DB->get_records_sql($sql, $params);
+            return $DB->get_records_sql($sql, $params);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
