@@ -37,10 +37,12 @@ class MainTask extends Main
      * 
      * @return array if teachers exist
      * @return null if not
+     * 
+     * @todo Восстановить работу в кроне. Учитывать глобальные данные и данные всех экземпляров блоков.
      */
     protected function get_teachers() 
     {
-        $teachers = cGetter::get_teachers_from_global_block_settings();
+        //$teachers = cGetter::get_teachers_from_global_block_settings();
 
         // all block instances
 
