@@ -71,6 +71,20 @@ class MainTask extends Main
     }
 
     /**
+     * Writes data related to forum into database.
+     * 
+     * @return void
+     */
+    protected function write_forum() : void 
+    {
+        $forumWriter = new \NTD\Classes\Components\Forum\DatabaseWriter\Main(
+            $this->teachers,
+            Enums::UPDATE_DATA_ON_SITE_LEVEL
+        );
+        $forumWriter->write();
+    }
+
+    /**
      * Returns unique teachers cohorts if exists.
      * 
      * @return array cohorts if exists

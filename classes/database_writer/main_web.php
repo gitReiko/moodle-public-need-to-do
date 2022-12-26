@@ -81,4 +81,18 @@ class MainWeb extends Main
         $messangerWriter->write();
     }
 
+    /**
+     * Writes data related to forum into database.
+     * 
+     * @return void
+     */
+    protected function write_forum() : void 
+    {
+        $forumWriter = new \NTD\Classes\Components\Forum\DatabaseWriter\Main(
+            $this->teachers,
+            $this->updateLevel
+        );
+        $forumWriter->write();
+    }
+
 }

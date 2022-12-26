@@ -3,6 +3,7 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../components/messanger/database_writer.php';
+require_once __DIR__.'/../components/forum/database_writer/main.php';
 
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use NTD\Classes\Lib\Enums as Enums; 
@@ -43,7 +44,7 @@ abstract class Main
         if(is_array($this->teachers))
         {
             $this->write_messsanger();
-            // forum posts
+            $this->write_forum();
             // quiz works
             // assign works
         }
@@ -55,6 +56,13 @@ abstract class Main
      * @return void
      */
     abstract protected function write_messsanger() : void ;
+
+    /**
+     * Writes data related to forum into database.
+     * 
+     * @return void
+     */
+    abstract protected function write_forum() : void ;
 
 
 
