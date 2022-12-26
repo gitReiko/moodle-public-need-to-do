@@ -55,7 +55,7 @@ class MainWeb extends Main
     {
         if($this->updateLevel === Enums::UPDATE_DATA_ON_BLOCK_INSTANCE_LEVEL)
         {
-            return cGetter::get_teachers_for_block_instance($this->params->cohort);
+            return cGetter::get_teachers_from_cohort($this->params->cohort);
         }
         else if($this->updateLevel === Enums::UPDATE_DATA_ON_USER_LEVEL)
         {

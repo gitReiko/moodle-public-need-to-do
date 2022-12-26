@@ -2,9 +2,9 @@
 
 namespace block_needtodo\task;
 
-require_once $CFG->dirroot.'/blocks/needtodo/classes/database_writer/main.php';
+require_once $CFG->dirroot.'/blocks/needtodo/classes/database_writer/main_task.php';
 
-use NTD\Classes\DatabaseWriter\Main as DatabaseWriter;
+use NTD\Classes\DatabaseWriter\MainTask as DatabaseWriter;
 
 class cache_data extends \core\task\scheduled_task
 {
@@ -24,7 +24,7 @@ class cache_data extends \core\task\scheduled_task
      */
     public function execute() 
     {
-        $writer = new DatabaseWriter;
+        $writer = new \NTD\Classes\DatabaseWriter\MainTask;
         $writer->write_to_database();
     }
 

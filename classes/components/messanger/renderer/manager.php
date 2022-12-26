@@ -105,7 +105,7 @@ class Manager
      */
     private function get_teachers()
     {
-        return cGetter::get_teachers_for_block_instance($this->params->cohort);
+        return cGetter::get_teachers_from_cohort($this->params->cohort);
     }
 
     /**
