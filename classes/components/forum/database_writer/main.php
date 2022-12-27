@@ -18,6 +18,11 @@ class Main
     private $updateLevel;
 
     /**
+     * Forums with subscription.
+     */
+    private $forums;
+
+    /**
      * Prepares data for the class.
      * 
      * @param array of all teachers whose work is monitored by the block
@@ -26,11 +31,12 @@ class Main
     {
         $this->teachers = $teachers;
         $this->updateLevel = $updateLevel;
-        //$this->prepare_forum_data();
 
-        $forums = new \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
+        $this->forums = $this->get_forums();
 
-        print_r($forums->get_forums());
+
+
+        print_r($this->forums);
 
     }
 
@@ -41,11 +47,6 @@ class Main
      */
     public function write() : void 
     { 
-        // Узяць усе форумы
-        // Адкінуць форумы з адключанай падпіскай
-        // Адсартаваць па назве курса
-        // Адзначыць прымусовую падпіску
-
         // Узяць усе дыскусіі кожнага форума 
         // Калі прымусовая падпіска адключана
         // Вызначыць ці падпісан настаўнік на дыскусію
@@ -61,6 +62,17 @@ class Main
 
 
         echo 'WORK';
+    }
+
+    /**
+     * Returns forums with subscription.
+     * 
+     * @return array forums if exists
+     */
+    private function get_forums() 
+    {
+        $forums = new \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
+        return $forums->get_forums();
     }
 
 
