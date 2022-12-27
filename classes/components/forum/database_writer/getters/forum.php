@@ -12,6 +12,9 @@ class Forum
      */
     private $forums;
 
+    /**
+     * Prepares data for class. 
+     */
     function __construct() 
     {
         $this->forums = $this->get_all_forums_with_subscription();
