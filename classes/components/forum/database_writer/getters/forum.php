@@ -19,6 +19,8 @@ class Forum
     {
         $this->forums = $this->get_all_forums_with_subscription();
         $this->simplify_forums_force_subscription();
+        $this->add_discussions_to_forums();
+        $this->add_posts_to_forums();
     }
 
     /**
@@ -73,6 +75,63 @@ class Forum
                 $forum->forcesubscribe = false;
             }
         }
+    }
+
+    /**
+     * Adds discussions to forums.
+     */
+    private function add_discussions_to_forums() : void 
+    {
+        foreach($this->forums as $forum)
+        {
+            $forum->discussions = $this->get_forum_discussions($forum->id);
+        }
+    }
+
+    /**
+     * Returns forum discussions.
+     * 
+     * @param int $forumId
+     * 
+     * @return array forum discussions if its exists
+     */
+    private function get_forum_discussions(int $forumId)
+    {
+        global $DB;
+        $where = array(
+            'forum' => $forumId
+        );
+        return $DB->get_records('forum_discussions', $where, '', 'id');
+    }
+
+    /**
+     * Adds posts to forums.
+     */
+    private function add_posts_to_forums() 
+    {
+        foreach($this->forums as $forum)
+        {
+            foreach($forum->discussions as $discussion)
+            {
+                $discussion->posts = $this->get_discussion_posts($discussion->id);
+            }
+        }
+    }
+
+    /**
+     * Returns discussion posts.
+     * 
+     * @param int $discussionId
+     * 
+     * @return array discussion posts if exists
+     */
+    private function get_discussion_posts(int $discussionId)
+    {
+        global $DB;
+        $where = array(
+            'discussion' => $discussionId
+        );
+        return $DB->get_records('forum_posts', $where, '', 'id');
     }
 
 }
