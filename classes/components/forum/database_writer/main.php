@@ -18,7 +18,7 @@ class Main
     private $updateLevel;
 
     /**
-     * Forums with subscription.
+     * Forums with all posts.
      */
     private $forums;
 
