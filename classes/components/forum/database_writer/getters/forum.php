@@ -2,6 +2,11 @@
 
 namespace NTD\Classes\Components\Forum\DatabaseWriter\Getters;
 
+/**
+ * Forums getter for forum component.
+ * 
+ * Returns all forums to which educators can subscribe.
+ */
 class Forum  
 {
     const FORCE_SUBSCRIPTION = 1;

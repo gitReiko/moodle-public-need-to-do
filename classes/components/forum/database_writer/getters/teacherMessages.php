@@ -2,6 +2,11 @@
 
 namespace NTD\Classes\Components\Forum\DatabaseWriter\Getters;
 
+/**
+ * Teacher messages getter for forum component.
+ * 
+ * Returns teachers with unread messages.
+ */
 class TeacherMessages   
 {
     /**
@@ -14,6 +19,12 @@ class TeacherMessages
      */
     private $forums;
 
+    /**
+     * Prepares data for class.
+     * 
+     * @param array teachers 
+     * @param array forums
+     */
     function __construct($teachers, $forums)
     {
         $this->teachers = $teachers;
@@ -22,9 +33,14 @@ class TeacherMessages
         $this->add_unreaded_messages_to_teachers();
     }
 
-    private function get_teacher_messages()
+    /**
+     * Returns teachers array with unread messages. 
+     * 
+     * @return array teachers if they exists
+     */
+    public function get_teachers_with_messages()
     {
-        // sv
+        return $this->teachers;
     }
 
     /**
@@ -45,6 +61,9 @@ class TeacherMessages
 
     /**
      * Adds unreaded messanges to teacher.
+     * 
+     * @param stdClass teacher 
+     * @param stdClass forum
      */
     private function add_unreaded_forum_messages_to_teacher($teacher, $forum) : void 
     {
@@ -75,7 +94,7 @@ class TeacherMessages
 
         if($unreadedMessages)
         {
-            $this->add_forum_with_unread_messages($teacher, $forum->id, $unreadedMessages);
+            $this->add_forum_with_unread_messages($teacher, $forum, $unreadedMessages);
         }
     }
 
@@ -166,16 +185,17 @@ class TeacherMessages
      * Adds forum with unreaded messages to teacher. 
      * 
      * @param stdClass $teacher
-     * @param int $forumId 
+     * @param stdClass $forum 
      * @param int $unreadedMessages
      */
-    private function add_forum_with_unread_messages(\stdClass $teacher, int $forumId, int $unreadedMessages) : void 
+    private function add_forum_with_unread_messages(\stdClass $teacher, \stdClass $forum, int $unreadedMessages) : void 
     {
-        $forum = new \stdClass;
-        $forum->id = $forumId;
-        $forum->unreadedMessages = $unreadedMessages;
+        $teacherForum = new \stdClass;
+        $teacherForum->id = $forum->id;
+        $teacherForum->name = $forum->name;
+        $teacherForum->unreadedMessages = $unreadedMessages;
 
-        $teacher->forums[] = $forum;
+        $teacher->forums[] = $teacherForum;
     }
 
 }

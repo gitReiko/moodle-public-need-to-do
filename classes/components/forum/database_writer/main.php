@@ -3,6 +3,10 @@
 namespace NTD\Classes\Components\Forum\DatabaseWriter;
 
 require_once 'getters/forum.php';
+require_once 'getters/teacherMessages.php';
+
+use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\TeacherMessages;
+use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
 
 class Main 
 {
@@ -33,9 +37,10 @@ class Main
         $this->updateLevel = $updateLevel;
 
         $this->forums = $this->get_forums();
+        $this->teachers = $this->get_teachers_with_messages();
 
 
-        print_r($this->forums);
+        print_r($this->teachers);
 
     }
 
@@ -74,8 +79,21 @@ class Main
      */
     private function get_forums() 
     {
-        $forums = new \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
+        $forums = new Forum;
         return $forums->get_forums();
+    }
+
+    /**
+     * Returns teachers with unread messages.
+     * 
+     * @return array teachers with messages
+     */
+    private function get_teachers_with_messages() 
+    {
+        $teachers = new TeacherMessages(
+            $this->teachers, $this->forums
+        );
+        return $teachers->get_teachers_with_messages();
     }
 
 
