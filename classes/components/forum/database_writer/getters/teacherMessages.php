@@ -19,6 +19,9 @@ class TeacherMessages
      */
     private $forums;
 
+    /** Unread teachers messages prepared for writing to the database.  */
+    private $unreadMessages;
+
     /**
      * Prepares data for class.
      * 
@@ -27,45 +30,73 @@ class TeacherMessages
      */
     function __construct($teachers, $forums)
     {
-        $this->teachers = $teachers;
-        $this->forums = $forums;
-
-        $this->add_unreaded_messages_to_teachers();
+        $this->teachers = $teachers; 
+        $this->forums = $forums; 
+        
+        $this->init_unread_messages();
     }
 
     /**
-     * Returns teachers array with unread messages. 
+     * Returns unread teachers messages.
      * 
-     * @return array teachers if they exists
+     * @return array unread messages
      */
-    public function get_teachers_with_messages()
+    public function get_unread_teachers_messages()
     {
-        return $this->teachers;
+        return $this->unreadMessages;
     }
 
     /**
-     * Adds unreaded messanges to teachers.
+     * Returns unread messages.
      */
-    private function add_unreaded_messages_to_teachers() : void 
+    private function init_unread_messages() 
     {
-        foreach($this->teachers as $teacher)
-        {
-            $teacher->forums = array();
+        $unreadMessages = array();
 
+        foreach($this->teachers as $teacher)
+        {     
+            $message = new \stdClass;
+            $message->teacher = new \stdClass;
+            $message->teacher->id = $teacher->id;
+            $message->teacher->email = $teacher->email;
+            $message->teacher->name = $teacher->fullname;
+            $message->teacher->phone1 = $teacher->phone1;
+            $message->teacher->phone2 = $teacher->phone2;
+            
+            $forums = array();
             foreach($this->forums as $forum)
             {
-                $this->add_unreaded_forum_messages_to_teacher($teacher, $forum);
+                $forumWithMessages = $this->get_teacher_unreaded_forum_messages($teacher, $forum);
+
+                if($forumWithMessages)
+                {
+                    $forums[] = $forumWithMessages;
+                }
+            }
+
+            if(count($forums))
+            {
+                $message->teacher->forums = $forums;
+
+                $message->teacher->coursesIds = $this->get_unique_courses_ids_from_forums($forums);
+                $message->teacher->forumsIds = $this->get_forums_ids_array($forums);
+
+                $unreadMessages[] = $message;
             }
         }
+
+        $this->unreadMessages = $unreadMessages;
     }
 
     /**
-     * Adds unreaded messanges to teacher.
+     * Returns teacher unreaded forum messanges.
      * 
      * @param stdClass teacher 
      * @param stdClass forum
+     * 
+     * @return stdClass $forum
      */
-    private function add_unreaded_forum_messages_to_teacher($teacher, $forum) : void 
+    private function get_teacher_unreaded_forum_messages($teacher, $forum)  
     {
         $subscribed = false;
         $unreadedMessages = 0;
@@ -94,7 +125,11 @@ class TeacherMessages
 
         if($unreadedMessages)
         {
-            $this->add_forum_with_unread_messages($teacher, $forum, $unreadedMessages);
+            return $this->get_forum_with_unread_messages($teacher, $forum, $unreadedMessages);
+        }
+        else 
+        {
+            return null;
         }
     }
 
@@ -182,20 +217,62 @@ class TeacherMessages
     }
 
     /**
-     * Adds forum with unreaded messages to teacher. 
+     * Returns forum with unreaded messages to teacher. 
      * 
      * @param stdClass $teacher
      * @param stdClass $forum 
      * @param int $unreadedMessages
+     * 
+     * @return stdClass 
      */
-    private function add_forum_with_unread_messages(\stdClass $teacher, \stdClass $forum, int $unreadedMessages) : void 
+    private function get_forum_with_unread_messages(\stdClass $teacher, \stdClass $forum, int $unreadedMessages)  
     {
         $teacherForum = new \stdClass;
         $teacherForum->id = $forum->id;
         $teacherForum->name = $forum->name;
+        $teacherForum->courseId = $forum->courseid;
+        $teacherForum->courseName = $forum->coursename;
         $teacherForum->unreadedMessages = $unreadedMessages;
 
-        $teacher->forums[] = $teacherForum;
+        return $teacherForum;
+    }
+
+    /**
+     * Returns array of unique courses ids from forums.
+     * 
+     * @return array courses ids
+     */
+    private function get_unique_courses_ids_from_forums($forums)
+    {
+        $courses = array();
+
+        foreach($forums as $forum)
+        {
+            $courses[] = $forum->courseId;
+        }
+
+        $courses = array_unique($courses);
+
+        return $courses;
+    }
+
+    /**
+     * Returns array of forums ids.
+     * 
+     * @return array courses ids
+     */
+    private function get_forums_ids_array($forums)
+    {
+        $forumsArray = array();
+
+        foreach($forums as $forum)
+        {
+            $forumsArray[] = $forum->id;
+        }
+
+        $forumsArray = array_unique($forumsArray);
+
+        return $forumsArray;
     }
 
 }

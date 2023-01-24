@@ -26,6 +26,9 @@ class Main
      */
     private $forums;
 
+    /** Unread teachers messages prepared for writing to the database.  */
+    private $unreadMessages;
+
     /**
      * Prepares data for the class.
      * 
@@ -37,10 +40,18 @@ class Main
         $this->updateLevel = $updateLevel;
 
         $this->forums = $this->get_forums();
-        $this->teachers = $this->get_teachers_with_messages();
+        $this->unreadMessages = $this->get_unread_teachers_messages();
+
+        foreach($this->unreadMessages as $unreadMessage)
+        {
+            print_r($unreadMessage);
+            echo '<hr>';
+        }
+
+        //print_r($this->teachers);
 
 
-        print_r($this->teachers);
+        
 
     }
 
@@ -86,14 +97,14 @@ class Main
     /**
      * Returns teachers with unread messages.
      * 
-     * @return array teachers with messages
+     * @return array teachers with unread messages
      */
-    private function get_teachers_with_messages() 
+    private function get_unread_teachers_messages() 
     {
         $teachers = new TeacherMessages(
             $this->teachers, $this->forums
         );
-        return $teachers->get_teachers_with_messages();
+        return $teachers->get_unread_teachers_messages();
     }
 
 
