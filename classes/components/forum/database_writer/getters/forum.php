@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Components\Forum\DatabaseWriter\Getters;
 
+use NTD\Classes\Lib\Getters\Common as cGetter;
+
 /**
  * Forums getter for forum component.
  * 
@@ -23,6 +25,7 @@ class Forum
     function __construct() 
     {
         $this->forums = $this->get_all_forums_with_subscription();
+        $this->add_course_modules_to_forums();
         $this->simplify_forums_force_subscription();
         $this->add_discussions_to_forums();
         $this->add_posts_to_forums();
@@ -57,6 +60,19 @@ class Forum
         $params = array(self::NO_SUBSCRIPTION);
 
         return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Adds course modules id to forums.
+     */
+    private function add_course_modules_to_forums()
+    {
+        $moduleId = cGetter::get_module_id('forum');
+
+        foreach($this->forums as $forum)
+        {
+            $forum->cmid = cGetter::get_course_module_id($forum->courseid, $moduleId, $forum->id);
+        }
     }
 
     /**

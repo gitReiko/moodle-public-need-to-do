@@ -113,6 +113,40 @@ class Common
     }
 
     /**
+     * Returns id of module. 
+     * 
+     * @param string $name of module
+     * 
+     * @return int id of module
+     */
+    public static function get_module_id(string $name) : int 
+    {
+        global $DB;
+        $where = array('name' => $name);
+        return $DB->get_field('modules', 'id', $where);
+    }
+
+    /**
+     * Returns id of course module. 
+     * 
+     * @param int $courseId
+     * @param int $moduleId
+     * @param int $instance
+     * 
+     * @return int course module id
+     */
+    public static function get_course_module_id(int $courseId, int $moduleId, int $instance) : int 
+    {
+        global $DB;
+        $where = array(
+            'course' => $courseId,
+            'module' => $moduleId, 
+            'instance' => $instance
+        );
+        return $DB->get_field('course_modules', 'id', $where);
+    }
+
+    /**
      * Return array of users from user and cohort_members database tables.
      * 
      * Returns only active users.

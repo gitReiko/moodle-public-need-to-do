@@ -230,6 +230,7 @@ class TeacherMessages
         $teacherForum = new \stdClass;
         $teacherForum->id = $forum->id;
         $teacherForum->name = $forum->name;
+        $teacherForum->cmid = $forum->cmid;
         $teacherForum->courseId = $forum->courseid;
         $teacherForum->courseName = $forum->coursename;
         $teacherForum->unreadedMessages = $unreadedMessages;

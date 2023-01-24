@@ -45,7 +45,14 @@ class Main
         foreach($this->unreadMessages as $unreadMessage)
         {
             print_r($unreadMessage);
-            echo '<hr>';
+
+            foreach($unreadMessage->teacher->forums as $forum)
+            {
+                print_r($forum);
+                echo '<hr>';
+            }
+
+            echo '<hr><hr>';
         }
 
         //print_r($this->teachers);
