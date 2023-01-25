@@ -98,38 +98,66 @@ class TeacherMessages
      */
     private function get_teacher_unreaded_forum_messages($teacher, $forum)  
     {
-        $subscribed = false;
-        $unreadedMessages = 0;
-
-        if($forum->forcesubscribe) 
+        if($this->is_user_has_access_to_forum($forum->cmid, $teacher->id))
         {
-            $subscribed = true;
-        }
-        else if($this->is_user_subscribed_to_forum($teacher->id, $forum->id))
-        {
-            $subscribed = true;
-        }
-
-        foreach($forum->discussions as $discussion)
-        {
-            if($this->is_user_subscribed_to_discussion($teacher->id, $forum->id, $discussion->id)) 
+            $subscribedToForum = false;
+            $unreadedMessages = 0;
+    
+            if($forum->forcesubscribe) 
+            {                
+                $subscribedToForum = true;
+            }
+            else if($this->is_user_subscribed_to_forum($teacher->id, $forum->id))
             {
-                $subscribed = true;
+                $subscribedToForum = true;
             }
 
-            if($subscribed)
+            foreach($forum->discussions as $discussion)
             {
-                $unreadedMessages += $this->unread_discussion_posts($teacher->id, $forum->id, $discussion); // !!!!!!!!!!!!!!!!
+                if($subscribedToForum)
+                {
+                    $unreadedMessages += $this->unread_discussion_posts($teacher->id, $forum->id, $discussion);
+                }
+                else if($this->is_user_subscribed_to_discussion($teacher->id, $forum->id, $discussion->id))
+                {
+                    $unreadedMessages += $this->unread_discussion_posts($teacher->id, $forum->id, $discussion);
+                }
             }
-        }
-
-        if($unreadedMessages)
-        {
-            return $this->get_forum_with_unread_messages($teacher, $forum, $unreadedMessages);
+    
+            if($unreadedMessages)
+            {
+                return $this->get_forum_with_unread_messages($teacher, $forum, $unreadedMessages);
+            }
+            else 
+            {
+                return null;
+            }
         }
         else 
         {
             return null;
+        }
+    }
+
+    /**
+     * Returns true if user has access to forum. 
+     * 
+     * @param int forumId 
+     * @param int teacherId
+     * 
+     * @return bool 
+     */
+    private function is_user_has_access_to_forum(int $forumId, int $teacherId) : bool 
+    {
+        $contextmodule = \context_module::instance($forumId);
+
+        if(has_capability('mod/forum:viewdiscussion', $contextmodule, $teacherId)) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
         }
     }
 
