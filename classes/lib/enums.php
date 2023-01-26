@@ -12,6 +12,7 @@ class Enums
     const BLOCK_INSTANCE = 'ntd_block_instance';
     
     const COMPONENT = 'component';
+    const FORUM = 'forum';
     const MESSANGER = 'messanger';
 
 }
