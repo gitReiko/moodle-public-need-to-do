@@ -7,7 +7,7 @@ require_once 'getters/teacherMessages.php';
 
 use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\TeacherMessages;
 use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
-use NTD\Classes\Lib\Enums as Enums; 
+use \NTD\Classes\Lib\Enums as Enums; 
 
 class Main 
 {
@@ -53,7 +53,7 @@ class Main
     {
         if($this->updateLevel === Enums::UPDATE_DATA_ON_SITE_LEVEL)
         {
-            //$this->remove_unnecessary_data();
+            $this->remove_unnecessary_data();
         }
 
         foreach($this->unreadMessages as $unreadMessage)
@@ -94,6 +94,31 @@ class Main
             $this->teachers, $this->forums
         );
         return $teachers->get_unread_teachers_messages();
+    }
+
+    /**
+     * Removes all unnecessary unread forum messages.
+     * 
+     * Deletes: suspended users, deleted users
+     * or users not more enrolled in the cohort.
+     * 
+     * The cohort specified in the global block settings
+     * 
+     */
+    private function remove_unnecessary_data() : void 
+    {
+        global $DB;
+
+        $teachersInCondition = cGetter::get_teachers_in_database_condition($this->teachers);
+
+        $sql = "DELETE
+                FROM {block_needtodo}
+                WHERE component = ?
+                AND teacherid NOT {$teachersInCondition}";
+
+        $params = array(Enums::FORUM);
+
+        $DB->execute($sql, $params);
     }
 
     /**
