@@ -76,7 +76,7 @@ class TeacherMessages
 
             if(count($forums))
             {
-                $message->teacher->forums = $forums;
+                $message->forums = $forums;
 
                 $message->teacher->coursesIds = $this->get_unique_courses_ids_from_forums($forums);
                 $message->teacher->forumsIds = $this->get_forums_ids_array($forums);

@@ -145,7 +145,7 @@ class Main
 
         $where = array(
             'component' => Enums::FORUM,
-            'teacherid' => $needtodo->teacher->id
+            'teacherid' => $needtodo->teacherid
         );
 
         return $DB->get_field('block_needtodo', 'id', $where);
