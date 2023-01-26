@@ -7,6 +7,7 @@ require_once 'getters/teacherMessages.php';
 
 use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\TeacherMessages;
 use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
+use NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 class Main 
