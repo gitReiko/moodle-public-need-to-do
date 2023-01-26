@@ -20,6 +20,13 @@ class Forum
     private $forums;
 
     /**
+     * Timestamp after which a post will be outdated.
+     * 
+     * Outdated post is considered read.
+     */
+    private $outdatedPostTime;
+
+    /**
      * Prepares data for class. 
      */
     function __construct() 
@@ -28,6 +35,7 @@ class Forum
         $this->add_course_modules_to_forums();
         $this->simplify_forums_force_subscription();
         $this->add_discussions_to_forums();
+        $this->outdatedPostTime = $this->get_outdated_posts_time();
         $this->add_posts_to_forums();
     }
 
@@ -126,6 +134,31 @@ class Forum
     }
 
     /**
+     * Returns timestamp after which the post is considered read.
+     * 
+     * @return int timestamp 
+     */
+    private function get_outdated_posts_time()
+    {
+        $days = $this->get_old_post_days();
+        return time() - ($days * 24 * 3600);
+    }
+
+    /**
+     * Returns count of days after which a post will be outdated.
+     * 
+     * Outdated post is considered read.
+     * 
+     * @return int count of days
+     */
+    private function get_old_post_days() : int 
+    {
+        global $DB;
+        $where = array('name' => 'forum_oldpostdays');
+        return $DB->get_field('config', 'value', $where);
+    }
+
+    /**
      * Adds posts to forums.
      */
     private function add_posts_to_forums() 
@@ -149,10 +182,13 @@ class Forum
     private function get_discussion_posts(int $discussionId)
     {
         global $DB;
-        $where = array(
-            'discussion' => $discussionId
-        );
-        return $DB->get_records('forum_posts', $where, '', 'id');
+        $sql = 'SELECT id 
+                FROM {forum_posts} 
+                WHERE discussion = ?
+                AND modified > ?
+                ';
+        $params = array($discussionId, $this->outdatedPostTime);
+        return $DB->get_records_sql($sql, $params);
     }
 
 }
