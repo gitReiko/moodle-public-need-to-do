@@ -2,7 +2,7 @@
 
 namespace NTD\Classes\DatabaseWriter;
 
-require_once __DIR__.'/../components/messanger/database_writer.php';
+require_once __DIR__.'/../components/messanger/database_writer/main.php';
 require_once __DIR__.'/../components/forum/database_writer/main.php';
 
 use \NTD\Classes\Lib\Getters\Common as cGetter;

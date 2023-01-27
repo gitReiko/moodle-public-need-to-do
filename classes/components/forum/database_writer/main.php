@@ -37,7 +37,7 @@ class Main extends DatabaseWriter
     protected function get_needtodo_record(\stdClass $dataEntity) : \stdClass 
     {
         $needtodo = new \stdClass;
-        $needtodo->component = Enums::FORUM;
+        $needtodo->component = $this->componentName;
         $needtodo->teacherid = $dataEntity->teacher->id;
         $needtodo->info = json_encode($dataEntity);
         $needtodo->updatetime = time();
