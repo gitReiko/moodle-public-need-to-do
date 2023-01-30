@@ -12,6 +12,11 @@ use NTD\Classes\Lib\Enums as Enums;
 class MyWork 
 {
     /**
+     * Block instance params.
+     */
+    private $params;
+
+    /**
      * Data necessary for rendering
      */
     private $data;
@@ -19,8 +24,9 @@ class MyWork
     /**
      * Prepares data for class.
      */
-    function __construct()
+    function __construct(\stdClass $params)
     {
+        $this->params = $params;
         $this->prepare_data_for_rendering();
     }
 
@@ -64,9 +70,20 @@ class MyWork
      */
     private function get_my_unread_messages() : string 
     {
+        $list = Lib::get_teacher_line(
+            $this->data, 
+            $this->params->instance,
+            Enums::MY_WORK
+        );
+
         $linkToChat = true;
-        $list = Lib::get_teacher_line($this->data);
-        $list.= Lib::get_unreaded_from_lines($this->data, $linkToChat);
+        $list.= Lib::get_unreaded_from_lines(
+            $this->data, 
+            $this->params->instance, 
+            Enums::MY_WORK,
+            $linkToChat
+        );
+
         return $list;
     }
 

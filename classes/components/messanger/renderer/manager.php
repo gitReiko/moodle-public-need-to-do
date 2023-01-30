@@ -120,8 +120,18 @@ class Manager
 
         foreach($this->data as $value)
         {
-            $list.= Lib::get_teacher_line($value);
-            $list.= Lib::get_unreaded_from_lines($value, $linkToChat);
+            $list.= Lib::get_teacher_line(
+                $value, 
+                $this->params->instance, 
+                Enums::NOT_MY_WORK
+            );
+            
+            $list.= Lib::get_unreaded_from_lines(
+                $value, 
+                $this->params->instance, 
+                Enums::NOT_MY_WORK, 
+                $linkToChat
+            );
         }
 
         return $list;

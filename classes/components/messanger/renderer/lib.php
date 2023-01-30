@@ -30,7 +30,8 @@ class Lib
      * 
      * @return string teacher line
      */
-    public static function get_teacher_line(\stdClass $value) : string 
+    public static function get_teacher_line(\stdClass $value, int $blockInstance,
+        string $whoseWork) : string 
     {
         $attr = array('class' => 'ntd-undone-work');
         $text = $value->unreadedMessages->count;
@@ -41,6 +42,8 @@ class Lib
         $attr = array(
             'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline ntd-tooltip',
             'data-teacher' => $value->teacher->id,
+            'data-block-instance' => $blockInstance,
+            'data-whose-work' => $whoseWork,
             'title' => cLib::get_teacher_contacts($value->teacher)
         );
         $line = $teacherName.' ('.$unreadedCount.')';
@@ -54,7 +57,8 @@ class Lib
      * 
      * @return string unreaded lines
      */
-    public static function get_unreaded_from_lines(\stdClass $value, bool $linkToChat = false) : string 
+    public static function get_unreaded_from_lines(\stdClass $value, int $blockInstance, 
+        string $whoseWork, bool $linkToChat = false) : string 
     {
         $lines = '';
 
@@ -66,6 +70,8 @@ class Lib
 
             $attr = array(
                 'data-teacher' => $value->teacher->id,
+                'data-block-instance' => $blockInstance,
+                'data-whose-work' => $whoseWork,
                 'data-user' => $fromUser->id
             );
 

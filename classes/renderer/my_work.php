@@ -4,11 +4,26 @@ namespace NTD\Classes\Renderer;
 
 require_once __DIR__.'/../components/messanger/renderer/my_work.php';
 
+use \NTD\Classes\Components\Messanger\Renderer\MyWork as MessengerMyWork;
+
 /**
  * Forms my work part of the block.
  */
 class MyWork
 {
+
+    /**
+     * Block instance params.
+     */
+    private $params;
+
+    /**
+     * Prepares data.
+     */
+    function __construct(\stdClass $params)
+    {
+        $this->params = $params;
+    }
 
     /**
      * Returns my work part of the block.
@@ -48,7 +63,7 @@ class MyWork
      */
     private function get_messanger_part() : string 
     {
-        $renderer = new \NTD\Classes\Components\Messanger\Renderer\MyWork;
+        $renderer = new MessengerMyWork($this->params);
         return $renderer->get_messanger_part();
     }
 

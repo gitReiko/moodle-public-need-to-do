@@ -142,7 +142,7 @@ class Content
      */
     private function get_my_work() : string 
     {
-        $renderer = new MyWork;
+        $renderer = new MyWork($this->params);
         return $renderer->get_my_work();
     }
 

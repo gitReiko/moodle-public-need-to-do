@@ -1,10 +1,14 @@
 // Onclick. Show / hide teacher unreaded messages. start
 require(['jquery'], function($)
 {
-    
     $('.ntd-messanger-headline').click(function() 
     {
-        $('.ntd-level-2[data-teacher='+this.dataset.teacher+']').toggleClass('ntd-hidden-box');
+        let identifier = '';
+        identifier += '.ntd-level-2[data-teacher='+this.dataset.teacher+']';
+        identifier += '[data-block-instance='+this.dataset.blockInstance+']';
+        identifier += '[data-whose-work='+this.dataset.whoseWork+']';
+
+        $(identifier).toggleClass('ntd-hidden-box');
     });
 });
 // Onclick. Show / hide teacher unreaded messages. end
