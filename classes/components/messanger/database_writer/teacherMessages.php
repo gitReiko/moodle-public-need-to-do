@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Components\Messanger\DatabaseWriter;
 
+use \NTD\Classes\Lib\Getters\Common as cGetter;
+
 class TeachersMessanges 
 {
 
@@ -172,6 +174,7 @@ class TeachersMessanges
         $user = new \stdClass;
         $user->id = $message->useridfrom;
         $user->count = 1;
+        $user->lasttimestamp = $message->timecreated;
         $user->lasttime = $message->timecreated;
 
         $structure->unreadedMessages->fromUsers[] = $user;
@@ -290,7 +293,7 @@ class TeachersMessanges
     {
         foreach($structure->unreadedMessages->fromUsers as $fromUser)
         {
-            $fromUser->lasttime = date('Y-m-d H:m', $fromUser->lasttime);
+            $fromUser->lasttimestamp = date('Y-m-d H:m', $fromUser->lasttime);
         }
     }
 

@@ -2,11 +2,10 @@
 
 namespace NTD\Classes\Components\Messanger\DatabaseWriter;
 
-require_once 'getters/teacherMessages.php';
+require_once 'teacherMessages.php';
 require_once __DIR__.'/../../../lib/components/database_writer.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter;
-use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -26,7 +25,7 @@ class Main extends DatabaseWriter
     /** Prepares data neccessary for database writer. */
     protected function prepare_neccessary_data() : void
     {
-        $teachers = new TeacherMessages($this->teachers);
+        $teachers = new TeachersMessanges($this->teachers);
         $this->data = $teachers->get_unread_teachers_messages();
     }
 
@@ -41,7 +40,7 @@ class Main extends DatabaseWriter
     {
         $needtodo = new \stdClass;
         $needtodo->component = $this->componentName;
-        $needtodo->teacherid = $teacher->id;
+        $needtodo->teacherid = $dataEntity->teacher->id;
         $needtodo->info = json_encode($dataEntity);
         $needtodo->updatetime = time();
         return $needtodo;

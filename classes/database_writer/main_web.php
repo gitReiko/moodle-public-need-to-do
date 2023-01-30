@@ -6,6 +6,8 @@ require_once __DIR__.'/../lib/enums.php';
 require_once __DIR__.'/../lib/getters/common.php';
 require_once __DIR__.'/main.php';
 
+use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWriter;
+use \NTD\Classes\Components\Forum\DatabaseWriter\Main as ForumDatabaseWriter;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use NTD\Classes\Lib\Enums as Enums; 
 
@@ -74,7 +76,7 @@ class MainWeb extends Main
      */
     protected function write_messsanger() : void 
     {
-        $messangerWriter = new \NTD\Classes\Components\Messanger\DatabaseWriter(
+        $messangerWriter = new MessangerDatabaseWriter(
             $this->teachers,
             $this->updateLevel
         );
@@ -88,7 +90,7 @@ class MainWeb extends Main
      */
     protected function write_forum() : void 
     {
-        $forumWriter = new \NTD\Classes\Components\Forum\DatabaseWriter\Main(
+        $forumWriter = new ForumDatabaseWriter(
             $this->teachers,
             $this->updateLevel
         );
