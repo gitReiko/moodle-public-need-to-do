@@ -27,11 +27,14 @@ class Lib
      * Returns line which display teacher name and number of unreaded messages.
      * 
      * @param stdClass all data about one teacher
+     * @param int block id 
+     * @param string $whoseWork 
+     * @param string $className
      * 
      * @return string teacher line
      */
-    public static function get_teacher_line(\stdClass $value, int $blockInstance,
-        string $whoseWork) : string 
+    public static function get_teacher_line(\stdClass $value, int $blockInstance, 
+        string $whoseWork, string $className) : string 
     {
         $attr = array('class' => 'ntd-undone-work');
         $text = $value->unreadedMessages->count;
@@ -40,7 +43,7 @@ class Lib
         $teacherName = $value->teacher->name;
 
         $attr = array(
-            'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline ntd-tooltip',
+            'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline ntd-tooltip '.$className,
             'data-teacher' => $value->teacher->id,
             'data-block-instance' => $blockInstance,
             'data-whose-work' => $whoseWork,
@@ -53,11 +56,14 @@ class Lib
     /**
      * Returns lines which display users whose messages are unread.
      * 
-     * @param stdClass all data about one teacher
+     * @param stdClass all data about one teacher 
+     * @param int block id 
+     * @param string $whoseWork
+     * @param bool $linkToChat
      * 
      * @return string unreaded lines
      */
-    public static function get_unreaded_from_lines(\stdClass $value, int $blockInstance, 
+    public static function get_unreaded_from_lines(\stdClass $value, int $blockInstance,
         string $whoseWork, bool $linkToChat = false) : string 
     {
         $lines = '';

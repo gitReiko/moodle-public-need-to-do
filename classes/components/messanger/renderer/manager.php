@@ -115,26 +115,83 @@ class Manager
      */
     private function get_teachers_list() : string 
     {
+        $blockClass = 'ntd-large-id-'.$this->params->instance;
         $linkToChat = false;
         $list = '';
 
+        $i = 0;
         foreach($this->data as $value)
         {
+            if($this->is_item_number_too_large($i)) 
+            {
+                $class = 'ntd-hidden-box '.$blockClass;
+            }
+            else 
+            {
+                $class = '';
+            }
+
             $list.= Lib::get_teacher_line(
                 $value, 
                 $this->params->instance, 
-                Enums::NOT_MY_WORK
+                Enums::NOT_MY_WORK,
+                $class
             );
             
             $list.= Lib::get_unreaded_from_lines(
                 $value, 
                 $this->params->instance, 
-                Enums::NOT_MY_WORK, 
+                Enums::NOT_MY_WORK,
                 $linkToChat
             );
+
+            $i++;
+        }
+
+        if($this->is_item_number_too_large($i)) 
+        {
+            $list.= $this->get_show_more_button($blockClass);
         }
 
         return $list;
+    }
+
+    /**
+     * Returns true if item number is too large.
+     * 
+     * @param int $number 
+     * 
+     * @return bool 
+     */
+    private function is_item_number_too_large(int $number) : bool 
+    {
+        if($number > 5) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns show / hide more button. 
+     * 
+     * @param string $class
+     * 
+     * @return string show / hide more button
+     */
+    private function get_show_more_button(string $class) : string 
+    {
+        $attr = array(
+            'class' => 'ntd-cursor-pointer',
+            'data-show-text' =>  get_string('show_more', 'block_needtodo'),
+            'data-hide-text' =>  get_string('hide_more', 'block_needtodo'),
+            'onclick' => 'show_hide_more(this,`'.$class.'`)'
+        );
+        $text = get_string('show_more', 'block_needtodo');
+        return \html_writer::tag('p', $text, $attr);
     }
 
 }
