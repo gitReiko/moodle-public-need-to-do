@@ -115,7 +115,7 @@ class Manager
      */
     private function get_teachers_list() : string 
     {
-        $blockClass = 'ntd-large-id-'.$this->params->instance;
+        $blockClass = 'ntd-more-chat-messages-'.$this->params->instance;
         $linkToChat = false;
         $list = '';
 
