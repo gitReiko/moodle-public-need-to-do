@@ -32,7 +32,7 @@ class Content
     /**
      * Prepares data and updates data if necessary.
      * 
-     * @param stdClass $params
+     * @param stdClass params of block instance
      */
     function __construct(\stdClass $params)
     {

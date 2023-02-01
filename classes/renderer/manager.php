@@ -2,6 +2,7 @@
 
 namespace NTD\Classes\Renderer;
 
+require_once 'manager_course_activities.php';
 require_once __DIR__.'/../components/messanger/renderer/manager.php';
 
 /**
@@ -33,6 +34,7 @@ class Manager
         $manager = $this->get_new_line();
         $manager.= $this->get_manager_header();
         $manager.= $this->get_messanger_part();
+        $manager.= $this->get_course_activities_part();
 
         return $manager;
     }
@@ -69,6 +71,12 @@ class Manager
     {
         $renderer = new \NTD\Classes\Components\Messanger\Renderer\Manager($this->params);
         return $renderer->get_messanger_part();
+    }
+
+    private function get_course_activities_part() : string 
+    {
+        $renderer = new ManagerCoursesActivities($this->params);
+        return 'activities part';
     }
 
 }

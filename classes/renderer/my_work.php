@@ -19,6 +19,8 @@ class MyWork
 
     /**
      * Prepares data.
+     * 
+     * @param stdClass params of block instance
      */
     function __construct(\stdClass $params)
     {
