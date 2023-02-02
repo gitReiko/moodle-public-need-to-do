@@ -213,9 +213,9 @@ class TeachersMessanges
         {
             if($fromUser->id == $message->useridfrom)
             {
-                if($fromUser->lasttime < $message->timecreated)
+                if($fromUser->lasttimestamp < $message->timecreated)
                 {
-                    $fromUser->lasttime = $message->timecreated;
+                    $fromUser->lasttimestamp = $message->timecreated;
                 }
             }
         }
@@ -293,7 +293,7 @@ class TeachersMessanges
     {
         foreach($structure->unreadedMessages->fromUsers as $fromUser)
         {
-            $fromUser->lasttimestamp = date('Y-m-d H:m', $fromUser->lasttime);
+            $fromUser->lasttime = date('Y-m-d H:m', $fromUser->lasttimestamp);
         }
     }
 
