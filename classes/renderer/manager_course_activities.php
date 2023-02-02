@@ -43,10 +43,6 @@ class ManagerCoursesActivities extends CoursesActivities
     {
         $this->courses = array();
         $this->courses = $this->add_forums_data();
-
-
-        echo '<hr>courses getter<hr>';
-        print_r($this->courses);
     }
 
     /**

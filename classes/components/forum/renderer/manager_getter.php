@@ -31,6 +31,8 @@ class ManagerGetter
         $this->courses = $courses;
 
         $this->add_forums_to_courses();
+        $this->count_teachers_unread_messages();
+        $this->count_courses_unread_messages();
     }
 
     /** 
@@ -268,8 +270,61 @@ class ManagerGetter
         $activity->name = $forum->name;
         $activity->cmid = $forum->cmid;
         $activity->type = Enums::FORUM;
+        $activity->unreadMessages = $forum->unreadedMessages;
 
         $teacher->activities[] = $activity;
+    }
+
+    /** 
+     * Counts teachers unread messages. 
+     */
+    private function count_teachers_unread_messages() : void 
+    {
+        foreach($this->courses as $course)
+        {
+            foreach($course->teachers as $teacher)
+            {
+                $teacher->unreadMessages = $this->count_teacher_unread_messages($teacher->activities);
+            }
+        }
+    }
+
+    /**
+     * Returns count of unread messages.
+     * 
+     * @param array activities 
+     * 
+     * @return int count of unread messages 
+     */
+    private function count_teacher_unread_messages(array $activities) : int 
+    {
+        $count = 0;
+
+        foreach($activities as $activity)
+        {
+            if($activity->type == Enums::FORUM)
+            {
+                $count += $activity->unreadMessages;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Counts courses unread messages. 
+     */
+    private function count_courses_unread_messages() : void 
+    {
+        foreach($this->courses as $course)
+        {
+            $course->unreadMessages = 0;
+
+            foreach($course->teachers as $teacher)
+            {
+                $course->unreadMessages += $teacher->unreadMessages;
+            }
+        }
     }
 
 

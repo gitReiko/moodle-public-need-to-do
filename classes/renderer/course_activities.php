@@ -36,9 +36,10 @@ abstract class CoursesActivities
      * 
      * @return string course activities
      */
-    public function get_course_actitivities_part() : string 
+    public function get_course_activities_part() : string 
     {
         $block = $this->get_header();
+        $block.= $this->get_list_of_course_activities();
 
         return $block;
     }
@@ -63,6 +64,56 @@ abstract class CoursesActivities
         $attr = array('class' => 'ntd-messanger-header');
         $text = get_string('course_activities', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
+    }
+
+    /**
+     * Returns list of course activities.
+     * 
+     * @return string list of course activities
+     */
+    private function get_list_of_course_activities() : string 
+    {
+        $list = '';
+
+        foreach($this->courses as $course)
+        {
+            $list.= $this->get_course_cell($course);
+        }
+
+        return $list;
+    }
+
+    /**
+     * Returns course cell. 
+     * 
+     * @param stdClass course
+     * 
+     * @return string course
+     */
+    private function get_course_cell(\stdClass $course) : string 
+    {
+        $attr = array(
+            'class' => 'ntd-expandable-box ntd-level-1'
+        );
+        $text = $course->name;
+        $text.= $this->get_course_unread_forum_messages_label($course);
+        return \html_writer::tag('div', $text, $attr);
+    }
+
+
+    /**
+     * Returns course unread forum messages label.
+     * 
+     * @param stdClass course 
+     * 
+     * @return string forum label
+     */
+    private function get_course_unread_forum_messages_label(\stdClass $course) : string 
+    {
+        $attr = array('class' => 'ntd-undone-work');
+        $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
+        $text.= $course->unreadMessages;        
+        return \html_writer::tag('span', $text, $attr);
     }
 
 }

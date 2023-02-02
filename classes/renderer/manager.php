@@ -76,7 +76,7 @@ class Manager
     private function get_course_activities_part() : string 
     {
         $renderer = new ManagerCoursesActivities($this->params);
-        return $renderer->get_course_actitivities_part();
+        return $renderer->get_course_activities_part();
     }
 
 }
