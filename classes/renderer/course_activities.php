@@ -2,6 +2,9 @@
 
 namespace NTD\Classes\Renderer;
 
+use NTD\Classes\Lib\Enums as Enums; 
+use NTD\Classes\Lib\Common as cLib;
+
 /**
  * Forms manager activities part.
  */
@@ -78,6 +81,7 @@ abstract class CoursesActivities
         foreach($this->courses as $course)
         {
             $list.= $this->get_course_cell($course);
+            $list.= $this->get_teachers_cell($course);
         }
 
         return $list;
@@ -93,27 +97,59 @@ abstract class CoursesActivities
     private function get_course_cell(\stdClass $course) : string 
     {
         $attr = array(
-            'class' => 'ntd-expandable-box ntd-level-1'
+            'class' => 'ntd-expandable ntd-teacher-cell',
+            'data-course-cell' => $course->id,
+            'data-block-instance' => $this->params->instance,
+            'data-whose-work' => Enums::NOT_MY_WORK,
         );
         $text = $course->name;
-        $text.= $this->get_course_unread_forum_messages_label($course);
+        $text.= $this->get_unread_forum_messages_label($course);
         return \html_writer::tag('div', $text, $attr);
     }
-
-
+    
     /**
-     * Returns course unread forum messages label.
+     * Returns entity unread forum messages label.
      * 
-     * @param stdClass course 
+     * @param stdClass entity 
      * 
      * @return string forum label
      */
-    private function get_course_unread_forum_messages_label(\stdClass $course) : string 
+    private function get_unread_forum_messages_label(\stdClass $entity) : string 
     {
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
-        $text.= $course->unreadMessages;        
+        $text.= $entity->unreadMessages;        
         return \html_writer::tag('span', $text, $attr);
     }
+
+    /**
+     * Returns course teachers cells.
+     * 
+     * @param stdClass course 
+     * 
+     * @return strings teachers cells 
+     */
+    private function get_teachers_cell(\stdClass $course) : string 
+    {
+        $cells = '';
+
+        foreach($course->teachers as $teacher)
+        {
+            $attr = array(
+                'class' => 'ntd-expandable ntd-level-2 ntd-tooltip ntd-hidden-box',
+                'data-course-cell' => $course->id,
+                'data-block-instance' => $this->params->instance,
+                'data-whose-work' => Enums::NOT_MY_WORK,
+                'title' => cLib::get_teacher_contacts($teacher)
+            );
+            $text = $teacher->name;
+            $text.= $this->get_unread_forum_messages_label($teacher);
+            $cells.= \html_writer::tag('div', $text, $attr);
+        }
+
+        return $cells;
+    }
+
+
 
 }

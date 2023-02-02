@@ -43,7 +43,7 @@ class Lib
         $teacherName = $value->teacher->name;
 
         $attr = array(
-            'class' => 'ntd-expandable-box ntd-level-1 ntd-messanger-headline ntd-tooltip '.$className,
+            'class' => 'ntd-expandable ntd-messanger-headline ntd-tooltip '.$className,
             'data-teacher' => $value->teacher->id,
             'data-block-instance' => $blockInstance,
             'data-whose-work' => $whoseWork,

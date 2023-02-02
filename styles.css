@@ -4,17 +4,17 @@
     color: #9e1922;
 }
 
-.ntd-expandable-box
-{
-    cursor: pointer;
-}
-
 .ntd-hidden-box 
 {
     display: none;
 }
 
-.ntd-level-1::before 
+.ntd-expandable
+{
+    cursor: pointer;
+}
+
+.ntd-expandable::before 
 {
     content: "› ";
 }

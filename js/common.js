@@ -51,4 +51,15 @@ function show_hide_more(event, blockLargeId)
     });
 }
 
+require(['jquery'], function($)
+{
+    $('.ntd-teacher-cell').click(function() 
+    {
+        let identifier = '';
+        identifier += '.ntd-level-2[data-course-cell='+this.dataset.courseCell+']';
+        identifier += '[data-block-instance='+this.dataset.blockInstance+']';
+        identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 
+        $(identifier).toggleClass('ntd-hidden-box');
+    });
+});
