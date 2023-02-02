@@ -188,7 +188,8 @@ class Manager
             'class' => 'ntd-cursor-pointer',
             'data-show-text' =>  get_string('show_more', 'block_needtodo'),
             'data-hide-text' =>  get_string('hide_more', 'block_needtodo'),
-            'onclick' => 'show_hide_more(this,`'.$class.'`)'
+            'onclick' => 'show_hide_more(this,`'.$class.'`)',
+            'style' => 'margin-bottom: 0px'
         );
         $text = get_string('show_more', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);

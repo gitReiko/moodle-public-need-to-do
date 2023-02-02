@@ -31,6 +31,18 @@ abstract class CoursesActivities
         $this->init_courses_for_renderer();
     }
 
+    /**
+     * Returns course activities part of block.
+     * 
+     * @return string course activities
+     */
+    public function get_course_actitivities_part() : string 
+    {
+        $block = $this->get_header();
+
+        return $block;
+    }
+
     /** 
      * Prepares data neccessary for child classes.
      */
@@ -40,5 +52,17 @@ abstract class CoursesActivities
      * Prepares data necessary for render.
      */
     abstract protected function init_courses_for_renderer() : void;
+
+    /**
+     * Returns header of class.
+     * 
+     * @return string header
+     */
+    private function get_header() : string 
+    {
+        $attr = array('class' => 'ntd-messanger-header');
+        $text = get_string('course_activities', 'block_needtodo');
+        return \html_writer::tag('p', $text, $attr);
+    }
 
 }

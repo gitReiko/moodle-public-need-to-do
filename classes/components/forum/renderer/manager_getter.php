@@ -61,9 +61,6 @@ class ManagerGetter
                 $this->add_activity_if_necessary($data, $forum);
             }
         }
-
-        echo '<hr><hr>';
-        print_r($this->courses);
     }
 
     /**
