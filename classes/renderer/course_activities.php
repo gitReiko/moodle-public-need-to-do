@@ -97,7 +97,7 @@ abstract class CoursesActivities
     private function get_course_cell(\stdClass $course) : string 
     {
         $attr = array(
-            'class' => 'ntd-expandable ntd-activities-teacher-cell ntd-tooltip',
+            'class' => 'ntd-expandable ntd-activity-course-cell ntd-tooltip',
             'data-course-cell' => $course->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => Enums::NOT_MY_WORK,
@@ -152,7 +152,7 @@ abstract class CoursesActivities
         foreach($course->teachers as $teacher)
         {
             $attr = array(
-                'class' => 'ntd-expandable ntd-level-2 ntd-tooltip ntd-hidden-box ntd-activities-activity-cell',
+                'class' => 'ntd-expandable ntd-level-2 ntd-tooltip ntd-hidden-box ntd-activity-teacher-cell',
                 'data-course-cell' => $course->id,
                 'data-teacher-cell' => $teacher->id,
                 'data-block-instance' => $this->params->instance,

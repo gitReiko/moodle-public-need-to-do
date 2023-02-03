@@ -54,21 +54,30 @@ require(['jquery'], function($)
 // Onclick. Show / hide teachers course activities cells.
 require(['jquery'], function($)
 {
-    $('.ntd-activities-teacher-cell').click(function() 
+    $('.ntd-activity-course-cell').click(function() 
     {
         let identifier = '';
         identifier += '.ntd-level-2[data-course-cell='+this.dataset.courseCell+']';
         identifier += '[data-block-instance='+this.dataset.blockInstance+']';
         identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 
-        $(identifier).toggleClass('ntd-hidden-box');
+        $(identifier).toggleClass('ntd-hidden-box').each(function(index) {
+
+            let childId = '';
+            childId += '.ntd-level-3[data-teacher-cell='+$(this).attr('data-teacher-cell')+']';
+            childId += '[data-block-instance='+$(this).attr('data-block-instance')+']';
+            childId += '[data-whose-work='+$(this).attr('data-whose-work')+']';
+            
+            $(childId).addClass('ntd-hidden-box');
+        });
+
     });
 });
 
 // Onclick. Show / hide activities course activities cells.
 require(['jquery'], function($)
 {
-    $('.ntd-activities-activity-cell').click(function() 
+    $('.ntd-activity-teacher-cell').click(function() 
     {
         let identifier = '';
         identifier += '.ntd-level-3[data-teacher-cell='+this.dataset.teacherCell+']';
