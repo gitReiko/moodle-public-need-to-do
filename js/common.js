@@ -1,17 +1,3 @@
-// Onclick. Show / hide teacher unreaded messages. start
-require(['jquery'], function($)
-{
-    $('.ntd-messanger-headline').click(function() 
-    {
-        let identifier = '';
-        identifier += '.ntd-level-2[data-teacher='+this.dataset.teacher+']';
-        identifier += '[data-block-instance='+this.dataset.blockInstance+']';
-        identifier += '[data-whose-work='+this.dataset.whoseWork+']';
-
-        $(identifier).toggleClass('ntd-hidden-box');
-    });
-});
-// Onclick. Show / hide teacher unreaded messages. end
 
 // Teachers tooltips start 
 require(['jquery'], function($)
@@ -51,9 +37,24 @@ function show_hide_more(event, blockLargeId)
     });
 }
 
+// Onclick. Show / hide teachers chat cells.
 require(['jquery'], function($)
 {
-    $('.ntd-teacher-cell').click(function() 
+    $('.ntd-chat-teachers').click(function() 
+    {
+        let identifier = '';
+        identifier += '.ntd-level-2[data-teacher='+this.dataset.teacher+']';
+        identifier += '[data-block-instance='+this.dataset.blockInstance+']';
+        identifier += '[data-whose-work='+this.dataset.whoseWork+']';
+
+        $(identifier).toggleClass('ntd-hidden-box');
+    });
+});
+
+// Onclick. Show / hide teachers activities cells.
+require(['jquery'], function($)
+{
+    $('.ntd-activities-teacher-cell').click(function() 
     {
         let identifier = '';
         identifier += '.ntd-level-2[data-course-cell='+this.dataset.courseCell+']';

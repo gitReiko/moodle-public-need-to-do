@@ -97,7 +97,7 @@ abstract class CoursesActivities
     private function get_course_cell(\stdClass $course) : string 
     {
         $attr = array(
-            'class' => 'ntd-expandable ntd-teacher-cell',
+            'class' => 'ntd-expandable ntd-activities-teacher-cell',
             'data-course-cell' => $course->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => Enums::NOT_MY_WORK,

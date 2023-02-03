@@ -37,19 +37,20 @@ class Lib
         string $whoseWork, string $className) : string 
     {
         $attr = array('class' => 'ntd-undone-work');
-        $text = $value->unreadedMessages->count;
+        $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
+        $text.= $value->unreadedMessages->count;
         $unreadedCount = \html_writer::tag('span', $text, $attr);
 
         $teacherName = $value->teacher->name;
 
         $attr = array(
-            'class' => 'ntd-expandable ntd-messanger-headline ntd-tooltip '.$className,
+            'class' => 'ntd-expandable ntd-chat-teachers ntd-tooltip '.$className,
             'data-teacher' => $value->teacher->id,
             'data-block-instance' => $blockInstance,
             'data-whose-work' => $whoseWork,
             'title' => cLib::get_teacher_contacts($value->teacher)
         );
-        $line = $teacherName.' ('.$unreadedCount.')';
+        $line = $teacherName.$unreadedCount;
         return \html_writer::tag('div', $line, $attr);
     }
 
@@ -71,7 +72,8 @@ class Lib
         foreach($value->unreadedMessages->fromUsers as $fromUser)
         {
             $attr = array('class' => 'ntd-undone-work');
-            $text = $fromUser->count;
+            $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
+            $text.= $fromUser->count;
             $unreadedCount = \html_writer::tag('span', $text, $attr);
 
             $attr = array(
@@ -99,7 +101,7 @@ class Lib
 
             $attr = array_merge($attr, $attr2);
 
-            $text = $fromUser->name.' ('.$unreadedCount.')';
+            $text = $fromUser->name.$unreadedCount;
             $lines.= \html_writer::tag('div', $text, $attr);
         }
 
