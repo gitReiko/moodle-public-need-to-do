@@ -40,7 +40,7 @@ function show_hide_more(event, blockLargeId)
 // Onclick. Show / hide teachers chat cells.
 require(['jquery'], function($)
 {
-    $('.ntd-chat-teachers').click(function() 
+    $('.ntd-chat-teacher').click(function() 
     {
         let identifier = '';
         identifier += '.ntd-level-2[data-teacher='+this.dataset.teacher+']';

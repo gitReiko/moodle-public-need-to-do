@@ -44,7 +44,7 @@ class Lib
         $teacherName = $value->teacher->name;
 
         $attr = array(
-            'class' => 'ntd-expandable ntd-chat-teachers ntd-tooltip '.$className,
+            'class' => 'ntd-expandable ntd-chat-teacher ntd-tooltip '.$className,
             'data-teacher' => $value->teacher->id,
             'data-block-instance' => $blockInstance,
             'data-whose-work' => $whoseWork,
