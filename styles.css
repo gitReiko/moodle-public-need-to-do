@@ -25,6 +25,12 @@
     background: #f7e7d2;
 }
 
+.ntd-level-3 
+{
+    margin-left: 20px;
+    background: #fbf5ed;
+}
+
 .ntd-cursor-default 
 {
     cursor: default;

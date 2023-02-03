@@ -117,7 +117,7 @@ abstract class CoursesActivities
      */
     private function get_course_title(\stdClass $course)
     {
-        $title = $course->name.'<br>';
+        $title = get_string('course', 'block_needtodo').$course->name.'<br>';
         $title.= get_string('unread_forum_messages', 'block_needtodo');
         $title.= $course->unreadMessages;
         return $title;
@@ -152,8 +152,9 @@ abstract class CoursesActivities
         foreach($course->teachers as $teacher)
         {
             $attr = array(
-                'class' => 'ntd-expandable ntd-level-2 ntd-tooltip ntd-hidden-box',
+                'class' => 'ntd-expandable ntd-level-2 ntd-tooltip ntd-hidden-box ntd-activities-activity-cell',
                 'data-course-cell' => $course->id,
+                'data-teacher-cell' => $teacher->id,
                 'data-block-instance' => $this->params->instance,
                 'data-whose-work' => Enums::NOT_MY_WORK,
                 'title' => $this->get_teacher_contacts($teacher, $teacher->unreadMessages)
@@ -161,6 +162,11 @@ abstract class CoursesActivities
             $text = $teacher->name;
             $text.= $this->get_unread_forum_messages_label($teacher);
             $cells.= \html_writer::tag('div', $text, $attr);
+
+            foreach($teacher->activities as $activity)
+            {
+                $cells.= $this->get_activities_cell($teacher, $activity);
+            }
         }
 
         return $cells;
@@ -180,6 +186,50 @@ abstract class CoursesActivities
         $unreadText.= $unreadCount;
 
         return cLib::get_teacher_contacts($teacher, $unreadText);
+    }
+
+    /**
+     * Returns activities cells.
+     * 
+     * @param stdClass teacher 
+     * @param stdClass activity 
+     * 
+     * @return string activity cells
+     */
+    private function get_activities_cell(\stdClass $teacher, \stdClass $activity) : string 
+    {
+        $attr = array(
+            'class' => 'ntd-level-3 ntd-tooltip ntd-hidden-box ntd-cursor-pointer',
+            'data-teacher-cell' => $teacher->id,
+            'data-block-instance' => $this->params->instance,
+            'data-whose-work' => Enums::NOT_MY_WORK,
+            'title' => $this->get_activity_title($activity)
+        );
+        $text = $activity->name;
+        $text.= $this->get_unread_forum_messages_label($activity);
+        return \html_writer::tag('div', $text, $attr);
+    }
+
+    /**
+     * Returns activity title. 
+     * 
+     * @param stdClass activity 
+     * 
+     * @return string title
+     */
+    private function get_activity_title(\stdClass $activity) : string 
+    {
+        $title = '';
+
+        if($activity->type == Enums::FORUM)
+        {
+            $title.= get_string('forum', 'block_needtodo');
+        }
+
+        $title.= $activity->name.'<br>';
+        $title.= get_string('unread_forum_messages', 'block_needtodo');
+        $title.= $activity->unreadMessages;
+        return $title;
     }
 
 

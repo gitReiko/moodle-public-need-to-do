@@ -51,13 +51,27 @@ require(['jquery'], function($)
     });
 });
 
-// Onclick. Show / hide teachers activities cells.
+// Onclick. Show / hide teachers course activities cells.
 require(['jquery'], function($)
 {
     $('.ntd-activities-teacher-cell').click(function() 
     {
         let identifier = '';
         identifier += '.ntd-level-2[data-course-cell='+this.dataset.courseCell+']';
+        identifier += '[data-block-instance='+this.dataset.blockInstance+']';
+        identifier += '[data-whose-work='+this.dataset.whoseWork+']';
+
+        $(identifier).toggleClass('ntd-hidden-box');
+    });
+});
+
+// Onclick. Show / hide activities course activities cells.
+require(['jquery'], function($)
+{
+    $('.ntd-activities-activity-cell').click(function() 
+    {
+        let identifier = '';
+        identifier += '.ntd-level-3[data-teacher-cell='+this.dataset.teacherCell+']';
         identifier += '[data-block-instance='+this.dataset.blockInstance+']';
         identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 
