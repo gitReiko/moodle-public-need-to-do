@@ -48,10 +48,26 @@ class Lib
             'data-teacher' => $value->teacher->id,
             'data-block-instance' => $blockInstance,
             'data-whose-work' => $whoseWork,
-            'title' => cLib::get_teacher_contacts($value->teacher)
+            'title' => self::get_teacher_contacts($value->teacher, $value->unreadedMessages->count)
         );
         $line = $teacherName.$unreadedCount;
         return \html_writer::tag('div', $line, $attr);
+    }
+
+    /**
+     * Returns teacher contacts prepared for render.
+     * 
+     * @param stdClass teacher 
+     * @param int unread count 
+     * 
+     * @return string contacts prepared for render
+     */
+    private static function get_teacher_contacts(\stdClass $teacher, int $unreadCount) : string 
+    {
+        $unreadText = get_string('unread_chat_messages', 'block_needtodo');
+        $unreadText.= $unreadCount;
+
+        return cLib::get_teacher_contacts($teacher, $unreadText);
     }
 
     /**
@@ -119,6 +135,8 @@ class Lib
     {
         $title = get_string('message_sent_by', 'block_needtodo').': ';
         $title.= $fromUser->name.'<br>';
+        $title.= get_string('unread_chat_messages', 'block_needtodo');
+        $title.= $fromUser->count.'<br>';
         $title.= get_string('last_name_sent', 'block_needtodo').': ';
         $title.= $fromUser->lasttime;
 

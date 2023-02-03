@@ -44,5 +44,7 @@ $string['pluginname:addinstance'] = 'Добавить новый блок Нуж
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';
 $string['pluginname'] = 'Нужно сделать';
 $string['show_more'] = 'Показать больше...';
+$string['unread_chat_messages'] = 'Непрочитано сообщений чата: ';
+$string['unread_forum_messages'] = 'Непрочитано сообщений форума: ';
 $string['update_data'] = 'Обновить данные';
 $string['use_settings_below'] = 'Использовать приведённые ниже настройки';

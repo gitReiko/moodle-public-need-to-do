@@ -38,14 +38,16 @@ class Common
      * Returns teacher contacts prepared for render.
      * 
      * @param stdClass teacher 
+     * @param string undone count 
      * 
      * @return string contacts prepared for render
      */
-    public static function get_teacher_contacts(\stdClass $teacher) : string 
+    public static function get_teacher_contacts(\stdClass $teacher, string $undoneCount) : string 
     {
         $newline = '<br>';
 
         $contacts = $teacher->name.$newline;
+        $contacts.= $undoneCount.$newline;
 
         if(!empty($teacher->email))
         {

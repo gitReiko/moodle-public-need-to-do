@@ -97,14 +97,30 @@ abstract class CoursesActivities
     private function get_course_cell(\stdClass $course) : string 
     {
         $attr = array(
-            'class' => 'ntd-expandable ntd-activities-teacher-cell',
+            'class' => 'ntd-expandable ntd-activities-teacher-cell ntd-tooltip',
             'data-course-cell' => $course->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => Enums::NOT_MY_WORK,
+            'title' => $this->get_course_title($course)
         );
         $text = $course->name;
         $text.= $this->get_unread_forum_messages_label($course);
         return \html_writer::tag('div', $text, $attr);
+    }
+
+    /**
+     * Returns tile for course cell.
+     * 
+     * @param stdClass course 
+     * 
+     * @return string title 
+     */
+    private function get_course_title(\stdClass $course)
+    {
+        $title = $course->name.'<br>';
+        $title.= get_string('unread_forum_messages', 'block_needtodo');
+        $title.= $course->unreadMessages;
+        return $title;
     }
     
     /**
@@ -140,7 +156,7 @@ abstract class CoursesActivities
                 'data-course-cell' => $course->id,
                 'data-block-instance' => $this->params->instance,
                 'data-whose-work' => Enums::NOT_MY_WORK,
-                'title' => cLib::get_teacher_contacts($teacher)
+                'title' => $this->get_teacher_contacts($teacher, $teacher->unreadMessages)
             );
             $text = $teacher->name;
             $text.= $this->get_unread_forum_messages_label($teacher);
@@ -148,6 +164,22 @@ abstract class CoursesActivities
         }
 
         return $cells;
+    }
+
+    /**
+     * Returns teacher contacts prepared for render.
+     * 
+     * @param stdClass teacher 
+     * @param int unread count 
+     * 
+     * @return string contacts prepared for render
+     */
+    private function get_teacher_contacts(\stdClass $teacher, int $unreadCount) : string 
+    {
+        $unreadText = get_string('unread_forum_messages', 'block_needtodo');
+        $unreadText.= $unreadCount;
+
+        return cLib::get_teacher_contacts($teacher, $unreadText);
     }
 
 
