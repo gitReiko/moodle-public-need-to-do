@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Lib;
 
+require_once 'enums.php';
+
 class Common 
 {
 
@@ -63,6 +65,45 @@ class Common
         }
 
         return $contacts;
+    }
+
+    /**
+     * Returns true if item number is too large.
+     * 
+     * @param int $number 
+     * 
+     * @return bool 
+     */
+    public static function is_item_number_too_large(int $number) : bool 
+    {
+        if($number > 5) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns show / hide more button. 
+     * 
+     * @param string $class
+     * 
+     * @return string show / hide more button
+     */
+    public static function get_show_more_button(string $class) : string 
+    {
+        $attr = array(
+            'class' => 'ntd-cursor-pointer',
+            'data-show-text' =>  get_string('show_more', 'block_needtodo'),
+            'data-hide-text' =>  get_string('hide_more', 'block_needtodo'),
+            'onclick' => 'show_hide_more(this,`'.$class.'`,`'.Enums::CHILDS.'`)',
+            'style' => 'margin-bottom: 0px'
+        );
+        $text = get_string('show_more', 'block_needtodo');
+        return \html_writer::tag('p', $text, $attr);
     }
 
 }

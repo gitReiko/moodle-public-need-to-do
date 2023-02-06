@@ -24,6 +24,11 @@ class Manager
     private $data;
 
     /**
+     * Class name for more button.
+     */
+    private $more = Enums::MORE.Enums::OTHER.Enums::MESSAGES;
+
+    /**
      * Prepares data for class.
      */
     function __construct(\stdClass $params)
@@ -115,20 +120,22 @@ class Manager
      */
     private function get_teachers_list() : string 
     {
-        $blockClass = 'ntd-more-chat-messages-'.$this->params->instance;
+        $blockClass = $this->more.$this->params->instance;
         $linkToChat = false;
         $list = '';
 
         $i = 0;
         foreach($this->data as $value)
         {
-            if($this->is_item_number_too_large($i)) 
+            if(cLib::is_item_number_too_large($i)) 
             {
                 $class = 'ntd-hidden-box '.$blockClass;
+                $childClass = $blockClass.Enums::CHILDS;
             }
             else 
             {
                 $class = '';
+                $childClass = '';
             }
 
             $list.= Lib::get_teacher_line(
@@ -142,57 +149,19 @@ class Manager
                 $value, 
                 $this->params->instance, 
                 Enums::NOT_MY_WORK,
+                $childClass,
                 $linkToChat
             );
 
             $i++;
         }
 
-        if($this->is_item_number_too_large($i)) 
+        if(cLib::is_item_number_too_large($i)) 
         {
-            $list.= $this->get_show_more_button($blockClass);
+            $list.= cLib::get_show_more_button($blockClass);
         }
 
         return $list;
-    }
-
-    /**
-     * Returns true if item number is too large.
-     * 
-     * @param int $number 
-     * 
-     * @return bool 
-     */
-    private function is_item_number_too_large(int $number) : bool 
-    {
-        if($number > 5) 
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Returns show / hide more button. 
-     * 
-     * @param string $class
-     * 
-     * @return string show / hide more button
-     */
-    private function get_show_more_button(string $class) : string 
-    {
-        $attr = array(
-            'class' => 'ntd-cursor-pointer',
-            'data-show-text' =>  get_string('show_more', 'block_needtodo'),
-            'data-hide-text' =>  get_string('hide_more', 'block_needtodo'),
-            'onclick' => 'show_hide_more(this,`'.$class.'`)',
-            'style' => 'margin-bottom: 0px'
-        );
-        $text = get_string('show_more', 'block_needtodo');
-        return \html_writer::tag('p', $text, $attr);
     }
 
 }

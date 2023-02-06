@@ -10,6 +10,7 @@ use NTD\Classes\Lib\Common as cLib;
  */
 abstract class CoursesActivities
 {
+
     /**
      * Courses with activities and teachers.
      * 
@@ -21,6 +22,11 @@ abstract class CoursesActivities
      * Block instance params.
      */
     protected $params;
+
+    /**
+     * Class name for more button.
+     */
+    private $more = Enums::MORE.Enums::OTHER.Enums::ACTIVITIES;
 
     /**
      * Prepares data.
@@ -77,71 +83,34 @@ abstract class CoursesActivities
     private function get_list_of_course_activities() : string 
     {
         $list = '';
-        $blockClass = 'ntd-more-activities-'.$this->params->instance;
+        $blockClass = $this->more.$this->params->instance;
 
         $i = 0;
         foreach($this->courses as $course)
         {
-            if($this->is_item_number_too_large($i)) 
+            if(cLib::is_item_number_too_large($i)) 
             {
                 $class = 'ntd-hidden-box '.$blockClass;
+                $childClass = $blockClass.Enums::CHILDS;
             }
             else 
             {
                 $class = '';
+                $childClass = '';
             }
 
             $list.= $this->get_course_cell($course, $class);
-            $list.= $this->get_teachers_cell($course);
+            $list.= $this->get_teachers_cell($course, $childClass);
 
             $i++;
         }
 
-        if($this->is_item_number_too_large($i)) 
+        if(cLib::is_item_number_too_large($i)) 
         {
-            $list.= $this->get_show_more_button($blockClass);
+            $list.= cLib::get_show_more_button($blockClass, $childClass);
         }
 
         return $list;
-    }
-
-    /**
-     * Returns true if item number is too large.
-     * 
-     * @param int $number 
-     * 
-     * @return bool 
-     */
-    private function is_item_number_too_large(int $number) : bool 
-    {
-        if($number > 5) 
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Returns show / hide more button. 
-     * 
-     * @param string $class
-     * 
-     * @return string show / hide more button
-     */
-    private function get_show_more_button(string $class) : string 
-    {
-        $attr = array(
-            'class' => 'ntd-cursor-pointer',
-            'data-show-text' =>  get_string('show_more', 'block_needtodo'),
-            'data-hide-text' =>  get_string('hide_more', 'block_needtodo'),
-            'onclick' => 'show_hide_more(this,`'.$class.'`)',
-            'style' => 'margin-bottom: 0px'
-        );
-        $text = get_string('show_more', 'block_needtodo');
-        return \html_writer::tag('p', $text, $attr);
     }
 
     /**
@@ -200,17 +169,22 @@ abstract class CoursesActivities
      * Returns course teachers cells.
      * 
      * @param stdClass course 
+     * @param stdClass child class
      * 
      * @return strings teachers cells 
      */
-    private function get_teachers_cell(\stdClass $course) : string 
+    private function get_teachers_cell(\stdClass $course, string $childClass) : string 
     {
         $cells = '';
 
         foreach($course->teachers as $teacher)
         {
+            $className = 'ntd-expandable ntd-level-2  ntd-tooltip ';
+            $className.= 'ntd-hidden-box ntd-activity-teacher-cell ';
+            $className.= $childClass;
+
             $attr = array(
-                'class' => 'ntd-expandable ntd-level-2 ntd-tooltip ntd-hidden-box ntd-activity-teacher-cell',
+                'class' => $className,
                 'data-course-cell' => $course->id,
                 'data-teacher-cell' => $teacher->id,
                 'data-block-instance' => $this->params->instance,
@@ -223,7 +197,7 @@ abstract class CoursesActivities
 
             foreach($teacher->activities as $activity)
             {
-                $cells.= $this->get_activities_cell($teacher, $activity);
+                $cells.= $this->get_activities_cell($teacher, $activity, $className);
             }
         }
 
@@ -251,13 +225,14 @@ abstract class CoursesActivities
      * 
      * @param stdClass teacher 
      * @param stdClass activity 
+     * @param string class name
      * 
      * @return string activity cells
      */
-    private function get_activities_cell(\stdClass $teacher, \stdClass $activity) : string 
+    private function get_activities_cell(\stdClass $teacher, \stdClass $activity, string $className) : string 
     {
         $attr = array(
-            'class' => 'ntd-level-3 ntd-tooltip ntd-hidden-box ntd-cursor-pointer',
+            'class' => 'ntd-level-3 ntd-tooltip ntd-hidden-box ntd-cursor-pointer'.$className,
             'data-teacher-cell' => $teacher->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => Enums::NOT_MY_WORK,

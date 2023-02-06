@@ -20,20 +20,21 @@ require(['jquery'], function($)
 });
 // Teachers tooltips end
 
-function show_hide_more(event, blockLargeId)
+function show_hide_more(button, hiddenElements, childs)
 {
     require(['jquery'], function($)
     {
-        if($(event).text() == $(event).attr('data-show-text'))
+        if($(button).text() == $(button).attr('data-show-text'))
         {
-            $(event).text($(event).attr('data-hide-text'));
+            $(button).text($(button).attr('data-hide-text'));
         }
         else 
         {
-            $(event).text($(event).attr('data-show-text'));
+            $(button).text($(button).attr('data-show-text'));
         }
 
-        $('.'+blockLargeId).toggleClass('ntd-hidden-box');
+        $('.'+hiddenElements).toggleClass('ntd-hidden-box');
+        $('.'+hiddenElements+childs).addClass('ntd-hidden-box');
     });
 }
 

@@ -18,4 +18,12 @@ class Enums
     const MY_WORK = 'my_work';
     const NOT_MY_WORK = 'not_my_work';
 
+    // More button
+    const MORE = 'ntd-more-';
+    const MY = 'my-';
+    const OTHER = 'other-';
+    const MESSAGES = 'messages-';
+    const ACTIVITIES = 'activities-';
+    const CHILDS = '-childs';
+
 }

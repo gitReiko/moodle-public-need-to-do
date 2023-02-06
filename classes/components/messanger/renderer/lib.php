@@ -81,7 +81,7 @@ class Lib
      * @return string unreaded lines
      */
     public static function get_unreaded_from_lines(\stdClass $value, int $blockInstance,
-        string $whoseWork, bool $linkToChat = false) : string 
+        string $whoseWork, string $className, bool $linkToChat = false) : string 
     {
         $lines = '';
 
@@ -102,7 +102,7 @@ class Lib
             if($linkToChat)
             {
                 $attr2 = array(
-                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-pointer ntd-tooltip',
+                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-pointer ntd-tooltip '.$className,
                     'onclick' => 'window.location.replace("/message/index.php");', // redirect to link 
                     'title' => self::get_student_title($fromUser)
                 );
@@ -110,7 +110,7 @@ class Lib
             else 
             {
                 $attr2 = array(
-                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-default ntd-tooltip', 
+                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-default ntd-tooltip '.$className, 
                     'title' => self::get_student_title($fromUser)
                 );
             }
