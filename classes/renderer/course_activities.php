@@ -207,6 +207,9 @@ abstract class CoursesActivities
         );
         $text = $activity->name;
         $text.= $this->get_unread_forum_messages_label($activity);
+
+        $text = \html_writer::tag('a', $text, array('href' => $activity->link));
+
         return \html_writer::tag('div', $text, $attr);
     }
 

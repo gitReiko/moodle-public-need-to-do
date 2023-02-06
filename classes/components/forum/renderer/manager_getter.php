@@ -270,6 +270,7 @@ class ManagerGetter
         $activity->name = $forum->name;
         $activity->cmid = $forum->cmid;
         $activity->type = Enums::FORUM;
+        $activity->link = '/mod/forum/view.php?id='.$forum->cmid;
         $activity->unreadMessages = $forum->unreadedMessages;
 
         $teacher->activities[] = $activity;
