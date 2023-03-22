@@ -2,9 +2,12 @@
 
 namespace NTD\Classes\Renderer;
 
+require_once 'activities.php';
 require_once __DIR__.'/../components/messanger/renderer/my_work.php';
 
 use \NTD\Classes\Components\Messanger\Renderer\MyWork as MessengerMyWork;
+use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
  * Forms my work part of the block.
@@ -34,16 +37,21 @@ class MyWork
      */
     public function get_my_work() : string 
     {
-        $myWork = $this->get_messanger_part();
+        $messangerPart = $this->get_messanger_part();
+        $activitiesPart = $this->get_activities_part();
 
-        if(empty($myWork))
+        if(empty($messangerPart) || empty($activitiesPart))
         {
-            return '';
+            $my = '';
         }
         else 
         {
-            return $this->get_my_works_header().$myWork;
+            $my = $this->get_my_works_header();
+            $my.= $messangerPart;
+            $my.= $activitiesPart;
         }
+
+        return $my;
     }
 
     /**
@@ -67,6 +75,19 @@ class MyWork
     {
         $renderer = new MessengerMyWork($this->params);
         return $renderer->get_messanger_part();
+    }
+
+    /**
+     * Returns activities part of block.
+     * 
+     * @return string activities part of block
+     */
+    private function get_activities_part() : string 
+    {
+        $moreButtonId = Enums::MORE.Enums::MY.Enums::ACTIVITIES;
+        $teachers = cGetter::get_teachers_array_with_user_only();
+        $renderer = new Activities($this->params, $teachers, $moreButtonId);
+        return $renderer->get_activities_part();
     }
 
 }

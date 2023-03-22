@@ -2,8 +2,11 @@
 
 namespace NTD\Classes\Renderer;
 
-require_once 'manager_course_activities.php';
+require_once 'activities.php';
 require_once __DIR__.'/../components/messanger/renderer/manager.php';
+
+use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
  * Forms part of the block for the manager.
@@ -34,7 +37,7 @@ class Manager
         $manager = $this->get_new_line();
         $manager.= $this->get_manager_header();
         $manager.= $this->get_messanger_part();
-        $manager.= $this->get_course_activities_part();
+        $manager.= $this->get_activities_part();
 
         return $manager;
     }
@@ -73,10 +76,17 @@ class Manager
         return $renderer->get_messanger_part();
     }
 
-    private function get_course_activities_part() : string 
+    /**
+     * Returns manager part of block content related to activities.
+     * 
+     * @return string manager part of block content related to activities
+     */
+    private function get_activities_part() : string 
     {
-        $renderer = new ManagerCoursesActivities($this->params);
-        return $renderer->get_course_activities_part();
+        $moreButtonId = Enums::MORE.Enums::OTHER.Enums::ACTIVITIES;
+        $teachers = cGetter::get_teachers_from_cohort($this->params->cohort);
+        $renderer = new Activities($this->params, $teachers, $moreButtonId);
+        return $renderer->get_activities_part();
     }
 
 }

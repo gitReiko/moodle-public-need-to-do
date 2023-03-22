@@ -2,13 +2,16 @@
 
 namespace NTD\Classes\Renderer;
 
-use NTD\Classes\Lib\Enums as Enums; 
-use NTD\Classes\Lib\Common as cLib;
+require_once __DIR__.'/../components/forum/renderer/manager_getter.php';
+
+use \NTD\Classes\Components\Forum\Renderer\ManagerGetter as ForumGetter;
+use \NTD\Classes\Lib\Enums as Enums; 
+use \NTD\Classes\Lib\Common as cLib;
 
 /**
- * Forms manager activities part.
+ * Forms activities part of block.
  */
-abstract class CoursesActivities
+class Activities
 {
 
     /**
@@ -16,36 +19,44 @@ abstract class CoursesActivities
      * 
      * Contains all data neccessary for render.
      */
-    protected $courses;
+    private $courses;
 
     /**
      * Block instance params.
      */
-    protected $params;
+    private $params;
 
     /**
      * Class name for more button.
      */
-    private $more = Enums::MORE.Enums::OTHER.Enums::ACTIVITIES;
+    private $more;
+
+    /**
+     * Teachers whose data needs to be extracted.
+     */
+    private $teachers;
 
     /**
      * Prepares data.
      * 
      * @param stdClass params of block instance
+     * @param array teachers
      */
-    function __construct(\stdClass $params)
+    function __construct(\stdClass $params, array $teachers, string $moreButtonId)
     {
         $this->params = $params;
-        $this->init_neccessary_params();
+        $this->teachers = $teachers;
+        $this->more = $moreButtonId;
+
         $this->init_courses_for_renderer();
     }
 
     /**
-     * Returns course activities part of block.
+     * Returns activities part of block.
      * 
      * @return string course activities
      */
-    public function get_course_activities_part() : string 
+    public function get_activities_part() : string 
     {
         $block = $this->get_header();
         $block.= $this->get_list_of_course_activities();
@@ -53,15 +64,25 @@ abstract class CoursesActivities
         return $block;
     }
 
-    /** 
-     * Prepares data neccessary for child classes.
-     */
-    abstract protected function init_neccessary_params() : void ;
-
     /**
      * Prepares data necessary for render.
      */
-    abstract protected function init_courses_for_renderer() : void;
+    private function init_courses_for_renderer() : void 
+    {
+        $this->courses = array();
+        $this->courses = $this->add_forums_data();
+    }
+
+    /**
+     * Returns courses with added forums.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    private function add_forums_data() 
+    {
+        $forum = new ForumGetter($this->params, $this->teachers, $this->courses);
+        return $forum->get_courses_with_added_forums();
+    }
 
     /**
      * Returns header of class.
@@ -285,7 +306,5 @@ abstract class CoursesActivities
         $title.= $activity->unreadMessages;
         return $title;
     }
-
-
 
 }
