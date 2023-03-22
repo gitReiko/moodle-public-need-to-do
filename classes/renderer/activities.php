@@ -2,9 +2,9 @@
 
 namespace NTD\Classes\Renderer;
 
-require_once __DIR__.'/../components/forum/renderer/manager_getter.php';
+require_once __DIR__.'/../components/forum/renderer/getter.php';
 
-use \NTD\Classes\Components\Forum\Renderer\ManagerGetter as ForumGetter;
+use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 use \NTD\Classes\Lib\Common as cLib;
 

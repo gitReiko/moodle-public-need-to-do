@@ -5,7 +5,7 @@ namespace NTD\Classes\Components\Forum\Renderer;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
-class ManagerGetter 
+class Getter 
 {
 
     /** Block instance params. */
