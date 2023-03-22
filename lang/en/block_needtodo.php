@@ -47,6 +47,7 @@ $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Mood
 $string['pluginname'] = 'Need to do block';
 $string['pluginname'] = 'Need to do';
 $string['show_more'] = 'Show more...';
+$string['to_the_course'] = 'to the course';
 $string['unread_chat_messages'] = 'Unread chat messages: ';
 $string['unread_forum_messages'] = 'Unread forum messages: ';
 $string['update_data'] = 'Update data';

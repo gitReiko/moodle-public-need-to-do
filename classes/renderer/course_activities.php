@@ -132,6 +132,7 @@ abstract class CoursesActivities
         );
         $text = $course->name;
         $text.= $this->get_unread_forum_messages_label($course);
+        $text.= $this->get_link_to_course($course->id);
         return \html_writer::tag('div', $text, $attr);
     }
 
@@ -163,6 +164,23 @@ abstract class CoursesActivities
         $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
         $text.= $entity->unreadMessages;        
         return \html_writer::tag('span', $text, $attr);
+    }
+
+    /**
+     * Returns link to the course.
+     * 
+     * @param int $courseId 
+     * 
+     * @return string link to the course 
+     */
+    private function get_link_to_course(int $courseId) : string 
+    {
+        $link = '<a href="/course/view.php?id='.$courseId.'">';
+        $link.= ' <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+        $link.= ' '.get_string('to_the_course', 'block_needtodo');
+        $link.= '</a>';
+
+        return $link;
     }
 
     /**
