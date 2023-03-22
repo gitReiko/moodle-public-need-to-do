@@ -27,26 +27,27 @@ class Activities
     private $params;
 
     /**
-     * Class name for more button.
-     */
-    private $more;
-
-    /**
      * Teachers whose data needs to be extracted.
      */
     private $teachers;
+
+    /**
+     * Determines if something is owned by the user.
+     */
+    private $whoseWork;
 
     /**
      * Prepares data.
      * 
      * @param stdClass params of block instance
      * @param array teachers
+     * @param string whoseWork
      */
-    function __construct(\stdClass $params, array $teachers, string $moreButtonId)
+    function __construct(\stdClass $params, array $teachers, string $whoseWork)
     {
         $this->params = $params;
         $this->teachers = $teachers;
-        $this->more = $moreButtonId;
+        $this->whoseWork = $whoseWork;
 
         $this->init_courses_for_renderer();
     }
@@ -104,7 +105,7 @@ class Activities
     private function get_list_of_course_activities() : string 
     {
         $list = '';
-        $blockClass = $this->more.$this->params->instance;
+        $blockClass = Enums::MORE.$this->whoseWork.Enums::ACTIVITIES.$this->params->instance;
 
         $i = 0;
         foreach($this->courses as $course)
@@ -148,7 +149,7 @@ class Activities
             'class' => 'ntd-expandable ntd-activity-course-cell ntd-tooltip '.$class,
             'data-course-cell' => $course->id,
             'data-block-instance' => $this->params->instance,
-            'data-whose-work' => Enums::NOT_MY_WORK,
+            'data-whose-work' => $this->whoseWork,
             'title' => $this->get_course_title($course)
         );
         $text = $course->name;
@@ -227,7 +228,7 @@ class Activities
                 'data-course-cell' => $course->id,
                 'data-teacher-cell' => $teacher->id,
                 'data-block-instance' => $this->params->instance,
-                'data-whose-work' => Enums::NOT_MY_WORK,
+                'data-whose-work' => $this->whoseWork,
                 'title' => $this->get_teacher_contacts($teacher, $teacher->unreadMessages)
             );
             $text = $teacher->name;
@@ -274,7 +275,7 @@ class Activities
             'class' => 'ntd-level-3 ntd-tooltip ntd-hidden-box ntd-cursor-pointer'.$className,
             'data-teacher-cell' => $teacher->id,
             'data-block-instance' => $this->params->instance,
-            'data-whose-work' => Enums::NOT_MY_WORK,
+            'data-whose-work' => $this->whoseWork,
             'title' => $this->get_activity_title($activity)
         );
         $text = $activity->name;

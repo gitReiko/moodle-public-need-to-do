@@ -83,9 +83,9 @@ class Manager
      */
     private function get_activities_part() : string 
     {
-        $moreButtonId = Enums::MORE.Enums::OTHER.Enums::ACTIVITIES;
+        $whoseWork = Enums::OTHER;
         $teachers = cGetter::get_teachers_from_cohort($this->params->cohort);
-        $renderer = new Activities($this->params, $teachers, $moreButtonId);
+        $renderer = new Activities($this->params, $teachers, $whoseWork);
         return $renderer->get_activities_part();
     }
 

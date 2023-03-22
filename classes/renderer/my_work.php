@@ -84,9 +84,9 @@ class MyWork
      */
     private function get_activities_part() : string 
     {
-        $moreButtonId = Enums::MORE.Enums::MY.Enums::ACTIVITIES;
+        $whoseWork = Enums::MY;
         $teachers = cGetter::get_teachers_array_with_user_only();
-        $renderer = new Activities($this->params, $teachers, $moreButtonId);
+        $renderer = new Activities($this->params, $teachers, $whoseWork);
         return $renderer->get_activities_part();
     }
 
