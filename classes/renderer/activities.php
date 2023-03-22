@@ -237,7 +237,7 @@ class Activities
 
             foreach($teacher->activities as $activity)
             {
-                $cells.= $this->get_activities_cell($teacher, $activity, $className);
+                $cells.= $this->get_activities_cell($course, $teacher, $activity, $className);
             }
         }
 
@@ -263,16 +263,18 @@ class Activities
     /**
      * Returns activities cells.
      * 
+     * @param stdClass course
      * @param stdClass teacher 
      * @param stdClass activity 
      * @param string class name
      * 
      * @return string activity cells
      */
-    private function get_activities_cell(\stdClass $teacher, \stdClass $activity, string $className) : string 
+    private function get_activities_cell(\stdClass $course, \stdClass $teacher, \stdClass $activity, string $className) : string 
     {
         $attr = array(
             'class' => 'ntd-level-3 ntd-tooltip ntd-hidden-box ntd-cursor-pointer'.$className,
+            'data-course-cell' => $course->id,
             'data-teacher-cell' => $teacher->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => $this->whoseWork,

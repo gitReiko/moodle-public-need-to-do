@@ -81,7 +81,8 @@ require(['jquery'], function($)
     $('.ntd-activity-teacher-cell').click(function() 
     {
         let identifier = '';
-        identifier += '.ntd-level-3[data-teacher-cell='+this.dataset.teacherCell+']';
+        identifier += '.ntd-level-3[data-course-cell='+this.dataset.courseCell+']';
+        identifier += '[data-teacher-cell='+this.dataset.teacherCell+']';
         identifier += '[data-block-instance='+this.dataset.blockInstance+']';
         identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 
