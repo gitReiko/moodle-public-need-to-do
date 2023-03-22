@@ -70,10 +70,13 @@ class MyWork
      */
     private function get_my_unread_messages() : string 
     {
+        $className = '';
+
         $list = Lib::get_teacher_line(
             $this->data, 
             $this->params->instance,
-            Enums::MY_WORK
+            Enums::MY_WORK,
+            $className
         );
 
         $linkToChat = true;
