@@ -40,7 +40,7 @@ class MyWork
         $messangerPart = $this->get_messanger_part();
         $activitiesPart = $this->get_activities_part();
 
-        if(empty($messangerPart) || empty($activitiesPart))
+        if(empty($messangerPart) && empty($activitiesPart))
         {
             $my = '';
         }
