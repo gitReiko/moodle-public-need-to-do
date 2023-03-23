@@ -59,10 +59,16 @@ class Activities
      */
     public function get_activities_part() : string 
     {
-        $block = $this->get_header();
-        $block.= $this->get_list_of_course_activities();
+        $activities = $this->get_list_of_course_activities();
 
-        return $block;
+        if(empty($activities))
+        {
+            return '';
+        }
+        else 
+        {
+            return $this->get_header().$activities;
+        }
     }
 
     /**
