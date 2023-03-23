@@ -124,8 +124,7 @@ class Common
             'class' => 'ntd-more-less-btn',
             'data-show-text' =>  get_string('show_more', 'block_needtodo'),
             'data-hide-text' =>  get_string('hide_more', 'block_needtodo'),
-            'onclick' => 'show_hide_more(this,`'.$class.'`,`'.Enums::CHILDS.'`)',
-            'style' => 'margin-bottom: 0px'
+            'onclick' => 'show_hide_more(this,`'.$class.'`,`'.Enums::CHILDS.'`)'
         );
         $text = get_string('show_more', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
