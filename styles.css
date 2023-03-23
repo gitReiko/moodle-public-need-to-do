@@ -63,20 +63,26 @@
     border-radius: 5px;
 }
 
-.ntd-my-work-header 
+.ntd-block-header 
 {
     margin-top: 10px;
     margin-bottom: 5px;
-    font-size: large;
-    color: darkred;
+    font-size: 1.3em;
+    color: 	#af4035;
     cursor: default;
 }
 
-.ntd-messanger-header
+.ntd-block-subheader
 {
     margin-bottom: 4px;
-    color: #3d3d3d;
-    font-weight: bold;
+    color: #af7d35;
+    font-size: 1.1em;
     cursor: default;
+}
+
+.ntd-more-less-btn 
+{
+    cursor: pointer;
+    color: #986048;
 }
 

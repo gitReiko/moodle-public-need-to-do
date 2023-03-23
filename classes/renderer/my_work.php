@@ -61,7 +61,7 @@ class MyWork
      */
     private function get_my_works_header() : string 
     {
-        $attr = array('class' => 'ntd-my-work-header');
+        $attr = array('class' => 'ntd-block-header');
         $text = get_string('my_work', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
     }

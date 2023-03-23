@@ -34,22 +34,11 @@ class Manager
      */
     public function get_manager_part() : string 
     {
-        $manager = $this->get_new_line();
-        $manager.= $this->get_manager_header();
+        $manager = $this->get_manager_header();
         $manager.= $this->get_messanger_part();
         $manager.= $this->get_activities_part();
 
         return $manager;
-    }
-
-    /**
-     * Returns html new line.
-     * 
-     * @return string html new line
-     */
-    private function get_new_line() : string 
-    {
-        return \html_writer::empty_tag('br');
     }
 
     /**
@@ -59,10 +48,9 @@ class Manager
      */
     private function get_manager_header() : string 
     {
-        $text = get_string('info_about_other_users', 'block_needtodo');
-        $text = \html_writer::tag('b', $text);
-        $text = \html_writer::tag('p', $text);
-        return $text;
+        $attr = array('class' => 'ntd-block-header');
+        $text = get_string('other_users_work', 'block_needtodo');
+        return \html_writer::tag('p', $text, $attr);
     }
 
     /**

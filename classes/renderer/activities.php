@@ -98,7 +98,7 @@ class Activities
      */
     private function get_header() : string 
     {
-        $attr = array('class' => 'ntd-messanger-header');
+        $attr = array('class' => 'ntd-block-subheader');
         $text = get_string('course_activities', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
     }

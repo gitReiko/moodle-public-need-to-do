@@ -18,7 +18,7 @@ class Lib
      */
     public static function get_messanger_header() : string 
     {
-        $attr = array('class' => 'ntd-messanger-header');
+        $attr = array('class' => 'ntd-block-subheader');
         $text = get_string('messages_not_read_in_chat', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
     }
