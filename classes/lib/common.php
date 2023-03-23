@@ -10,29 +10,54 @@ class Common
     /**
      * Return true if user can monitor other users.
      * 
-     * @param int course category id
-     * 
      * @return bool 
      */
-    public static function is_user_can_monitor_other_users(int $courseCategoryId = null) : bool 
+    public static function is_user_can_monitor_other_users() : bool 
     {
-        $systemcontext = \context_system::instance();
-
-        if(has_capability('block/needtodo:monitorteachersonsite', $systemcontext)) 
+        if(self::is_user_can_monitor_all_courses()) 
         {
             return true;
         }
-
-        if($courseCategoryId)
+        else if(self::is_user_can_monitor_any_course_category())
         {
-            $categorycontext = context_coursecat::instance($courseCategoryId);
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if user can monitor all courses. 
+     * 
+     * @return bool 
+     */
+    public static function is_user_can_monitor_all_courses() : bool 
+    {
+        return has_capability('block/needtodo:monitorteachersonsite', \context_system::instance());
+    }
+
+    /**
+     * Returns true if user can monitor any course category. 
+     * 
+     * @return bool 
+     */
+    public static function is_user_can_monitor_any_course_category() : bool 
+    {
+        global $DB;
+        $courseCategories = $DB->get_records('course_categories', array(), '', 'id');
+
+        foreach($courseCategories as $category)
+        {
+            $categorycontext = \context_coursecat::instance($category->id);
 
             if(has_capability('block/needtodo:monitorteachersincategory', $categorycontext)) 
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 

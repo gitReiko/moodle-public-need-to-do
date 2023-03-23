@@ -58,9 +58,12 @@ class Getter
 
             foreach($data->forums as $forum)
             {
-                $this->add_course_if_necessary($forum);
-                $this->add_teacher_if_necessary($data, $forum);
-                $this->add_activity_if_necessary($data, $forum);
+                if($this->is_user_has_manager_capability_in_forum($forum->cmid))
+                {
+                    $this->add_course_if_necessary($forum);
+                    $this->add_teacher_if_necessary($data, $forum);
+                    $this->add_activity_if_necessary($data, $forum);
+                }
             }
         }
     }
@@ -90,6 +93,18 @@ class Getter
         {
             return null;
         }
+    }
+
+    /**
+     * Returns true if the user sees the block has forum manager permissions.
+     * 
+     * @param int course module id 
+     * 
+     * @return bool 
+     */
+    private function is_user_has_manager_capability_in_forum(int $cmid) : bool 
+    {
+        return has_capability('mod/forum:addnews', \context_module::instance($cmid));
     }
 
     /**
