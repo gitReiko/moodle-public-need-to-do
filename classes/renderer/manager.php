@@ -2,9 +2,10 @@
 
 namespace NTD\Classes\Renderer;
 
-require_once 'activities.php';
+require_once 'activities/manager.php';
 require_once __DIR__.'/../components/messanger/renderer/manager.php';
 
+use \NTD\Classes\Renderer\Activities\Manager as Activities;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -71,9 +72,8 @@ class Manager
      */
     private function get_activities_part() : string 
     {
-        $whoseWork = Enums::OTHER;
         $teachers = cGetter::get_teachers_from_cohort($this->params->cohort);
-        $renderer = new Activities($this->params, $teachers, $whoseWork);
+        $renderer = new Activities($this->params, $teachers);
         return $renderer->get_activities_part();
     }
 

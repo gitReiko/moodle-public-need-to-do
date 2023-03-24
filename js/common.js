@@ -44,7 +44,7 @@ require(['jquery'], function($)
     $('.ntd-chat-teacher').click(function() 
     {
         let identifier = '';
-        identifier += '.ntd-level-2[data-teacher='+this.dataset.teacher+']';
+        identifier += '.ntd-level-2-other-activities[data-teacher='+this.dataset.teacher+']';
         identifier += '[data-block-instance='+this.dataset.blockInstance+']';
         identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 
@@ -52,13 +52,13 @@ require(['jquery'], function($)
     });
 });
 
-// Onclick. Show / hide teachers course activities cells.
+// Onclick. Show / hide OTHER (MANAGER) teachers cells.
 require(['jquery'], function($)
 {
-    $('.ntd-activity-course-cell').click(function() 
+    $('.ntd-manager-activity-course-cell').click(function() 
     {
         let identifier = '';
-        identifier += '.ntd-level-2[data-course-cell='+this.dataset.courseCell+']';
+        identifier += '.ntd-level-2-other-activities[data-course-cell='+this.dataset.courseCell+']';
         identifier += '[data-block-instance='+this.dataset.blockInstance+']';
         identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 
@@ -75,14 +75,28 @@ require(['jquery'], function($)
     });
 });
 
-// Onclick. Show / hide activities course activities cells.
+// Onclick. Show / hide OTHER (MANAGER) activities cells.
 require(['jquery'], function($)
 {
-    $('.ntd-activity-teacher-cell').click(function() 
+    $('.ntd-manager-activity-teacher-cell').click(function() 
     {
         let identifier = '';
         identifier += '.ntd-level-3[data-course-cell='+this.dataset.courseCell+']';
         identifier += '[data-teacher-cell='+this.dataset.teacherCell+']';
+        identifier += '[data-block-instance='+this.dataset.blockInstance+']';
+        identifier += '[data-whose-work='+this.dataset.whoseWork+']';
+
+        $(identifier).toggleClass('ntd-hidden-box');
+    });
+});
+
+// Onclick. Show / hide MY activities cells.
+require(['jquery'], function($)
+{
+    $('.ntd-my-work-activity-course-cell').click(function() 
+    {
+        let identifier = '';
+        identifier += '.ntd-level-2-my-activities[data-course-cell='+this.dataset.courseCell+']';
         identifier += '[data-block-instance='+this.dataset.blockInstance+']';
         identifier += '[data-whose-work='+this.dataset.whoseWork+']';
 

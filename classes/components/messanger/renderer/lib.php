@@ -102,7 +102,7 @@ class Lib
             if($linkToChat)
             {
                 $attr2 = array(
-                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-pointer ntd-tooltip '.$className,
+                    'class' => 'ntd-hidden-box ntd-level-2-other-activities ntd-cursor-pointer ntd-tooltip '.$className,
                     'onclick' => 'window.location.replace("/message/index.php");', // redirect to link 
                     'title' => self::get_student_title($fromUser)
                 );
@@ -110,7 +110,7 @@ class Lib
             else 
             {
                 $attr2 = array(
-                    'class' => 'ntd-hidden-box ntd-level-2 ntd-cursor-default ntd-tooltip '.$className, 
+                    'class' => 'ntd-hidden-box ntd-level-2-other-activities ntd-cursor-default ntd-tooltip '.$className, 
                     'title' => self::get_student_title($fromUser)
                 );
             }

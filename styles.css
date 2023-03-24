@@ -19,16 +19,27 @@
     content: "› ";
 }
 
-.ntd-level-2 
+.ntd-level-1 
+{
+    background: #f7e7d2;
+}
+
+.ntd-level-2-other-activities 
 {
     margin-left: 10px;
-    background: #f7e7d2;
+    background: #faf0e4;
+}
+
+.ntd-level-2-my-activities 
+{
+    margin-left: 10px;
+    background: #faf0e4;
 }
 
 .ntd-level-3 
 {
     margin-left: 20px;
-    background: #fbf5ed;
+    background: #fcf7f1;
 }
 
 .ntd-cursor-default 

@@ -2,10 +2,11 @@
 
 namespace NTD\Classes\Renderer;
 
-require_once 'activities.php';
+require_once 'activities/my_work.php';
 require_once __DIR__.'/../components/messanger/renderer/my_work.php';
 
 use \NTD\Classes\Components\Messanger\Renderer\MyWork as MessengerMyWork;
+use \NTD\Classes\Renderer\Activities\MyWork as Activities;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -84,9 +85,8 @@ class MyWork
      */
     private function get_activities_part() : string 
     {
-        $whoseWork = Enums::MY;
         $teachers = cGetter::get_teachers_array_with_user_only();
-        $renderer = new Activities($this->params, $teachers, $whoseWork);
+        $renderer = new Activities($this->params, $teachers);
         return $renderer->get_activities_part();
     }
 

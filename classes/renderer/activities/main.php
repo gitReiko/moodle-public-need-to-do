@@ -1,8 +1,8 @@
 <?php 
 
-namespace NTD\Classes\Renderer;
+namespace NTD\Classes\Renderer\Activities;
 
-require_once __DIR__.'/../components/forum/renderer/getter.php';
+require_once __DIR__.'/../../components/forum/renderer/getter.php';
 
 use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
@@ -11,7 +11,7 @@ use \NTD\Classes\Lib\Common as cLib;
 /**
  * Forms activities part of block.
  */
-class Activities
+abstract class Main 
 {
 
     /**
@@ -19,35 +19,34 @@ class Activities
      * 
      * Contains all data neccessary for render.
      */
-    private $courses;
+    protected $courses;
 
     /**
      * Block instance params.
      */
-    private $params;
+    protected $params;
 
     /**
      * Teachers whose data needs to be extracted.
      */
-    private $teachers;
+    protected $teachers;
 
     /**
      * Determines if something is owned by the user.
      */
-    private $whoseWork;
+    protected $whoseWork;
 
     /**
-     * Prepares data.
+     * Prepares data for class.
      * 
      * @param stdClass params of block instance
      * @param array teachers
      * @param string whoseWork
      */
-    function __construct(\stdClass $params, array $teachers, string $whoseWork)
+    function __construct(\stdClass $params, array $teachers)
     {
         $this->params = $params;
         $this->teachers = $teachers;
-        $this->whoseWork = $whoseWork;
 
         $this->init_courses_for_renderer();
     }
@@ -69,6 +68,62 @@ class Activities
         {
             return $this->get_header().$activities;
         }
+    }
+
+    /**
+     * Returns unique classes for course cell.
+     * 
+     * My work and manager's work have a different structure.
+     * 
+     * @return string unique classes 
+     */
+    abstract protected function get_course_cell_unique_classes() : string;
+
+    /**
+     * Returns course child cells.
+     * 
+     * @param stdClass course 
+     * @param stdClass child class
+     * 
+     * @return strings child cells 
+     */
+    abstract protected function get_child_cells(\stdClass $course, string $childClass) : string ;
+
+    /**
+     * Returns entity unread forum messages label.
+     * 
+     * @param stdClass entity 
+     * 
+     * @return string forum label
+     */
+    protected function get_unread_forum_messages_label(\stdClass $entity) : string 
+    {
+        $attr = array('class' => 'ntd-undone-work');
+        $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
+        $text.= $entity->unreadMessages;        
+        return \html_writer::tag('span', $text, $attr);
+    }
+
+    /**
+     * Returns activity title. 
+     * 
+     * @param stdClass activity 
+     * 
+     * @return string title
+     */
+    protected function get_activity_title(\stdClass $activity) : string 
+    {
+        $title = '';
+
+        if($activity->type == Enums::FORUM)
+        {
+            $title.= get_string('forum', 'block_needtodo');
+        }
+
+        $title.= $activity->name.'<br>';
+        $title.= get_string('unread_forum_messages', 'block_needtodo');
+        $title.= $activity->unreadMessages;
+        return $title;
     }
 
     /**
@@ -111,7 +166,7 @@ class Activities
     private function get_list_of_course_activities() : string 
     {
         $list = '';
-        $blockClass = Enums::MORE.$this->whoseWork.Enums::ACTIVITIES.$this->params->instance;
+        $blockClass = $this->get_hidden_elements_class_for_more_button();
 
         $i = 0;
         foreach($this->courses as $course)
@@ -128,7 +183,7 @@ class Activities
             }
 
             $list.= $this->get_course_cell($course, $class);
-            $list.= $this->get_teachers_cell($course, $childClass);
+            $list.= $this->get_child_cells($course, $childClass);
 
             $i++;
         }
@@ -142,6 +197,16 @@ class Activities
     }
 
     /**
+     * Returns class of hidden elements for more button. 
+     * 
+     * @return string id of more button
+     */
+    private function get_hidden_elements_class_for_more_button() : string 
+    {
+        return Enums::MORE.$this->whoseWork.Enums::ACTIVITIES.$this->params->instance;
+    }
+
+    /**
      * Returns course cell. 
      * 
      * @param stdClass course
@@ -152,7 +217,7 @@ class Activities
     private function get_course_cell(\stdClass $course, string $class) : string 
     {
         $attr = array(
-            'class' => 'ntd-expandable ntd-activity-course-cell ntd-tooltip '.$class,
+            'class' => 'ntd-level-1 ntd-expandable ntd-tooltip '.$class.$this->get_course_cell_unique_classes(),
             'data-course-cell' => $course->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => $this->whoseWork,
@@ -178,21 +243,6 @@ class Activities
         $title.= $course->unreadMessages;
         return $title;
     }
-    
-    /**
-     * Returns entity unread forum messages label.
-     * 
-     * @param stdClass entity 
-     * 
-     * @return string forum label
-     */
-    private function get_unread_forum_messages_label(\stdClass $entity) : string 
-    {
-        $attr = array('class' => 'ntd-undone-work');
-        $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
-        $text.= $entity->unreadMessages;        
-        return \html_writer::tag('span', $text, $attr);
-    }
 
     /**
      * Returns link to the course.
@@ -209,111 +259,6 @@ class Activities
         $link.= '</a>';
 
         return $link;
-    }
-
-    /**
-     * Returns course teachers cells.
-     * 
-     * @param stdClass course 
-     * @param stdClass child class
-     * 
-     * @return strings teachers cells 
-     */
-    private function get_teachers_cell(\stdClass $course, string $childClass) : string 
-    {
-        $cells = '';
-
-        foreach($course->teachers as $teacher)
-        {
-            $className = 'ntd-expandable ntd-level-2  ntd-tooltip ';
-            $className.= 'ntd-hidden-box ntd-activity-teacher-cell ';
-            $className.= $childClass;
-
-            $attr = array(
-                'class' => $className,
-                'data-course-cell' => $course->id,
-                'data-teacher-cell' => $teacher->id,
-                'data-block-instance' => $this->params->instance,
-                'data-whose-work' => $this->whoseWork,
-                'title' => $this->get_teacher_contacts($teacher, $teacher->unreadMessages)
-            );
-            $text = $teacher->name;
-            $text.= $this->get_unread_forum_messages_label($teacher);
-            $cells.= \html_writer::tag('div', $text, $attr);
-
-            foreach($teacher->activities as $activity)
-            {
-                $cells.= $this->get_activities_cell($course, $teacher, $activity, $className);
-            }
-        }
-
-        return $cells;
-    }
-
-    /**
-     * Returns teacher contacts prepared for render.
-     * 
-     * @param stdClass teacher 
-     * @param int unread count 
-     * 
-     * @return string contacts prepared for render
-     */
-    private function get_teacher_contacts(\stdClass $teacher, int $unreadCount) : string 
-    {
-        $unreadText = get_string('unread_forum_messages', 'block_needtodo');
-        $unreadText.= $unreadCount;
-
-        return cLib::get_teacher_contacts($teacher, $unreadText);
-    }
-
-    /**
-     * Returns activities cells.
-     * 
-     * @param stdClass course
-     * @param stdClass teacher 
-     * @param stdClass activity 
-     * @param string class name
-     * 
-     * @return string activity cells
-     */
-    private function get_activities_cell(\stdClass $course, \stdClass $teacher, \stdClass $activity, string $className) : string 
-    {
-        $attr = array(
-            'class' => 'ntd-level-3 ntd-tooltip ntd-hidden-box ntd-cursor-pointer'.$className,
-            'data-course-cell' => $course->id,
-            'data-teacher-cell' => $teacher->id,
-            'data-block-instance' => $this->params->instance,
-            'data-whose-work' => $this->whoseWork,
-            'title' => $this->get_activity_title($activity)
-        );
-        $text = $activity->name;
-        $text.= $this->get_unread_forum_messages_label($activity);
-
-        $text = \html_writer::tag('a', $text, array('href' => $activity->link));
-
-        return \html_writer::tag('div', $text, $attr);
-    }
-
-    /**
-     * Returns activity title. 
-     * 
-     * @param stdClass activity 
-     * 
-     * @return string title
-     */
-    private function get_activity_title(\stdClass $activity) : string 
-    {
-        $title = '';
-
-        if($activity->type == Enums::FORUM)
-        {
-            $title.= get_string('forum', 'block_needtodo');
-        }
-
-        $title.= $activity->name.'<br>';
-        $title.= get_string('unread_forum_messages', 'block_needtodo');
-        $title.= $activity->unreadMessages;
-        return $title;
     }
 
 }
