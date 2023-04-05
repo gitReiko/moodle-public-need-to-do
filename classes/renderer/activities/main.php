@@ -133,6 +133,8 @@ abstract class Main
     {
         $this->courses = array();
         $this->courses = $this->add_forums_data();
+
+        $this->sort_teachers_and_activities();
     }
 
     /**
@@ -259,6 +261,26 @@ abstract class Main
         $link.= '</a>';
 
         return $link;
+    }
+
+    /**
+     * Sorts teachers an activities.
+     */
+    private function sort_teachers_and_activities() : void 
+    {
+        foreach($this->courses as $course)
+        {
+            foreach($course->teachers as $teacher)
+            {
+                usort($teacher->activities, function($a, $b){
+                    return strcmp($a->name, $b->name);
+                });
+            }
+
+            usort($course->teachers, function($a, $b){
+                return strcmp($a->name, $b->name);
+            });
+        }
     }
 
 }
