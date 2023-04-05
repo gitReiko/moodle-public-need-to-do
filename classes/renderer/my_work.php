@@ -3,10 +3,10 @@
 namespace NTD\Classes\Renderer;
 
 require_once 'activities/my_work.php';
-require_once __DIR__.'/../components/messanger/renderer/my_work.php';
+require_once 'messages/my_work.php';
 
-use \NTD\Classes\Components\Messanger\Renderer\MyWork as MessengerMyWork;
 use \NTD\Classes\Renderer\Activities\MyWork as Activities;
+use \NTD\Classes\Renderer\Messages\MyWork as Messanger;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -68,13 +68,13 @@ class MyWork
     }
 
     /**
-     * Returns my work part of block related to messanger.
+     * Returns messanger part of block.
      * 
-     * @return string my work part of block related to messanger
+     * @return string messanger part of block
      */
     private function get_messanger_part() : string 
     {
-        $renderer = new MessengerMyWork($this->params);
+        $renderer = new Messanger($this->params);
         return $renderer->get_messanger_part();
     }
 

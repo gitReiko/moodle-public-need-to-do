@@ -3,9 +3,10 @@
 namespace NTD\Classes\Renderer;
 
 require_once 'activities/manager.php';
-require_once __DIR__.'/../components/messanger/renderer/manager.php';
+require_once 'messages/manager.php';
 
 use \NTD\Classes\Renderer\Activities\Manager as Activities;
+use \NTD\Classes\Renderer\Messages\Manager as Messanger;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -55,13 +56,13 @@ class Manager
     }
 
     /**
-     * Returns manager part of block content related to messanger.
+     * Returns messanger part of block.
      * 
-     * @return string manager part of block content related to messanger
+     * @return string messanger part of block
      */
     private function get_messanger_part() : string 
     {
-        $renderer = new \NTD\Classes\Components\Messanger\Renderer\Manager($this->params);
+        $renderer = new Messanger($this->params);
         return $renderer->get_messanger_part();
     }
 

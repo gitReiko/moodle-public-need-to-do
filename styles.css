@@ -79,14 +79,14 @@
     margin-top: 10px;
     margin-bottom: 5px;
     font-size: 1.3em;
-    color: 	#af4035;
+    color: 	#19286f;
     cursor: default;
 }
 
 .ntd-block-subheader
 {
     margin-bottom: 4px;
-    color: #af7d35;
+    color: #372d89;
     font-size: 1.1em;
     cursor: default;
 }
@@ -94,7 +94,7 @@
 .ntd-more-less-btn 
 {
     cursor: pointer;
-    color: #986048;
+    color: #0b3a44;
     margin-bottom: 5px;
 }
 
