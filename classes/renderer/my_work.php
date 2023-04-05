@@ -41,18 +41,31 @@ class MyWork
         $messangerPart = $this->get_messanger_part();
         $activitiesPart = $this->get_activities_part();
 
+        $my = $this->get_my_works_header();
+
         if(empty($messangerPart) && empty($activitiesPart))
         {
-            $my = '';
+            $my.= $this->get_all_work_done();
         }
         else 
         {
-            $my = $this->get_my_works_header();
             $my.= $messangerPart;
             $my.= $activitiesPart;
         }
 
         return $my;
+    }
+
+    /**
+     * Returns a message that all the work is done.
+     * 
+     * @return string message 
+     */
+    private function get_all_work_done() : string 
+    {
+        $attr = array('class' => 'ntd-grey');
+        $text = get_string('all_done', 'block_needtodo');
+        return \html_writer::tag('p', $text, $attr);
     }
 
     /**

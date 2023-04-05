@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['all_done'] = 'All done.';
 $string['block_instance_name'] = 'Block instance name';
 $string['block_instance_setup'] = 'Block instance setup';
 $string['cache_data'] = 'Data caching for block Need to do block';
