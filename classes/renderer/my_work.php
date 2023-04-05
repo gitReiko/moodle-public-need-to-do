@@ -63,7 +63,7 @@ class MyWork
      */
     private function get_all_work_done() : string 
     {
-        $attr = array('class' => 'ntd-grey');
+        $attr = array('class' => 'ntd-green');
         $text = get_string('all_done', 'block_needtodo');
         return \html_writer::tag('p', $text, $attr);
     }
