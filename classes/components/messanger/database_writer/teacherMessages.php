@@ -46,28 +46,31 @@ class TeachersMessanges
 
             foreach($teacherMessages as $message)
             {
-                if($this->is_teacher_not_read_message($message))
+                if($this->is_sender_not_suspended($message))
                 {
-                    if($this->is_sender_with_unread_message_exists($structure, $message))
+                    if($this->is_teacher_not_read_message($message))
                     {
-                        $this->add_sender_to_from_users_array($structure, $message);
+                        if($this->is_sender_with_unread_message_exists($structure, $message))
+                        {
+                            $this->add_sender_to_from_users_array($structure, $message);
+                        }
+                        else 
+                        {
+                            $this->increase_count_of_unread_sender_messages($structure, $message);
+                        }
+    
+                        $this->update_sender_last_message_time_if_neccessary($structure, $message);
+                        $this->update_count_of_unread_messages_from_all_senders($structure);
                     }
-                    else 
+    
+                    if($this->is_senders_exists($structure))
                     {
-                        $this->increase_count_of_unread_sender_messages($structure, $message);
-                    }
-
-                    $this->update_sender_last_message_time_if_neccessary($structure, $message);
-                    $this->update_count_of_unread_messages_from_all_senders($structure);
-                }
-
-                if($this->is_senders_exists($structure))
-                {
-                    $this->add_senders_names($structure);
-                    $this->sort_senders_by_name($structure);
-                    $this->convert_lasttime_timestamp_to_string($structure);
-
-                    $teachersUnreadMessages[] = $structure;
+                        $this->add_senders_names($structure);
+                        $this->sort_senders_by_name($structure);
+                        $this->convert_lasttime_timestamp_to_string($structure);
+    
+                        $teachersUnreadMessages[] = $structure;
+                    } 
                 }
             }
         }
@@ -138,6 +141,25 @@ class TeachersMessanges
         );
 
         return !$DB->record_exists('message_user_actions', $where);
+    }
+
+    /**
+     * Returns true if message sender still active.
+     * 
+     * @param stdClass message 
+     * 
+     * @return bool 
+     */
+    private function is_sender_not_suspended(\stdClass $message) : bool 
+    {
+        global $DB;
+
+        $where = array(
+            'id' => $message->useridfrom,
+            'suspended' => 0
+        );
+
+        return $DB->record_exists('user', $where);
     }
 
     /**
