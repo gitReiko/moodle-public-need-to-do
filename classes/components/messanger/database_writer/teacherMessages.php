@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Components\Messanger\DatabaseWriter;
 
+require_once $CFG->dirroot.'/message/classes/api.php';
+
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 
 class TeachersMessanges 
@@ -41,41 +43,87 @@ class TeachersMessanges
 
         foreach($this->teachers as $teacher)
         {
-            $structure = $this->get_structure_unread_messages_of_teacher($teacher);
-            $teacherMessages = $this->get_all_messages_sent_to_teacher($teacher->id);
+            $conversations = \core_message\api::get_conversations($teacher->id);
 
-            foreach($teacherMessages as $message)
+            if($this->is_teacher_has_unread_messages($conversations))
             {
-                if($this->is_sender_not_suspended($message))
+                $structure = $this->get_structure($teacher);
+
+                foreach($conversations as $conversation)
                 {
-                    if($this->is_teacher_not_read_message($message))
+                    if($this->is_conversation_has_unread_messages($conversation))
                     {
-                        if($this->is_sender_with_unread_message_exists($structure, $message))
+                        $structure->unreadedMessages->count += $conversation->unreadcount;
+
+                        $fromUser = new \stdClass;
+                        $fromUser->id = reset($conversation->members)->id;
+                        $fromUser->name = reset($conversation->members)->fullname;
+                        $fromUser->count = $conversation->unreadcount;
+                        $fromUser->lasttime = 0;
+
+                        foreach($conversation->messages as $message)
                         {
-                            $this->add_sender_to_from_users_array($structure, $message);
+                            if($fromUser->lasttime < $message->timecreated)
+                            {
+                                $fromUser->lasttime = $message->timecreated;
+                            }
                         }
-                        else 
-                        {
-                            $this->increase_count_of_unread_sender_messages($structure, $message);
-                        }
-    
-                        $this->update_sender_last_message_time_if_neccessary($structure, $message);
-                        $this->update_count_of_unread_messages_from_all_senders($structure);
+
+                        $structure->unreadedMessages->fromUsers[] = $fromUser;
                     }
+                }
+
+                if($this->is_senders_exists($structure))
+                {
+                    $this->add_senders_names($structure);
+                    $this->sort_senders_by_name($structure);
+                    $this->convert_lasttime_timestamp_to_string($structure);
     
-                    if($this->is_senders_exists($structure))
-                    {
-                        $this->add_senders_names($structure);
-                        $this->sort_senders_by_name($structure);
-                        $this->convert_lasttime_timestamp_to_string($structure);
-    
-                        $teachersUnreadMessages[] = $structure;
-                    } 
+                    $teachersUnreadMessages[] = $structure;
                 }
             }
         }
 
         $this->unreadMessages = $teachersUnreadMessages;
+    }
+
+    /**
+     * Returns true if teacher has unread messages. 
+     * 
+     * @param \stdClass $teacher
+     * 
+     * @return bool 
+     */
+    private function is_teacher_has_unread_messages(array $conversations) : bool 
+    {
+        foreach($conversations as $conversation)
+        {
+            if(!empty($conversation->unreadcount))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if conversation has unread messages. 
+     * 
+     * @param \stdClass $conversation
+     * 
+     * @return bool 
+     */
+    private function is_conversation_has_unread_messages(\stdClass $conversation) : bool 
+    {
+        if(empty($conversation->unreadcount))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
     }
 
     /**
@@ -85,7 +133,7 @@ class TeachersMessanges
      * 
      * @return \stdClass structure 
      */
-    private function get_structure_unread_messages_of_teacher(\stdClass $teacher) 
+    private function get_structure(\stdClass $teacher) 
     {
         $structure = new \stdClass;
         $structure->teacher = new \stdClass;
@@ -99,161 +147,6 @@ class TeachersMessanges
         $structure->unreadedMessages->fromUsers = array();
         return $structure;
     }
-
-    /**
-     * Returns all teacher unreaded messages.
-     * 
-     * @param int teacher id
-     * 
-     * @return array of all teacher unreaded messages 
-     */
-    private function get_all_messages_sent_to_teacher(int $teacherId)
-    {
-        global $DB;
-
-        $sql = "SELECT m.id, m.useridfrom, mcm.userid AS useridto, m.conversationid, m.timecreated  
-                FROM {messages} AS m 
-                INNER JOIN {message_conversation_members} AS mcm 
-                ON m.conversationid = mcm.conversationid 
-                WHERE m.useridfrom <> mcm.userid
-                AND mcm.userid = ?";
-
-        $params = array($teacherId);
-
-        return $DB->get_records_sql($sql, $params);
-    }
-
-    /**
-     * Returns true if teacher not read message.
-     * 
-     * @param stdClass message
-     * 
-     * @return bool true if message is readed
-     */
-    private function is_teacher_not_read_message(\stdClass $message) : bool 
-    {
-        global $DB;
-
-        $where = array(
-            'userid' => $message->useridto,
-            'messageid' => $message->id,
-            'action' => 1
-        );
-
-        return !$DB->record_exists('message_user_actions', $where);
-    }
-
-    /**
-     * Returns true if message sender still active.
-     * 
-     * @param stdClass message 
-     * 
-     * @return bool 
-     */
-    private function is_sender_not_suspended(\stdClass $message) : bool 
-    {
-        global $DB;
-
-        $where = array(
-            'id' => $message->useridfrom,
-            'suspended' => 0
-        );
-
-        return $DB->record_exists('user', $where);
-    }
-
-    /**
-     * Returns true if sender with unread message exists in from user array.
-     * 
-     * @param stdClass structure
-     * @param stdClass message
-     * 
-     * @return bool 
-     */
-    private function is_sender_with_unread_message_exists(\stdClass $structure, \stdClass $message) : bool 
-    {
-        foreach($structure->unreadedMessages->fromUsers as $messageFrom)
-        {
-            if($messageFrom->id == $message->useridfrom)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Adds sender to from users array.
-     * 
-     * @param stdClass structure
-     * @param stdClass message
-     * 
-     * @return void 
-     */
-    private function add_sender_to_from_users_array(\stdClass $structure, \stdClass $message) : void 
-    {
-        $user = new \stdClass;
-        $user->id = $message->useridfrom;
-        $user->count = 1;
-        $user->lasttimestamp = $message->timecreated;
-        $user->lasttime = $message->timecreated;
-
-        $structure->unreadedMessages->fromUsers[] = $user;
-    }
-
-    /**
-     * Increases count of unread sender messages.
-     * 
-     * @param array structure
-     * @param stdClass message
-     * 
-     * @return void 
-     */
-    private function increase_count_of_unread_sender_messages(\stdClass $structure, \stdClass $message) : void 
-    {
-        foreach($structure->unreadedMessages->fromUsers as $fromUser)
-        {
-            if($fromUser->id == $message->useridfrom)
-            {
-                $fromUser->count++;
-            }
-        }
-    }
-
-    /**
-     * Updates sender last message time if neccessary.
-     * 
-     * @param stdClass structure
-     * @param stdClass message
-     * 
-     * @return void 
-     */
-    private function update_sender_last_message_time_if_neccessary(\stdClass $structure, \stdClass $message) : void 
-    {
-        foreach($structure->unreadedMessages->fromUsers as $fromUser)
-        {
-            if($fromUser->id == $message->useridfrom)
-            {
-                if($fromUser->lasttimestamp < $message->timecreated)
-                {
-                    $fromUser->lasttimestamp = $message->timecreated;
-                }
-            }
-        }
-    }
-
-    /**
-     * Increments total count of teacher's unread messages.
-     * 
-     * @param stdClass structure
-     * 
-     * @return void 
-     */
-    private function update_count_of_unread_messages_from_all_senders(\stdClass $structure) : void 
-    {
-        $structure->unreadedMessages->count++;
-    }  
 
     /**
      * Returns true if from users array not empty.
@@ -315,7 +208,7 @@ class TeachersMessanges
     {
         foreach($structure->unreadedMessages->fromUsers as $fromUser)
         {
-            $fromUser->lasttime = date('Y-m-d H:m', $fromUser->lasttimestamp);
+            $fromUser->lasttime = date('Y-m-d H:m', $fromUser->lasttime);
         }
     }
 
