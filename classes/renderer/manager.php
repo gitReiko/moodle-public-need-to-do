@@ -7,7 +7,7 @@ require_once 'messages/manager.php';
 
 use \NTD\Classes\Renderer\Activities\Manager as Activities;
 use \NTD\Classes\Renderer\Messages\Manager as Messanger;
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -73,7 +73,7 @@ class Manager
      */
     private function get_activities_part() : string 
     {
-        $teachers = cGetter::get_teachers_from_cohort($this->params->cohort);
+        $teachers = tGet::get_teachers_from_cohort($this->params->cohort);
         $renderer = new Activities($this->params, $teachers);
         return $renderer->get_activities_part();
     }

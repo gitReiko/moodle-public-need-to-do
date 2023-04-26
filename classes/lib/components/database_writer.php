@@ -45,10 +45,7 @@ abstract class DatabaseWriter
      */
     public function write() : void 
     {
-        if($this->updateLevel === Enums::UPDATE_DATA_ON_SITE_LEVEL)
-        {
-            $this->remove_unnecessary_data();
-        }
+        $this->clear_outdated_data();
 
         foreach($this->data as $dataEntity)
         {
@@ -80,31 +77,6 @@ abstract class DatabaseWriter
      * @return stdClass needtodo record for database
      */
     abstract protected function get_needtodo_record(\stdClass $dataEntity) : \stdClass;
-
-    /**
-     * Removes all unnecessary component data from database.
-     * 
-     * Deletes: suspended users, deleted users
-     * or users not more enrolled in the cohort.
-     * 
-     * The cohort specified in the global block settings
-     * 
-     */
-    private function remove_unnecessary_data() : void 
-    {
-        global $DB;
-
-        $teachersInCondition = cGetter::get_teachers_in_database_condition($this->teachers);
-
-        $sql = "DELETE
-                FROM {block_needtodo}
-                WHERE component = ?
-                AND teacherid NOT {$teachersInCondition}";
-
-        $params = array($this->componentName);
-
-        $DB->execute($sql, $params);
-    }
 
     /**
      * Returns true if needtodo record exists in database.
@@ -166,6 +138,16 @@ abstract class DatabaseWriter
     {
         global $DB;
         $DB->insert_record('block_needtodo', $needtodo);
+    }
+
+    /** Clears outdated data */
+    protected function clear_outdated_data() : void 
+    {
+        //$this->componentName
+
+
+
+
     }
 
 }

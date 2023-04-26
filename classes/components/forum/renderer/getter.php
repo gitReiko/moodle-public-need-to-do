@@ -2,7 +2,7 @@
 
 namespace NTD\Classes\Components\Forum\Renderer;
 
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 class Getter 
@@ -75,7 +75,7 @@ class Getter
     {
         global $DB;
 
-        $teachersInCondition = cGetter::get_teachers_in_database_condition($this->teachers);
+        $teachersInCondition = tGet::get_where_in_condition_from_teachers_array($this->teachers);
 
         // Teachers may not exist
         if($teachersInCondition)

@@ -7,7 +7,7 @@ require_once 'messages/my_work.php';
 
 use \NTD\Classes\Renderer\Activities\MyWork as Activities;
 use \NTD\Classes\Renderer\Messages\MyWork as Messanger;
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -98,7 +98,7 @@ class MyWork
      */
     private function get_activities_part() : string 
     {
-        $teachers = cGetter::get_teachers_array_with_user_only();
+        $teachers = tGet::get_user_who_works_with_block_in_teachers_array();
         $renderer = new Activities($this->params, $teachers);
         return $renderer->get_activities_part();
     }

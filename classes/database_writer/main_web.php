@@ -3,12 +3,12 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../lib/enums.php';
-require_once __DIR__.'/../lib/getters/common.php';
+require_once __DIR__.'/../lib/getters/teachers.php';
 require_once __DIR__.'/main.php';
 
 use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWriter;
 use \NTD\Classes\Components\Forum\DatabaseWriter\Main as ForumDatabaseWriter;
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -57,11 +57,11 @@ class MainWeb extends Main
     {
         if($this->updateLevel === Enums::UPDATE_DATA_ON_BLOCK_INSTANCE_LEVEL)
         {
-            return cGetter::get_teachers_from_cohort($this->params->cohort);
+            return tGet::get_teachers_from_cohort($this->params->cohort);
         }
         else if($this->updateLevel === Enums::UPDATE_DATA_ON_USER_LEVEL)
         {
-            return cGetter::get_teachers_array_with_user_only();
+            return tGet::get_user_who_works_with_block_in_teachers_array();
         }
         else 
         {

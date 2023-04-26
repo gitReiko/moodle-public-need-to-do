@@ -2,6 +2,7 @@
 
 namespace NTD\Classes\Renderer;
 
+require_once __DIR__.'/../lib/getters/teachers.php';
 require_once __DIR__.'/../lib/getters/common.php';
 require_once __DIR__.'/../lib/common.php';
 require_once __DIR__.'/../lib/enums.php';

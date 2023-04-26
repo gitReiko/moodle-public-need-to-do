@@ -3,12 +3,13 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../lib/enums.php';
+require_once __DIR__.'/../lib/getters/teachers.php';
 require_once __DIR__.'/../lib/getters/common.php';
 require_once __DIR__.'/main.php';
 
 use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWriter;
 use \NTD\Classes\Components\Forum\DatabaseWriter\Main as ForumDatabaseWriter;
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -49,7 +50,7 @@ class MainTask extends Main
         $teachers = array();
         foreach($cohorts as $cohort)
         {
-            $cohortTeachers = cGetter::get_teachers_from_cohort($cohort);
+            $cohortTeachers = tGet::get_teachers_from_cohort($cohort);
             $teachers = array_merge($teachers, $cohortTeachers);
         }
 

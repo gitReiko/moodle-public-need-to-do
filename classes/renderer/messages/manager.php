@@ -4,7 +4,7 @@ namespace NTD\Classes\Renderer\Messages;
 
 require_once 'main.php';
 
-use \NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use \NTD\Classes\Lib\Enums as Enums;
 use \NTD\Classes\Lib\Common as cLib;
 
@@ -60,7 +60,7 @@ class Manager extends Main
         global $DB;
 
         $teachers = $this->get_teachers();
-        $teachersInCondition = cGetter::get_teachers_in_database_condition($teachers);
+        $teachersInCondition = tGet::get_where_in_condition_from_teachers_array($teachers);
 
         // Teachers may not exist
         if($teachersInCondition)
@@ -87,7 +87,7 @@ class Manager extends Main
      */
     private function get_teachers()
     {
-        return cGetter::get_teachers_from_cohort($this->params->cohort);
+        return tGet::get_teachers_from_cohort($this->params->cohort);
     }
 
     /**
