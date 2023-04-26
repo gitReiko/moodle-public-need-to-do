@@ -62,4 +62,14 @@ class Common
         return $DB->get_field('course_modules', 'id', $where);
     }
 
+    /**
+     * Returns id global block cohort.
+     * 
+     * @return int cohort id 
+     */
+    public static function get_id_of_global_block_cohort() : int 
+    {
+        return get_config('block_needtodo', 'monitored_teachers_cohort');
+    }
+
 }

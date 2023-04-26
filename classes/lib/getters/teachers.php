@@ -2,11 +2,35 @@
 
 namespace NTD\Classes\Lib\Getters;
 
+require_once 'common.php';
+
 /**
  * Contains teacher getters.
  */
 class Teachers 
 {
+
+    /**
+     * Returns all teachers from global and local blocks settings.
+     * 
+     * @return array if teachers exist
+     * @return null if not
+     */
+    public static function get_all_teachers() : ?array 
+    {
+        $cohorts = self::get_unique_teachers_cohorts();
+
+        $teachers = array();
+        foreach($cohorts as $cohort)
+        {
+            $cohortTeachers = self::get_teachers_from_cohort($cohort);
+            $teachers = array_merge($teachers, $cohortTeachers);
+        }
+
+        $teachers = self::get_unique_teachers($teachers);
+
+        return $teachers;
+    }
 
     /**
      * Returns the teachers with whom the block works.
@@ -20,7 +44,7 @@ class Teachers
      */
     public static function get_teachers_from_global_block_settings() : ?array
     {
-        $cohortId = get_config('block_needtodo', 'monitored_teachers_cohort');
+        $cohortId = Common::get_id_of_global_block_cohort();
         return self::get_teachers_from_cohort($cohortId);
     }
 
@@ -151,6 +175,154 @@ class Teachers
         });
 
         return $teachers;
+    }
+
+    /**
+     * Returns unique teachers cohorts if exists.
+     * 
+     * @return array cohorts if exists
+     */
+    private static function get_unique_teachers_cohorts()
+    {
+        $cohorts = array();
+
+        $globalCohort = self::get_cohort_from_global_settings();
+
+        if(isset($globalCohort))
+        {
+            $cohorts[] = $globalCohort;
+        }
+
+        $localCohorts = self::get_teacher_cohorts_from_block_instances();
+
+        if(count($localCohorts) > 0)
+        {
+            $cohorts = array_merge($cohorts, $localCohorts);
+        }
+
+        $cohorts = array_unique($cohorts);
+
+        return $cohorts;
+    }
+
+    /** 
+     * Returns teacher cohort from global settings.
+     * 
+     * @return int cohort id
+     */
+    private static function get_cohort_from_global_settings()
+    {
+        return Common::get_id_of_global_block_cohort();
+    }
+
+    /**
+     * Returns teachers cohorts from block instances.
+     * 
+     * @return array teacher cohorts if exists
+     */
+    private static function get_teacher_cohorts_from_block_instances()
+    {
+        $data = self::get_block_instances_data();
+        $data = self::decode_block_instances_data($data);
+        return self::get_cohorts_from_block_instances($data);
+    }
+
+    /**
+     * Returns block instances data.
+     * 
+     * @return array if data exists
+     * @return null if not
+     */
+    private static function get_block_instances_data() : ?array 
+    {
+        global $DB;
+        $where = array('blockname' => 'needtodo');
+        return $DB->get_records('block_instances', $where);
+    }
+
+    /**
+     * Decodes block instances data.
+     * 
+     * @param array block instances data if exists
+     * 
+     * @return array block instances data if exists
+     */
+    private static function decode_block_instances_data($instances) : ?array 
+    {
+        foreach($instances as $instance)
+        {
+            $instance->configdata = unserialize(base64_decode($instance->configdata));
+        }
+
+        return $instances;
+    }
+
+    /**
+     * Returns teacher cohorts from block instances.
+     * 
+     * @param array block instances data if exists
+     * 
+     * @return array block instances data if exists
+     */
+    private static function get_cohorts_from_block_instances($instances) : array 
+    {
+        $cohorts = array();
+
+        foreach($instances as $instance)
+        {
+            if(isset($instance->configdata->use_local_settings))
+            {
+                if($instance->configdata->use_local_settings == 1)
+                {
+                    $cohorts[] = $instance->configdata->local_cohort;
+                }
+            }
+        }
+
+        return $cohorts;
+    }
+
+    /**
+     * Returns array of unique teachers.
+     * 
+     * @param array teachers
+     * 
+     * @return array unique teachers
+     */
+    private static function get_unique_teachers($teachers) : array 
+    {
+        $unique = array();
+
+        foreach($teachers as $teacher)
+        {
+            if(self::is_teacher_unique($unique, $teacher))
+            {
+                $unique[] = $teacher;
+            }
+        }
+
+        return $unique;
+    }
+
+    /**
+     * Returns true if teacher unique. 
+     * 
+     * @param array unique teachers 
+     * @param stdClass processed teacher
+     * 
+     * @return bool 
+     */
+    private static function is_teacher_unique($unique, $teacher) : bool 
+    {
+        foreach($unique as $value)
+        {
+            if($value->id == $teacher->id)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
