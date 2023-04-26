@@ -33,6 +33,8 @@ class MainTask extends Main
     function __construct() 
     {
         $this->teachers = tGet::get_all_teachers();
+
+        $this->clear_outdated_teachers();
     }
 
     /**
@@ -61,6 +63,69 @@ class MainTask extends Main
             Enums::UPDATE_DATA_ON_SITE_LEVEL
         );
         $forumWriter->write();
+    }
+
+    /**
+     * Clears outdated teachers from database. 
+     * 
+     * Outdated teacher is a teacher who is no longer used by the block
+     */
+    private function clear_outdated_teachers() : void 
+    {
+        $data = $this->get_all_block_data();
+
+        foreach($data as $value)
+        {
+            if( ! $this->is_teacher_exists($value))
+            {
+                $this->delete_outdated_teacher($value);
+            }
+        }
+    }
+
+    /**
+     * Returns all block data. 
+     * 
+     * @return array data 
+     */
+    private function get_all_block_data() : ?array 
+    {
+        global $DB;
+        return $DB->get_records('block_needtodo', array());
+    }
+
+    /**
+     * Returns true if teacher used by block.
+     * 
+     * @param stdClass row of block table 
+     * 
+     * @return bool 
+     */
+    private function is_teacher_exists(\stdClass $value) : bool 
+    {
+        foreach($this->teachers as $teacher)
+        {
+            if($value->teacherid == $teacher->id)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Deletes outdated teachers. 
+     * 
+     * Outdated teacher is a teacher who is no longer used by the block
+     * 
+     * @param stdClass row of block table  
+     */
+    private function delete_outdated_teacher(\stdClass $value) : void 
+    {
+        global $DB;
+        $where = array('id' => $value->id);
+        $DB->delete_records('block_needtodo', $where);
     }
 
 }

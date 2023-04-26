@@ -3,7 +3,6 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../lib/enums.php';
-require_once __DIR__.'/../lib/getters/teachers.php';
 require_once __DIR__.'/main.php';
 
 use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWriter;
