@@ -76,7 +76,7 @@ class MainTask extends Main
 
         foreach($data as $value)
         {
-            if( ! $this->is_teacher_exists($value))
+            if($this->is_teacher_not_exists($value))
             {
                 $this->delete_outdated_teacher($value);
             }
@@ -101,17 +101,17 @@ class MainTask extends Main
      * 
      * @return bool 
      */
-    private function is_teacher_exists(\stdClass $value) : bool 
+    private function is_teacher_not_exists(\stdClass $value) : bool 
     {
         foreach($this->teachers as $teacher)
         {
             if($value->teacherid == $teacher->id)
             {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
