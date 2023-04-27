@@ -26,25 +26,25 @@
 
 .ntd-level-1 
 {
-    background: #f7e7d2;
+    color: #000000;
 }
 
 .ntd-level-2-other-activities 
 {
     margin-left: 10px;
-    background: #faf0e4;
+    color: #223074;
 }
 
 .ntd-level-2-my-activities 
 {
     margin-left: 10px;
-    background: #faf0e4;
+    color: #223074;
 }
 
-.ntd-level-3 
+.ntd-level-3 a 
 {
     margin-left: 20px;
-    background: #fcf7f1;
+    color: #000000;
 }
 
 .ntd-cursor-default 
@@ -99,7 +99,7 @@
 .ntd-more-less-btn 
 {
     cursor: pointer;
-    color: #0b3a44;
+    color: #372d89;
     margin-bottom: 5px;
 }
 
