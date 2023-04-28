@@ -14,6 +14,7 @@ class Enums
     const COMPONENT = 'component';
     const FORUM = 'forum';
     const MESSANGER = 'messanger';
+    const QUIZ = 'quiz';
 
     const MY_WORK = 'my_work';
     const NOT_MY_WORK = 'not_my_work';
