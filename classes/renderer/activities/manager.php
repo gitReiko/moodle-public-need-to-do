@@ -78,7 +78,7 @@ class Manager extends Main
      * 
      * @return string contacts prepared for render
      */
-    private function get_teacher_contacts(\stdClass $teacher, int $unreadCount) : string 
+    private function get_teacher_contacts(\stdClass $teacher, $unreadCount) : string 
     {
         $unreadText = get_string('unread_forum_messages', 'block_needtodo');
         $unreadText.= $unreadCount;

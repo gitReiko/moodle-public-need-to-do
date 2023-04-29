@@ -2,9 +2,12 @@
 
 namespace NTD\Classes\Renderer\Activities;
 
+require_once __DIR__.'/../../lib/components/renderer_getter.php';
 require_once __DIR__.'/../../components/forum/renderer/getter.php';
+require_once __DIR__.'/../../components/quiz/renderer/getter.php';
 
 use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
+use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 use \NTD\Classes\Lib\Common as cLib;
 
@@ -100,7 +103,7 @@ abstract class Main
     {
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
-        $text.= $entity->unreadMessages;        
+        $text.= $entity->unreadMessages;
         return \html_writer::tag('span', $text, $attr);
     }
 
@@ -133,6 +136,10 @@ abstract class Main
     {
         $this->courses = array();
         $this->courses = $this->add_forums_data();
+        $this->courses = $this->add_quizes_data();
+
+
+        // count total courses data
 
         $this->sort_teachers_and_activities();
     }
@@ -146,6 +153,17 @@ abstract class Main
     {
         $forum = new ForumGetter($this->params, $this->teachers, $this->courses);
         return $forum->get_courses_with_added_forums();
+    }
+
+    /**
+     * Returns courses with added quizes.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    private function add_quizes_data() 
+    {
+        $quiz = new QuizGetter($this->params, $this->teachers, $this->courses);
+        return $quiz->get_courses_with_component_data();
     }
 
     /**
@@ -242,7 +260,7 @@ abstract class Main
     {
         $title = get_string('course', 'block_needtodo').$course->name.'<br>';
         $title.= get_string('unread_forum_messages', 'block_needtodo');
-        $title.= $course->unreadMessages;
+        $title.= $course->unreadMessages;       
         return $title;
     }
 
