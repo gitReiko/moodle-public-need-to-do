@@ -160,7 +160,7 @@ abstract class Main
         $this->courses = $this->add_quizes_data();
 
         $this->count_total_works();
-        $this->sort_teachers_and_activities();
+        $this->sort_all_data();
     }
 
     /**
@@ -316,9 +316,9 @@ abstract class Main
     }
 
     /**
-     * Sorts teachers an activities.
+     * Sorts all courses data (courses, teachers, activities).
      */
-    private function sort_teachers_and_activities() : void 
+    private function sort_all_data() : void 
     {
         foreach($this->courses as $course)
         {
@@ -333,6 +333,10 @@ abstract class Main
                 return strcmp($a->name, $b->name);
             });
         }
+
+        usort($this->courses, function($a, $b){
+            return strcmp($a->name, $b->name);
+        });
     }
 
     private function count_total_works() : void 
