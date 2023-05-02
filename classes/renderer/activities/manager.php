@@ -3,6 +3,7 @@
 namespace NTD\Classes\Renderer\Activities;
 
 require_once 'main.php';
+require_once 'locallib.php';
 
 use \NTD\Classes\Lib\Enums as Enums; 
 use \NTD\Classes\Lib\Common as cLib;
@@ -55,10 +56,15 @@ class Manager extends Main
                 'data-teacher-cell' => $teacher->id,
                 'data-block-instance' => $this->params->instance,
                 'data-whose-work' => $this->whoseWork,
-                'title' => $this->get_teacher_contacts($teacher, $teacher->unreadMessages)
+                'title' => $this->get_teacher_contacts($teacher)
             );
             $text = $teacher->name;
-            $text.= $this->get_unread_forum_messages_label($teacher);
+
+            if(LocalLib::is_unread_messages_exists($teacher))
+            {
+                $text.= $this->get_unread_forum_messages_label($teacher);
+            }
+
             $cells.= \html_writer::tag('div', $text, $attr);
 
             foreach($teacher->activities as $activity)
@@ -74,14 +80,18 @@ class Manager extends Main
      * Returns teacher contacts prepared for render.
      * 
      * @param stdClass teacher 
-     * @param int unread count 
      * 
      * @return string contacts prepared for render
      */
-    private function get_teacher_contacts(\stdClass $teacher, $unreadCount) : string 
+    private function get_teacher_contacts(\stdClass $teacher) : string 
     {
-        $unreadText = get_string('unread_forum_messages', 'block_needtodo');
-        $unreadText.= $unreadCount;
+        $unreadText = '';
+
+        if(LocalLib::is_unread_messages_exists($teacher))
+        {
+            $unreadText.= get_string('unread_forum_messages', 'block_needtodo');
+            $unreadText.= $teacher->unreadMessages;
+        }
 
         return cLib::get_teacher_contacts($teacher, $unreadText);
     }
@@ -107,7 +117,11 @@ class Manager extends Main
             'title' => $this->get_activity_title($activity)
         );
         $text = $activity->name;
-        $text.= $this->get_unread_forum_messages_label($activity);
+
+        if(LocalLib::is_unread_messages_exists($course))
+        {
+            $text.= $this->get_unread_forum_messages_label($activity);
+        }
 
         $text = \html_writer::tag('a', $text, array('href' => $activity->link));
 

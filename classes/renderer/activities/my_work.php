@@ -71,7 +71,11 @@ class MyWork extends Main
             'title' => $this->get_activity_title($activity)
         );
         $text = $activity->name;
-        $text.= $this->get_unread_forum_messages_label($activity);
+
+        if(LocalLib::is_unread_messages_exists($course))
+        {
+            $text.= $this->get_unread_forum_messages_label($activity);
+        }
 
         $text = \html_writer::tag('a', $text, array('href' => $activity->link));
 

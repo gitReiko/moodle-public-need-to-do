@@ -210,11 +210,6 @@ abstract class RendererGetter
      */
     private function is_teacher_not_exists(\stdClass $data, \stdClass $course) : bool 
     {
-        if(count($course->teachers))
-        {
-            return true;
-        }
-
         foreach($course->teachers as $teacher)
         {
             if($data->teacher->id == $teacher->id)

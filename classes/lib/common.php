@@ -74,7 +74,11 @@ class Common
         $newline = '<br>';
 
         $contacts = $teacher->name.$newline;
-        $contacts.= $undoneCount.$newline;
+
+        if( ! empty($undoneCount))
+        {
+            $contacts.= $undoneCount.$newline;
+        }
 
         if(!empty($teacher->email))
         {

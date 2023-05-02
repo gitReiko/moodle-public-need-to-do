@@ -5,6 +5,7 @@ namespace NTD\Classes\Renderer\Activities;
 require_once __DIR__.'/../../lib/components/renderer_getter.php';
 require_once __DIR__.'/../../components/forum/renderer/getter.php';
 require_once __DIR__.'/../../components/quiz/renderer/getter.php';
+require_once 'locallib.php';
 
 use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
 use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
@@ -123,9 +124,14 @@ abstract class Main
             $title.= get_string('forum', 'block_needtodo');
         }
 
-        $title.= $activity->name.'<br>';
-        $title.= get_string('unread_forum_messages', 'block_needtodo');
-        $title.= $activity->unreadMessages;
+        $title.= $activity->name;
+        
+        if(LocalLib::is_unread_messages_exists($activity))
+        {
+            $title.= '<br>'.get_string('unread_forum_messages', 'block_needtodo');
+            $title.= $activity->unreadMessages;
+        }
+
         return $title;
     }
 
@@ -244,7 +250,12 @@ abstract class Main
             'title' => $this->get_course_title($course)
         );
         $text = $course->name;
-        $text.= $this->get_unread_forum_messages_label($course);
+
+        if(LocalLib::is_unread_messages_exists($course))
+        {
+            $text.= $this->get_unread_forum_messages_label($course);
+        }
+
         $text.= $this->get_link_to_course($course->id);
         return \html_writer::tag('div', $text, $attr);
     }
@@ -258,9 +269,14 @@ abstract class Main
      */
     private function get_course_title(\stdClass $course)
     {
-        $title = get_string('course', 'block_needtodo').$course->name.'<br>';
-        $title.= get_string('unread_forum_messages', 'block_needtodo');
-        $title.= $course->unreadMessages;       
+        $title = get_string('course', 'block_needtodo').$course->name;
+
+        if(LocalLib::is_unread_messages_exists($course))
+        {
+            $title.= '<br>'.get_string('unread_forum_messages', 'block_needtodo');
+            $title.= $course->unreadMessages;  
+        }
+     
         return $title;
     }
 
