@@ -171,7 +171,7 @@ abstract class Main
     private function add_forums_data() 
     {
         $forum = new ForumGetter($this->params, $this->teachers, $this->courses);
-        return $forum->get_courses_with_added_forums();
+        return $forum->get_courses_with_component_data();
     }
 
     /**
