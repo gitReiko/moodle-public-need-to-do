@@ -46,7 +46,7 @@ class MyWork extends Main
         {
             foreach($teacher->activities as $activity)
             {
-                $cells.= $this->get_activities_cell($course, $activity, $className);
+                $cells.= $this->get_activities_cell($course, $activity);
             }
         }
 
@@ -75,6 +75,11 @@ class MyWork extends Main
         if(LocalLib::is_unread_messages_exists($course))
         {
             $text.= $this->get_unread_forum_messages_label($activity);
+        }
+
+        if(LocalLib::is_unchecked_works_exists($activity))
+        {
+            $text.= $this->get_unckeched_works_lable($activity);
         }
 
         $text = \html_writer::tag('a', $text, array('href' => $activity->link));
