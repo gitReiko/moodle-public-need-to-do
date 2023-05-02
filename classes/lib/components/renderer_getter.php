@@ -3,6 +3,7 @@
 namespace NTD\Classes\Lib\Components;
 
 use \NTD\Classes\Lib\Getters\Teachers as tGet;
+use \NTD\Classes\Lib\Getters\Common as cGet;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 abstract class RendererGetter 
@@ -54,13 +55,13 @@ abstract class RendererGetter
     abstract protected function get_component_type() : string ;
 
     /**
-     * Returns true if user has manager capability in component. 
+     * Returns true if user has teacher capability in component. 
      * 
      * @param int entity id 
      * 
      * @return bool 
      */
-    abstract protected function is_user_has_manager_capability_in_component(int $entityId) : bool ;
+    abstract protected function is_user_has_teacher_capability_in_component(int $entityId, \stdClass $teacher) : bool ;
 
     /** 
      * Returns component entities related to teacher. 
@@ -95,7 +96,9 @@ abstract class RendererGetter
 
             foreach($entities as $entity)
             {
-                if($this->is_user_has_manager_capability_in_component($entity->cmid))
+                $teacher = cGet::get_user($data->teacher->id);
+
+                if($this->is_user_has_teacher_capability_in_component($entity->cmid, $teacher))
                 {
                     $this->add_course_if_necessary($entity);
                     $this->add_teacher_if_necessary($data, $entity);

@@ -31,15 +31,15 @@ class Getter extends RendererGetter
     }
 
     /**
-     * Returns true if user has manager capability in component. 
+     * Returns true if user has teacher capability in component. 
      * 
      * @param int entity id 
      * 
      * @return bool 
      */
-    protected function is_user_has_manager_capability_in_component(int $cmid) : bool 
+    protected function is_user_has_teacher_capability_in_component(int $cmid, \stdClass $teacher) : bool 
     {
-        return has_capability('mod/quiz:manage', \context_module::instance($cmid));
+        return has_capability('mod/quiz:grade', \context_module::instance($cmid), $teacher);
     }
 
     /**
