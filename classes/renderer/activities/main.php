@@ -109,6 +109,21 @@ abstract class Main
     }
 
     /**
+     * Returns the designation of unchecked works. 
+     * 
+     * @param stdClass entity
+     * 
+     * @return string designation
+     */
+    protected function get_unckeched_works_lable(\stdClass $entity) : string 
+    {
+        $attr = array('class' => 'ntd-undone-work');
+        $text = ' <i class="fa fa-book" aria-hidden="true"></i> ';
+        $text.= $entity->uncheckedWorks;
+        return \html_writer::tag('span', $text, $attr);
+    }
+
+    /**
      * Returns activity title. 
      * 
      * @param stdClass activity 
@@ -144,9 +159,7 @@ abstract class Main
         $this->courses = $this->add_forums_data();
         $this->courses = $this->add_quizes_data();
 
-
-        // count total courses data
-
+        $this->count_total_works();
         $this->sort_teachers_and_activities();
     }
 
@@ -256,6 +269,11 @@ abstract class Main
             $text.= $this->get_unread_forum_messages_label($course);
         }
 
+        if(LocalLib::is_unchecked_works_exists($course))
+        {
+            $text.= $this->get_unckeched_works_lable($course);
+        }
+
         $text.= $this->get_link_to_course($course->id);
         return \html_writer::tag('div', $text, $attr);
     }
@@ -314,6 +332,37 @@ abstract class Main
             usort($course->teachers, function($a, $b){
                 return strcmp($a->name, $b->name);
             });
+        }
+    }
+
+    private function count_total_works() : void 
+    {
+        foreach($this->courses as $course)
+        {
+            $course->unreadMessages = 0;
+            $course->uncheckedWorks = 0;
+
+            foreach($course->teachers as $teacher)
+            {
+                $teacher->unreadMessages = 0;
+                $teacher->uncheckedWorks = 0;
+
+                foreach($teacher->activities as $activity)
+                {
+                    if(isset($activity->unreadMessages))
+                    {
+                        $teacher->unreadMessages += $activity->unreadMessages;
+                    }
+
+                    if(isset($activity->uncheckedWorks))
+                    {
+                        $teacher->uncheckedWorks += $activity->uncheckedWorks;
+                    }
+                }
+
+                $course->unreadMessages += $teacher->unreadMessages;
+                $course->uncheckedWorks += $teacher->uncheckedWorks;
+            }
         }
     }
 

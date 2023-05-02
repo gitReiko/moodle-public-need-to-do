@@ -24,4 +24,23 @@ class LocalLib
         }
     }
 
+    /**
+     * Returns true if unchecked works exists.
+     * 
+     * @param stdClass entity
+     * 
+     * @return bool 
+     */
+    public static function is_unchecked_works_exists(\stdClass $entity) : bool 
+    {
+        if(isset($entity->uncheckedWorks) && $entity->uncheckedWorks)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
 }
