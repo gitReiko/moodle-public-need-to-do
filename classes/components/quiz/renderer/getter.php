@@ -51,7 +51,7 @@ class Getter extends RendererGetter
      */
     protected function get_link_to_activity(\stdClass $entity) : string 
     {
-        return '/mod/quiz/view.php?id='.$entity->cmid;
+        return '/mod/quiz/report.php?id='.$entity->cmid.'&mode=overview';
     }
 
 }
