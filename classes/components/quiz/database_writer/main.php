@@ -218,24 +218,41 @@ class Main extends DatabaseWriter
      */
     private function is_teacher_can_check_attempt(int $courseId, int $teacherId, int $studentId) : bool 
     {
-        $withmembers = array($teacherId, $studentId);
+        $groups = $this->get_teacher_groups($courseId, $teacherId);
 
-        $groups = groups_get_all_groups(
-            $courseId, 
-            0, // $userid (default)
-            0, // $groupingid (default)
-            'g.*', // $fields (default)
-            $withmembers
-        );
+        foreach($groups as $group)
+        {
+            if(groups_is_member($group->id, $studentId))
+            {
+                return true;
+            }
+        }
 
-        if(empty($groups))
-        {
-            return false;
-        }
-        else 
-        {
-            return true;
-        }
+        return false;
+    }
+
+    /**
+     * Returns array of teacher groups.
+     * 
+     * @param int course id 
+     * @param int teacher id 
+     * 
+     * @return array groups
+     */
+    private function get_teacher_groups(int $courseId, int $teacherId) : ?array 
+    {
+        global $DB;
+
+        $sql = 'SELECT DISTINCT g.id 
+                FROM {groups_members} AS gm 
+                INNER JOIN {groups} AS g 
+                ON g.id = gm.groupid 
+                WHERE g.courseid = ? 
+                AND gm.userid = ?';
+
+        $params = array($courseId, $teacherId);
+
+        return $DB->get_records_sql($sql, $params);
     }
 
     /**
