@@ -22,6 +22,11 @@ class Course
         $this->attempt = $attempt;
     }
 
+    /**
+     * Processes an attempt at the course level. 
+     * 
+     * @return array courses with processed data.
+     */
     public function process_level()
     {
         if($this->is_course_not_exists())

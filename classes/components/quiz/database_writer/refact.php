@@ -4,6 +4,7 @@ namespace NTD\Classes\Components\Quiz\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer.php';
 require_once 'course.php';
+require_once 'teachers.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter;
 use \NTD\Classes\Lib\Enums as Enums; 
@@ -31,75 +32,15 @@ class Refact extends DatabaseWriter
         foreach($attempts as $attempt)
         {
             $this->process_course_level($attempt);
-            // 
+            $this->process_teachers_level($attempt);
 
-            foreach($this->courses as $course)
-            {
-                if($course->courseid == $attempt->courseid)
-                {
-                    $teachers = $this->get_teachers_who_check_attempt($attempt);
-
-                    if(count($teachers))
-                    {
-                        foreach($teachers as $teacher)
-                        {
-                            if($this->is_teacher_in_course_exists($course, $teacher))
-                            {
-                                // increase unchecked
-                            }
-                            else 
-                            {
-                                $course->teachers[] = $teacher;
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        // add empty teacher 
-                    }
-
-
-
-
-                    //print_r($teachers);
-                }
-            }
+            
         }
 
         //print_r($attempts);
         print_r($this->courses);
 
-
-        /*
-        foreach($attempts as $attempt)
-        {
-            $teacherAttempt = false;
-
-            $quiz = $this->get_attempt_quiz($attempt);
-
-            foreach($this->teachers as $teacher)
-            {
-                if($this->is_user_can_check_quiz($teacher, $quiz))
-                {
-                    $this->handle_teacher_attempt($teacher, $quiz);
-
-                    $teacherAttempt = true;
-                }
-            }
-
-            if($teacherAttempt == false)
-            {
-                // add zero teacher 
-            }
-        }
-
-        
-        $this->add_courses_to_teachers();
-        $this->add_quizes_to_teacher_courses();
-        $this->add_count_of_unchecked_student_works();
-
-        $this->init_component_data();
-        */
+        //$this->init_component_data();
     }
 
     /**
@@ -182,127 +123,17 @@ class Refact extends DatabaseWriter
     }
 
     /**
-     * Returns teachers who check attempt. 
+     * Process attempt on teachers level.
      * 
      * @param stdClass attempt 
-     * 
-     * @return array teachers 
      */
-    private function get_teachers_who_check_attempt(\stdClass $attempt) : ?array 
+    private function process_teachers_level(\stdClass $attempt) : void 
     {
-        $checkers = array();
-
-        foreach($this->teachers as $teacher)
-        {
-            if($this->is_user_can_check_quiz($teacher->id, $attempt->coursemoduleid))
-            {
-                if($this->is_teacher_and_student_are_in_same_group($attempt, $teacher->id))
-                {
-                    $checker = new \stdClass;
-                    $checker->id = $teacher->id;
-                    $checker->name = $teacher->fullname;
-                    $checker->email = $teacher->email;
-                    $checker->phone1 = $teacher->phone1;
-                    $checker->phone2 = $teacher->phone2;
-                    $checker->activities = array();
-
-                    $checkers[] = $checker;
-                }
-            }
-        }
-
-        return $checkers;
+        $teachers = new Teachers($this->courses, $this->teachers, $attempt);
+        $this->courses = $teachers->process_level(); 
     }
 
-    /**
-     * Returns true if teacher can check quiz. 
-     * 
-     * @param int teacher 
-     * @param int course module id  
-     * 
-     * @return bool 
-     */
-    private function is_user_can_check_quiz(int $teacherId, int $cmid) : bool 
-    {
-        $contextmodule = \context_module::instance($cmid);
 
-        if(has_capability('mod/quiz:grade', $contextmodule, $teacherId)) 
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Returns true if teacher can check quiz attempt.
-     * 
-     * @param stdClass attempt 
-     * @param int teacher id 
-     * 
-     * @return bool 
-     */
-    private function is_teacher_and_student_are_in_same_group(\stdClass $attempt, int $teacherId) : bool 
-    {
-        $groups = $this->get_teacher_groups($attempt->courseid, $teacherId);
-
-        foreach($groups as $group)
-        {
-            if(groups_is_member($group->id, $attempt->studentid))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns array of teacher groups.
-     * 
-     * @param int course id 
-     * @param int teacher id 
-     * 
-     * @return array groups
-     */
-    private function get_teacher_groups(int $courseId, int $teacherId) : ?array 
-    {
-        global $DB;
-
-        $sql = 'SELECT DISTINCT g.id 
-                FROM {groups_members} AS gm 
-                INNER JOIN {groups} AS g 
-                ON g.id = gm.groupid 
-                WHERE g.courseid = ? 
-                AND gm.userid = ?';
-
-        $params = array($courseId, $teacherId);
-
-        return $DB->get_records_sql($sql, $params);
-    }
-
-    /**
-     * Returns true if teacher exists in course. 
-     * 
-     * @param stdClass course 
-     * @param stdClass teacher 
-     * 
-     * @return bool 
-     */
-    private function is_teacher_in_course_exists(\stdClass $course, \stdClass $teacher) : bool 
-    {
-        foreach($course->teachers as $cTeacher)
-        {
-            if($cTeacher->id == $teacher->id)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
 
 
