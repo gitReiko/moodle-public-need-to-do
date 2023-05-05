@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Components\Quiz\DatabaseWriter;
 
+require_once 'activities.php';
+
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -55,6 +57,8 @@ class Teachers
                         {
                             $this->increase_teacher_unchecked($course, $teacher);
                         }
+
+                        $this->process_activities_level($teacher);
                     }
                 }
                 else 
@@ -303,6 +307,17 @@ class Teachers
         $zeroTeacher->activities = array();
 
         $course->teachers[] = $zeroTeacher;
+    }
+
+    /** 
+     * Processes an attempt at the activities level for teacher. 
+     * 
+     * @param stdClass teacher 
+     */
+    private function process_activities_level(\stdClass &$teacher) : void 
+    {
+        $activities = new Activities($teacher, $this->attempt);
+        $activities->process_level();
     }
 
 }
