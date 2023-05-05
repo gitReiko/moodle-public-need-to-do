@@ -42,6 +42,7 @@ $string['my_work'] = 'Моя работа';
 $string['needtodo:monitorteachersincategory'] = 'Контроль за работой учителей в категории курсов';
 $string['needtodo:monitorteachersonsite'] = 'Контроль за работой учителей на сайте';
 $string['needtodo:myaddinstance'] = 'Добавить новый блок «Нужно сделать» на личную страницу';
+$string['no_one_to_check'] = 'Некому проверить';
 $string['other_users_work'] = 'Работа других пользователей';
 $string['pluginname:addinstance'] = 'Добавить новый блок Нужно сделать';
 $string['pluginname:myaddinstance'] = 'Добавить новый блок Нужно сделать на сраницу Личного кабинета';

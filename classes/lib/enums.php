@@ -11,13 +11,18 @@ class Enums
     const UPDATE_DATA_ON_USER_LEVEL = 'ntd_update_data_on_user_level';
     const BLOCK_INSTANCE = 'ntd_block_instance';
     
+    // Components
     const COMPONENT = 'component';
     const FORUM = 'forum';
     const MESSANGER = 'messanger';
     const QUIZ = 'quiz';
 
+    // Render type
     const MY_WORK = 'my_work';
     const NOT_MY_WORK = 'not_my_work';
+
+    // Unique intities 
+    const ZERO_ID = 0;
 
     // More button
     const MORE = 'ntd-more-';
@@ -26,5 +31,6 @@ class Enums
     const MESSAGES = 'messages-';
     const ACTIVITIES = 'activities-';
     const CHILDS = '-childs';
+
 
 }

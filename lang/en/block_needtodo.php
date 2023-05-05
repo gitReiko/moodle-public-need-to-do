@@ -33,6 +33,7 @@ $string['course_activities'] = 'Course activities';
 $string['course'] = 'Course: ';
 $string['forum'] = 'Forum: ';
 $string['hide_more'] = 'Hide more...';
+$string['no_one_to_check'] = 'No one to check';
 $string['other_users_work'] = 'Other users work';
 $string['last_name_sent'] = 'Last message sent';
 $string['message_sent_by'] = 'Message sent by';

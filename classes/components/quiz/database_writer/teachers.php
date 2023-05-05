@@ -2,6 +2,8 @@
 
 namespace NTD\Classes\Components\Quiz\DatabaseWriter;
 
+use \NTD\Classes\Lib\Enums as Enums; 
+
 /**
  * Processes an attempt at the teacher level. 
  */
@@ -29,6 +31,8 @@ class Teachers
     /**
      * Processes an attempt at the course level. 
      * 
+     * A zero teacher is an entity representing attempts that have no one to check.
+     * 
      * @return array courses with processed data.
      */
     public function process_level()
@@ -39,7 +43,7 @@ class Teachers
             {
                 $teachers = $this->get_teachers_who_check_attempt();
 
-                if(count($teachers))
+                if($this->is_teacher_who_check_attempt_exists($teachers))
                 {
                     foreach($teachers as $teacher)
                     {
@@ -55,13 +59,15 @@ class Teachers
                 }
                 else 
                 {
-                    // add empty teacher 
+                    if($this->is_zero_teacher_exists($course))
+                    {
+                        $this->increase_zero_teacher_unchecked($course);
+                    }
+                    else 
+                    {
+                        $this->add_zero_teacher_to_course($course);
+                    }
                 }
-
-
-
-
-                //print_r($teachers);
             }
         }
 
@@ -99,6 +105,25 @@ class Teachers
         }
 
         return $checkers;
+    }
+
+    /**
+     * Returns true if teacher who check attemp exists. 
+     * 
+     * @param array teachers 
+     * 
+     * @return bool 
+     */
+    private function is_teacher_who_check_attempt_exists(array $teachers) : bool 
+    {
+        if(count($teachers))
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
     }
 
     /**
@@ -207,6 +232,9 @@ class Teachers
 
     /**
      * Increases unckecked value of teacher by 1. 
+     * 
+     * @param stdClass course 
+     * @param stdClass teacher 
      */
     private function increase_teacher_unchecked(\stdClass &$course, \stdClass $teacher) : void 
     {
@@ -219,10 +247,62 @@ class Teachers
         }
     }
 
+    /**
+     * Returns true if zero teacher exists. 
+     * 
+     * A zero teacher is an entity representing attempts that have no one to check.
+     * 
+     * @param stdClass course 
+     * 
+     * @return bool 
+     */
+    private function is_zero_teacher_exists(\stdClass $course) : bool 
+    {
+        foreach($course->teachers as $teacher)
+        {
+            if($teacher->id === Enums::ZERO_ID)
+            {
+                return true;
+            }
+        }
 
+        return false;
+    }
 
+    /**
+     * Increases unckecked value of zero teacher by 1. 
+     * 
+     * @param stdClass course 
+     */
+    private function increase_zero_teacher_unchecked(\stdClass &$course) : void 
+    {
+        foreach($course->teachers as $teacher)
+        {
+            if($teacher->id === Enums::ZERO_ID)
+            {
+                $teacher->uncheked++;
+            }
+        }
+    }
 
+    /**
+     * Adds zero teacher to course. 
+     * 
+     * @param stdClass course 
+     */
+    private function add_zero_teacher_to_course(\stdClass &$course) : void 
+    {
+        $zeroTeacher = new \stdClass;
+        $zeroTeacher->id = Enums::ZERO_ID;
+        $zeroTeacher->name = get_string('no_one_to_check', 'block_needtodo');
+        $zeroTeacher->email = null;
+        $zeroTeacher->phone1 = null;
+        $zeroTeacher->phone2 = null;
+        $zeroTeacher->uncheked = 1;
+        $zeroTeacher->unreaded = 0;
+        $zeroTeacher->activities = array();
 
-
+        $course->teachers[] = $zeroTeacher;
+    }
 
 }
