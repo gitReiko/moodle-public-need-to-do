@@ -36,7 +36,7 @@ class Refact extends DatabaseWriter
             // process actvities level is in teacher level
         }
 
-        $this->init_component_data();
+        $this->data = $this->courses;
     }
 
     /**
@@ -48,14 +48,12 @@ class Refact extends DatabaseWriter
      */
     protected function get_needtodo_record(\stdClass $dataEntity) : \stdClass 
     {
-        /*
         $needtodo = new \stdClass;
         $needtodo->component = $this->componentName;
-        $needtodo->teacherid = $dataEntity->teacher->id;
+        $needtodo->teacherid = $dataEntity->courseid;
         $needtodo->info = json_encode($dataEntity);
         $needtodo->updatetime = time();
         return $needtodo;
-        */
     }
 
     /**

@@ -56,7 +56,7 @@ class Activities
      */
     private function is_course_teacher_it_checking_teacher(\stdClass $teacher) : bool 
     {
-        if($teacher->id === $this->checkingTeacherId)
+        if($teacher->id == $this->checkingTeacherId)
         {
             return true;
         }
