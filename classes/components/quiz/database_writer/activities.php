@@ -7,49 +7,76 @@ namespace NTD\Classes\Components\Quiz\DatabaseWriter;
  */
 class Activities  
 {
-    /** A teacher that have attempts. */
-    private $teacher;
+    /** A course that have attempts. */
+    private $course;
 
-    /** An attempt of student to complete quiz. */
+    /** An id of teacher who can check attempt. */
+    private $checkingTeacherId;
+
+    /** An attempt of student which complete quiz. */
     private $attempt;
 
     /**
      * Prepares data for class.
      */
-    function __construct(\stdClass $teacher, \stdClass $attempt)
+    function __construct(\stdClass &$course, int $checkingTeacherId, \stdClass $attempt)
     {
-        $this->teacher = $teacher;
+        $this->course = $course;
+        $this->checkingTeacherId = $checkingTeacherId;
         $this->attempt = $attempt;
     }
 
     /**
      * Processes an attempt at the activities level. 
      */
-    public function process_level() : \stdClass  
+    public function process_level() : void   
     {
-        if($this->is_activity_exists())
+        foreach($this->course->teachers as &$teacher)
         {
-            echo 'increase<hr>';
-            $this->increase_activity_unchecked();
+            if($this->is_course_teacher_it_checking_teacher($teacher))
+            {
+                if($this->is_activity_exists($teacher))
+                {
+                    $this->increase_activity_unchecked($teacher);
+                }
+                else 
+                {
+                    $this->add_activity_to_array($teacher);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns true if course teacher is checking teacher. 
+     * 
+     * @param stdClass course teacher 
+     * 
+     * @return bool 
+     */
+    private function is_course_teacher_it_checking_teacher(\stdClass $teacher) : bool 
+    {
+        if($teacher->id === $this->checkingTeacherId)
+        {
+            return true;
         }
         else 
         {
-            $this->add_activity_to_array();
+            return false;
         }
-
-        return $this->teacher;
     }
 
     /**
      * Returns true if activity exists in teacher array. 
      * 
+     * @param stdClass course teacher 
+     * 
      * @return bool 
      */
-    private function is_activity_exists() : bool 
+    private function is_activity_exists(\stdClass $teacher) : bool 
     {
-        foreach($this->teacher->activities as $activity)
+        foreach($teacher->activities as $activity)
         {
-            echo 'activity id '.$activity->id.' == $this->attempt->quizid'.$this->attempt->quizid.'<hr>';
             if($activity->id == $this->attempt->quizid)
             {
                 return true;
@@ -61,23 +88,12 @@ class Activities
 
     /**
      * Increases unckecked value of activity by 1. 
+     * 
+     * @param stdClass course teacher 
      */
-    private function increase_activity_unchecked() : void 
+    private function increase_activity_unchecked(\stdClass &$teacher) : void 
     {
-        /*
-        while($i < count($this->teacher->activities))
-        {
-            if($this->teacher->activities[$i]->unchecked == $this->attempt->quizid)
-            {
-                $this->teacher->activities[$i]->unchecked++;
-            }
-
-            $i++;
-        }
-        */
-
-
-        foreach($this->teacher->activities as $activity)
+        foreach($teacher->activities as $activity)
         {
             if($activity->id == $this->attempt->quizid)
             {
@@ -88,8 +104,10 @@ class Activities
 
     /**
      * Adds activity to teacher array.
+     * 
+     * @param stdClass course teacher 
      */
-    private function add_activity_to_array() : void 
+    private function add_activity_to_array(\stdClass &$teacher) : void 
     {
         $activity = new \stdClass;
         $activity->id = $this->attempt->quizid;
@@ -98,10 +116,7 @@ class Activities
         $activity->unchecked = 1;
         $activity->unreaded = 0;
 
-        print_r($activity);
-        echo '<hr>';
-
-        $this->teacher->activities[] = $activity;
+        $teacher->activities[] = $activity;
     }
 
 

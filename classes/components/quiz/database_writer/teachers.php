@@ -17,7 +17,7 @@ class Teachers
     /** An array of teachers with whow block works. */
     private $teachers;
 
-    /** An attempt of student to complete quiz. */
+    /** An attempt of student which complete quiz */
     private $attempt;
 
     /**
@@ -33,7 +33,7 @@ class Teachers
     /**
      * Processes an attempt at the course level. 
      * 
-     * A zero teacher is an entity representing attempts that have no one to check.
+     * A absent checker is an entity representing attempts that have no one to check.
      * 
      * @return array courses with processed data.
      */
@@ -58,19 +58,21 @@ class Teachers
                             $this->increase_teacher_unchecked($course, $teacher);
                         }
 
-                        $this->process_activities_level($teacher);
+                        $this->process_activities_level($course, $teacher->id);
                     }
                 }
                 else 
                 {
-                    if($this->is_zero_teacher_exists($course))
+                    if($this->is_absent_checker_exists($course))
                     {
-                        $this->increase_zero_teacher_unchecked($course);
+                        $this->increase_absent_checker_unchecked($course);
                     }
                     else 
                     {
-                        $this->add_zero_teacher_to_course($course);
+                        $this->add_absent_checker_to_course($course);
                     }
+
+                    $this->process_absent_teacher_activities_level($course);
                 }
             }
         }
@@ -252,19 +254,19 @@ class Teachers
     }
 
     /**
-     * Returns true if zero teacher exists. 
+     * Returns true if absent checker exists. 
      * 
-     * A zero teacher is an entity representing attempts that have no one to check.
+     * A absent checker is an entity representing attempts that have no one to check.
      * 
      * @param stdClass course 
      * 
      * @return bool 
      */
-    private function is_zero_teacher_exists(\stdClass $course) : bool 
+    private function is_absent_checker_exists(\stdClass $course) : bool 
     {
         foreach($course->teachers as $teacher)
         {
-            if($teacher->id === Enums::ZERO_ID)
+            if($teacher->id === Enums::ABSENT_CHECKER_ID)
             {
                 return true;
             }
@@ -274,15 +276,15 @@ class Teachers
     }
 
     /**
-     * Increases unckecked value of zero teacher by 1. 
+     * Increases unckecked value of absent checker by 1. 
      * 
      * @param stdClass course 
      */
-    private function increase_zero_teacher_unchecked(\stdClass &$course) : void 
+    private function increase_absent_checker_unchecked(\stdClass &$course) : void 
     {
         foreach($course->teachers as $teacher)
         {
-            if($teacher->id === Enums::ZERO_ID)
+            if($teacher->id === Enums::ABSENT_CHECKER_ID)
             {
                 $teacher->uncheked++;
             }
@@ -290,34 +292,47 @@ class Teachers
     }
 
     /**
-     * Adds zero teacher to course. 
+     * Adds absent checker to course. 
      * 
      * @param stdClass course 
      */
-    private function add_zero_teacher_to_course(\stdClass &$course) : void 
+    private function add_absent_checker_to_course(\stdClass &$course) : void 
     {
-        $zeroTeacher = new \stdClass;
-        $zeroTeacher->id = Enums::ZERO_ID;
-        $zeroTeacher->name = get_string('no_one_to_check', 'block_needtodo');
-        $zeroTeacher->email = null;
-        $zeroTeacher->phone1 = null;
-        $zeroTeacher->phone2 = null;
-        $zeroTeacher->uncheked = 1;
-        $zeroTeacher->unreaded = 0;
-        $zeroTeacher->activities = array();
+        $absentChecker = new \stdClass;
+        $absentChecker->id = Enums::ABSENT_CHECKER_ID;
+        $absentChecker->name = get_string('no_one_to_check', 'block_needtodo');
+        $absentChecker->email = null;
+        $absentChecker->phone1 = null;
+        $absentChecker->phone2 = null;
+        $absentChecker->uncheked = 1;
+        $absentChecker->unreaded = 0;
+        $absentChecker->activities = array();
 
-        $course->teachers[] = $zeroTeacher;
+        $course->teachers[] = $absentChecker;
     }
 
     /** 
      * Processes an attempt at the activities level for teacher. 
      * 
-     * @param stdClass teacher 
+     * @param stdClass course 
+     * @param int checking teacher id  
      */
-    private function process_activities_level(\stdClass &$teacher) : void 
+    private function process_activities_level(\stdClass &$course, int $checkingTeacherId) : void 
     {
-        $activities = new Activities($teacher, $this->attempt);
+        $activities = new Activities($course, $checkingTeacherId, $this->attempt);
         $activities->process_level();
+    }
+
+    private function process_absent_teacher_activities_level(\stdClass &$course) : void 
+    {
+        foreach($course->teachers as $teacher)
+        {
+            if($teacher->id === Enums::ABSENT_CHECKER_ID)
+            {
+                $activities = new Activities($course, $teacher->id, $this->attempt);
+                $activities->process_level();
+            }
+        }
     }
 
 }

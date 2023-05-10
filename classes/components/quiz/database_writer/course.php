@@ -10,7 +10,7 @@ class Course
     /** An array of courses that have attempts. */
     private $courses;
 
-    /** An attempt of student to complete quiz. */
+    /** An attempt of student which complete quiz */
     private $attempt;
 
     /**

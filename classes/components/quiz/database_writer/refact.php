@@ -36,9 +36,7 @@ class Refact extends DatabaseWriter
             // process actvities level is in teacher level
         }
 
-        print_r($this->courses);
-
-        //$this->init_component_data();
+        $this->init_component_data();
     }
 
     /**
