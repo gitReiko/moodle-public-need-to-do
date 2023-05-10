@@ -45,7 +45,7 @@ abstract class DatabaseWriter
      */
     public function write() : void 
     {
-        $this->clear_outdated_data();
+        //$this->clear_outdated_data();
 
         foreach($this->data as $dataEntity)
         {
