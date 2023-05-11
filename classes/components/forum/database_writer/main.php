@@ -2,20 +2,24 @@
 
 namespace NTD\Classes\Components\Forum\DatabaseWriter;
 
-require_once 'getters/forum.php';
-require_once 'getters/teacherMessages.php';
 require_once __DIR__.'/../../../lib/components/database_writer.php';
+require_once 'forum.php';
+require_once 'unread_posts.php';
+require_once 'course.php';
+require_once 'teachers.php';
+require_once 'activities.php';
 
-use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\TeacherMessages;
-use \NTD\Classes\Components\Forum\DatabaseWriter\Getters\Forum;
 use \NTD\Classes\Lib\Components\DatabaseWriter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 class Main extends DatabaseWriter 
 {
 
+    /** An array of courses that have unread forum posts. */
+    private $courses = array();
+
     /** Sets component name. */
-    protected function set_component_name() : void  
+    protected function set_component_name() : void
     {
         $this->componentName = Enums::FORUM;
     }
@@ -23,8 +27,17 @@ class Main extends DatabaseWriter
     /** Prepares data neccessary for database writer. */
     protected function prepare_neccessary_data() : void 
     {
-        $this->forums = $this->get_forums();
-        $this->data = $this->get_unread_teachers_messages();
+        $forums = $this->get_forums();
+        $unreadPosts = $this->get_unread_posts($forums);
+
+        foreach($unreadPosts as $post)
+        {
+            $this->process_course_level($post);
+            $this->process_teachers_level($post);
+            $this->process_activities_level($post);
+        }
+
+        $this->data = $this->courses;
     }
 
     /**
@@ -38,7 +51,7 @@ class Main extends DatabaseWriter
     {
         $needtodo = new \stdClass;
         $needtodo->component = $this->componentName;
-        $needtodo->teacherid = $dataEntity->teacher->id;
+        $needtodo->teacherid = $dataEntity->courseid;
         $needtodo->info = json_encode($dataEntity);
         $needtodo->updatetime = time();
         return $needtodo;
@@ -56,16 +69,51 @@ class Main extends DatabaseWriter
     }
 
     /**
-     * Returns teachers with unread messages.
+     * Returns teachers unread posts. 
      * 
-     * @return array teachers with unread messages
+     * @param array forums 
+     * 
+     * @return array unread teachers posts 
      */
-    private function get_unread_teachers_messages() 
+    private function get_unread_posts(?array $forums) : ?array 
     {
-        $teachers = new TeacherMessages(
-            $this->teachers, $this->forums
+        $posts = new UnreadPosts(
+            $this->teachers, $forums
         );
-        return $teachers->get_unread_teachers_messages();
+        return $posts->get_unread_teachers_messages();
+    }
+
+    /**
+     * Process post on course level.
+     * 
+     * @param stdClass post 
+     */
+    private function process_course_level(\stdClass $post) : void 
+    {
+        $course = new Course($this->courses, $post);
+        $this->courses = $course->process_level();
+    }
+
+    /**
+     * Process post on teachers level.
+     * 
+     * @param stdClass post 
+     */
+    private function process_teachers_level(\stdClass $post) : void 
+    {
+        $teachers = new Teachers($this->courses, $post);
+        $this->courses = $teachers->process_level(); 
+    }
+
+    /**
+     * Process post on activities level.
+     * 
+     * @param stdClass post
+     */
+    private function process_activities_level(\stdClass $post) : void 
+    {
+        $activities = new Activities($this->courses, $post);
+        $this->courses = $activities->process_level();
     }
 
 }

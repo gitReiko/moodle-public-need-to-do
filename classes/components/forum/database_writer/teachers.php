@@ -20,7 +20,7 @@ class Teachers
     }
 
     /**
-     * Processes an entity at the course level. 
+     * Processes an entity at the teacher level. 
      * 
      * @return array courses with processed data.
      */
