@@ -3,7 +3,7 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../components/messanger/database_writer/main.php';
-require_once __DIR__.'/../components/forum/database_writer/main.php';
+require_once __DIR__.'/../components/forum/database_writer/refact.php';
 require_once __DIR__.'/../components/quiz/database_writer/main.php';
 require_once __DIR__.'/../lib/getters/teachers.php';
 

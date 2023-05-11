@@ -1,13 +1,13 @@
 <?php 
 
-namespace NTD\Classes\Components\Quiz\DatabaseWriter;
+namespace NTD\Classes\Components\Forum\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer/course.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Course as CourseSkeleton;
 
 /**
- * Processes an attempt at the course level. 
+ * Processes an entity at the course level. 
  */
 class Course extends CourseSkeleton 
 {
@@ -38,8 +38,8 @@ class Course extends CourseSkeleton
         $course = new \stdClass;
         $course->courseid = $this->rawEntity->courseid;
         $course->coursename = $this->rawEntity->coursename;
-        $course->uncheked = 1;
-        $course->unreaded = 0;
+        $course->uncheked = 0;
+        $course->unreaded = 1;
         $course->teachers = array();
 
         $this->courses[] = $course;
@@ -54,7 +54,7 @@ class Course extends CourseSkeleton
         {
             if($course->courseid == $this->rawEntity->courseid)
             {
-                $course->uncheked++;
+                $course->unreaded++;
             }
         }
     }

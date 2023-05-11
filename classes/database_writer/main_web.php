@@ -6,7 +6,7 @@ require_once __DIR__.'/../lib/enums.php';
 require_once __DIR__.'/main.php';
 
 use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWriter;
-use \NTD\Classes\Components\Forum\DatabaseWriter\Main as ForumDatabaseWriter;
+use \NTD\Classes\Components\Forum\DatabaseWriter\Refact as ForumDatabaseWriter;
 use \NTD\Classes\Components\Quiz\DatabaseWriter\Main as QuizDatabaseWriter;
 use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use NTD\Classes\Lib\Enums as Enums; 
