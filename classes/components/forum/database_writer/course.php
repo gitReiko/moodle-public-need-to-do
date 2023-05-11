@@ -39,14 +39,14 @@ class Course extends CourseSkeleton
         $course->courseid = $this->rawEntity->courseid;
         $course->coursename = $this->rawEntity->coursename;
         $course->uncheked = 0;
-        $course->unreaded = 1;
+        $course->unreaded = $this->rawEntity->unreaded;
         $course->teachers = array();
 
         $this->courses[] = $course;
     }
 
     /**
-     * Increases unckecked value of course by 1. 
+     * Increases unckecked value of course by value of unreaded raw. 
      */
     protected function increase_course_unchecked() : void 
     {
@@ -54,7 +54,7 @@ class Course extends CourseSkeleton
         {
             if($course->courseid == $this->rawEntity->courseid)
             {
-                $course->unreaded++;
+                $course->unreaded += $this->rawEntity->unreaded;
             }
         }
     }
