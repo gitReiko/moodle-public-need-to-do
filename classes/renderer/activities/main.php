@@ -104,7 +104,7 @@ abstract class Main
     {
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
-        $text.= $entity->unreadMessages;
+        $text.= $entity->unreaded;
         return \html_writer::tag('span', $text, $attr);
     }
 
@@ -115,11 +115,11 @@ abstract class Main
      * 
      * @return string designation
      */
-    protected function get_unckeched_works_lable(\stdClass $entity) : string 
+    protected function get_unckeched_works_label(\stdClass $entity) : string 
     {
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-book" aria-hidden="true"></i> ';
-        $text.= $entity->uncheckedWorks;
+        $text.= $entity->unchecked;
         return \html_writer::tag('span', $text, $attr);
     }
 
@@ -140,11 +140,17 @@ abstract class Main
         }
 
         $title.= $activity->name;
-        
-        if(LocalLib::is_unread_messages_exists($activity))
+
+        if($activity->unreaded)
         {
             $title.= '<br>'.get_string('unread_forum_messages', 'block_needtodo');
-            $title.= $activity->unreadMessages;
+            $title.= $activity->unreaded;       
+        }
+
+        if($activity->unchecked)
+        {
+            $title.= '<br>'.get_string('unchecked_activities_works', 'block_needtodo');
+            $title.= $activity->unchecked;       
         }
 
         return $title;
@@ -271,7 +277,7 @@ abstract class Main
 
         if(LocalLib::is_unchecked_works_exists($course))
         {
-            $text.= $this->get_unckeched_works_lable($course);
+            $text.= $this->get_unckeched_works_label($course);
         }
 
         $text.= $this->get_link_to_course($course->id);
@@ -292,7 +298,13 @@ abstract class Main
         if(LocalLib::is_unread_messages_exists($course))
         {
             $title.= '<br>'.get_string('unread_forum_messages', 'block_needtodo');
-            $title.= $course->unreadMessages;  
+            $title.= $course->unreaded;  
+        }
+
+        if($course->unchecked)
+        {
+            $title.= '<br>'.get_string('unchecked_activities_works', 'block_needtodo');
+            $title.= $course->unchecked;       
         }
      
         return $title;
@@ -343,29 +355,29 @@ abstract class Main
     {
         foreach($this->courses as $course)
         {
-            $course->unreadMessages = 0;
-            $course->uncheckedWorks = 0;
+            $course->unreaded = 0;
+            $course->unchecked = 0;
 
             foreach($course->teachers as $teacher)
             {
-                $teacher->unreadMessages = 0;
-                $teacher->uncheckedWorks = 0;
+                $teacher->unreaded = 0;
+                $teacher->unchecked = 0;
 
                 foreach($teacher->activities as $activity)
                 {
-                    if(isset($activity->unreadMessages))
+                    if(isset($activity->unreaded))
                     {
-                        $teacher->unreadMessages += $activity->unreadMessages;
+                        $teacher->unreaded += $activity->unreaded;
                     }
 
-                    if(isset($activity->uncheckedWorks))
+                    if(isset($activity->unchecked))
                     {
-                        $teacher->uncheckedWorks += $activity->uncheckedWorks;
+                        $teacher->unchecked += $activity->unchecked;
                     }
                 }
 
-                $course->unreadMessages += $teacher->unreadMessages;
-                $course->uncheckedWorks += $teacher->uncheckedWorks;
+                $course->unreaded += $teacher->unreaded;
+                $course->unchecked += $teacher->unchecked;
             }
         }
     }

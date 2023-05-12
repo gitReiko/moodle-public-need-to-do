@@ -67,7 +67,7 @@ class Manager extends Main
 
             if(LocalLib::is_unchecked_works_exists($teacher))
             {
-                $text.= $this->get_unckeched_works_lable($teacher);
+                $text.= $this->get_unckeched_works_label($teacher);
             }
 
             $cells.= \html_writer::tag('div', $text, $attr);
@@ -95,7 +95,13 @@ class Manager extends Main
         if(LocalLib::is_unread_messages_exists($teacher))
         {
             $unreadText.= get_string('unread_forum_messages', 'block_needtodo');
-            $unreadText.= $teacher->unreadMessages;
+            $unreadText.= $teacher->unreaded;
+        }
+
+        if($teacher->unchecked)
+        {
+            $unreadText.= get_string('unchecked_activities_works', 'block_needtodo');
+            $unreadText.= $teacher->unchecked;
         }
 
         return cLib::get_teacher_contacts($teacher, $unreadText);
@@ -130,7 +136,7 @@ class Manager extends Main
 
         if(LocalLib::is_unchecked_works_exists($activity))
         {
-            $text.= $this->get_unckeched_works_lable($activity);
+            $text.= $this->get_unckeched_works_label($activity);
         }
 
         $text = \html_writer::tag('a', $text, array('href' => $activity->link));

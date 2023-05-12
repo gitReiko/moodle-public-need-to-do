@@ -1,27 +1,27 @@
-<?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Languages configuration for the block_needtodo plugin.
+
  *
- * @package   block_needtodo
  * @copyright 2022, Denis Makouski khornau@gmail.com
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_needtodo
+ * Languages configuration for the block_needtodo plugin.
  */
-
+/**
+//
+//
+//
+// (at your option) any later version.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// GNU General Public License for more details.
+// it under the terms of the GNU General Public License as published by
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// Moodle is distributed in the hope that it will be useful,
+// Moodle is free software: you can redistribute it and/or modify
+// the Free Software Foundation, either version 3 of the License, or
+// This file is part of Moodle - http://moodle.org/
+// You should have received a copy of the GNU General Public License
+<?php
 $string['all_done'] = 'Всё сделано.';
 $string['block_instance_name'] = 'Название экземпляра блока';
 $string['block_instance_setup'] = 'Настройка экземпляра блока';
@@ -49,6 +49,7 @@ $string['pluginname:myaddinstance'] = 'Добавить новый блок Ну
 $string['pluginname'] = 'Нужно сделать';
 $string['show_more'] = 'Показать больше...';
 $string['to_the_course'] = 'к курсу';
+$string['unchecked_activities_works'] = 'Непроверенных работ активностей: ';
 $string['unread_chat_messages'] = 'Непрочитано сообщений чата: ';
 $string['unread_forum_messages'] = 'Непрочитано сообщений форума: ';
 $string['update_data'] = 'Обновить данные';

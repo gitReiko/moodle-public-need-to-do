@@ -14,7 +14,7 @@ class LocalLib
      */
     public static function is_unread_messages_exists(\stdClass $entity) : bool 
     {
-        if(isset($entity->unreadMessages) && $entity->unreadMessages)
+        if($entity->unreaded)
         {
             return true;
         }
@@ -33,7 +33,7 @@ class LocalLib
      */
     public static function is_unchecked_works_exists(\stdClass $entity) : bool 
     {
-        if(isset($entity->uncheckedWorks) && $entity->uncheckedWorks)
+        if(isset($entity->unchecked) && $entity->unchecked)
         {
             return true;
         }

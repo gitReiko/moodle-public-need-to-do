@@ -79,7 +79,7 @@ class MyWork extends Main
 
         if(LocalLib::is_unchecked_works_exists($activity))
         {
-            $text.= $this->get_unckeched_works_lable($activity);
+            $text.= $this->get_unckeched_works_label($activity);
         }
 
         $text = \html_writer::tag('a', $text, array('href' => $activity->link));

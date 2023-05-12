@@ -85,9 +85,8 @@ abstract class RendererGetter
             {
                 foreach($teacherDB->activities as $activityDB)
                 {
-                    $teacher = cGet::get_user($teacherDB->id);
-
-                    if($this->is_user_has_teacher_capability_in_component($activityDB->cmid, $teacher))
+                    if($this->is_teacher_it_absent_checker($teacherDB->id) 
+                        || $this->is_teacher_belongs_to_block_instance($teacherDB->id))
                     {
                         $this->add_course_if_necessary($courseDB);
                         $this->add_teacher_if_necessary($courseDB, $teacherDB);
@@ -145,6 +144,45 @@ abstract class RendererGetter
         }
 
         return $decoded;
+    }
+
+    /**
+     * Returns true if teacher it's absent checker. 
+     * 
+     * @param int teacher id 
+     * 
+     * @return bool 
+     */
+    private function is_teacher_it_absent_checker(int $teacherId) : bool 
+    {
+        if($teacherId == Enums::ABSENT_CHECKER_ID)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if teacher belongs to block instance. 
+     * 
+     * @param int $teacherId
+     * 
+     * @return bool 
+     */
+    private function is_teacher_belongs_to_block_instance(int $teacherId) : bool 
+    {
+        foreach($this->teachers as $teacher)
+        {
+            if($teacher->id == $teacherId)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
