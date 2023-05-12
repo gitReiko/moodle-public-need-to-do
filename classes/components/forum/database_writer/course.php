@@ -38,7 +38,7 @@ class Course extends CourseSkeleton
         $course = new \stdClass;
         $course->courseid = $this->rawEntity->courseid;
         $course->coursename = $this->rawEntity->coursename;
-        $course->uncheked = 0;
+        $course->unchecked = 0;
         $course->unreaded = $this->rawEntity->unreaded;
         $course->teachers = array();
 

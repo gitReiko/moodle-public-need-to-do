@@ -101,7 +101,7 @@ class Teachers
                     $checker->email = $teacher->email;
                     $checker->phone1 = $teacher->phone1;
                     $checker->phone2 = $teacher->phone2;
-                    $checker->uncheked = 1;
+                    $checker->unchecked = 1;
                     $checker->unreaded = 0;
                     $checker->activities = array();
 
@@ -248,7 +248,7 @@ class Teachers
         {
             if($cTeacher->id == $teacher->id)
             {
-                $cTeacher->uncheked++;
+                $cTeacher->unchecked++;
             }
         }
     }
@@ -286,7 +286,7 @@ class Teachers
         {
             if($teacher->id === Enums::ABSENT_CHECKER_ID)
             {
-                $teacher->uncheked++;
+                $teacher->unchecked++;
             }
         }
     }
@@ -304,7 +304,7 @@ class Teachers
         $absentChecker->email = null;
         $absentChecker->phone1 = null;
         $absentChecker->phone2 = null;
-        $absentChecker->uncheked = 1;
+        $absentChecker->unchecked = 1;
         $absentChecker->unreaded = 0;
         $absentChecker->activities = array();
 

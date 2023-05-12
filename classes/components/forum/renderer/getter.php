@@ -19,18 +19,6 @@ class Getter extends RendererGetter
     }
 
     /**
-     * Returns data related to forum from database.
-     * 
-     * @param string teachers in condition for database 
-     * 
-     * @return array forum data 
-     */
-    protected function get_component_entities(\stdClass $data) : ?array 
-    {
-        return $data->forums;
-    }
-
-    /**
      * Returns true if user has teacher capability in component.  
      * 
      * @param int entity id 

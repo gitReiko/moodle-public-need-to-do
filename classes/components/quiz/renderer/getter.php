@@ -19,18 +19,6 @@ class Getter extends RendererGetter
     }
 
     /**
-     * Returns data related to quiz from database.
-     * 
-     * @param string teachers in condition for database 
-     * 
-     * @return array quiz data 
-     */
-    protected function get_component_entities(\stdClass $data) : ?array 
-    {
-        return $data->quizes;
-    }
-
-    /**
      * Returns true if user has teacher capability in component. 
      * 
      * @param int entity id 

@@ -63,15 +63,6 @@ abstract class RendererGetter
      */
     abstract protected function is_user_has_teacher_capability_in_component(int $entityId, \stdClass $teacher) : bool ;
 
-    /** 
-     * Returns component entities related to teacher. 
-     * 
-     * @param stdClass need to do block data 
-     * 
-     * @return array component entities related to teacher 
-     */
-    abstract protected function get_component_entities(\stdClass $data) : ?array ;
-
     /**
      * Returns link to activity. 
      * 
@@ -86,23 +77,22 @@ abstract class RendererGetter
      */
     private function add_component_to_courses() : void 
     {
-        $teachersData = $this->get_component_data();
+        $data = $this->get_component_data();
 
-        foreach($teachersData as $teacherData)
+        foreach($data as $courseDB)
         {
-            $data = json_decode($teacherData->info);
-
-            $entities = $this->get_component_entities($data);
-
-            foreach($entities as $entity)
+            foreach($courseDB->teachers as $teacherDB)
             {
-                $teacher = cGet::get_user($data->teacher->id);
-
-                if($this->is_user_has_teacher_capability_in_component($entity->cmid, $teacher))
+                foreach($teacherDB->activities as $activityDB)
                 {
-                    $this->add_course_if_necessary($entity);
-                    $this->add_teacher_if_necessary($data, $entity);
-                    $this->add_activity_if_necessary($data, $entity);
+                    $teacher = cGet::get_user($teacherDB->id);
+
+                    if($this->is_user_has_teacher_capability_in_component($activityDB->cmid, $teacher))
+                    {
+                        $this->add_course_if_necessary($courseDB);
+                        $this->add_teacher_if_necessary($courseDB, $teacherDB);
+                        $this->add_activity_if_necessary($courseDB, $teacherDB, $activityDB);
+                    }
                 }
             }
         }
@@ -110,56 +100,78 @@ abstract class RendererGetter
 
     /**
      * Returns teachers data related to component.
+     * 
+     * @return array data 
      */
     private function get_component_data() : ?array 
     {
+        // from all courses or from category courses
+        // for now only from all courses 
+        $data = $this->get_component_data_from_all_courses();
+
+        $data = $this->decode_data_from_json($data);
+
+        return $data;
+    }
+
+    /**
+     * Returns component data from all courses.
+     * 
+     * @return array data 
+     */
+    private function get_component_data_from_all_courses() : ?array 
+    {
         global $DB;
 
-        $teachersInCondition = tGet::get_where_in_condition_from_teachers_array($this->teachers);
+        $where = array('component' => $this->componentType);
 
-        // Teachers may not exist
-        if($teachersInCondition)
+        return $DB->get_records('block_needtodo', $where);
+    }
+
+    /**
+     * Returns decoded from json data.
+     * 
+     * @param stdClass data 
+     * 
+     * @return array decoded data 
+     */
+    private function decode_data_from_json(?array $data) : ?array 
+    {
+        $decoded = array();
+
+        foreach($data as $value)
         {
-            $sql = "SELECT * 
-            FROM {block_needtodo} 
-            WHERE component = ? 
-            AND teacherid {$teachersInCondition}";
-    
-            $params = array($this->componentType);
-    
-            return $DB->get_records_sql($sql, $params);
+            $decoded[] = json_decode($value->info);
         }
-        else
-        {
-            return null;
-        }
+
+        return $decoded;
     }
 
     /**
      * Adds course to array if necessary.
      * 
-     * @param stdClass entity 
+     * @param stdClass course from database 
      */
-    private function add_course_if_necessary(\stdClass $entity) : void 
+    private function add_course_if_necessary(\stdClass $courseDB) : void 
     {
-        if($this->is_course_not_exists($entity))
+        if($this->is_course_not_exists($courseDB))
         {
-            $this->add_course_to_array($entity);
+            $this->add_course_to_array($courseDB);
         }
     }
 
     /**
      * Returns true if course not exists.
      * 
-     * @param stdClass entity
+     * @param stdClass course from database 
      * 
      * @return bool 
      */
-    private function is_course_not_exists(\stdClass $entity) : bool 
+    private function is_course_not_exists(\stdClass $courseDB) : bool 
     {
         foreach($this->courses as $course)
         {
-            if($course->id == $entity->courseId)
+            if($course->id == $courseDB->courseid)
             {
                 return false;
             }
@@ -171,13 +183,15 @@ abstract class RendererGetter
     /**
      * Adds course to courses array. 
      * 
-     * @param stdClass entity 
+     * @param stdClass course from database  
      */
-    private function add_course_to_array(\stdClass $entity) : void 
+    private function add_course_to_array(\stdClass $courseDB) : void 
     {
         $course = new \stdClass;
-        $course->id = $entity->courseId;
-        $course->name = $entity->courseName;
+        $course->id = $courseDB->courseid;
+        $course->name = $courseDB->coursename;
+        $course->unchecked = $courseDB->unchecked;
+        $course->unreaded = $courseDB->unreaded;
         $course->teachers = array();
 
         $this->courses[] = $course;
@@ -186,18 +200,18 @@ abstract class RendererGetter
     /**
      * Adds teacher to array if necessary.
      * 
-     * @param stdClass data 
-     * @param stdClass entity
+     * @param stdClass course from database  
+     * @param stdClass teacher from database  
      */
-    private function add_teacher_if_necessary(\stdClass $data, \stdClass $entity) : void 
+    private function add_teacher_if_necessary(\stdClass $courseDB, \stdClass $teacherDB) : void 
     {
         foreach($this->courses as $course)
         {
-            if($course->id == $entity->courseId)
+            if($course->id == $courseDB->courseid)
             {
-                if($this->is_teacher_not_exists($data, $course))
+                if($this->is_teacher_not_exists($course, $teacherDB))
                 {
-                    $this->add_teacher_to_course($data, $course);
+                    $this->add_teacher_to_course($course, $teacherDB);
                 }
             }
         }
@@ -206,16 +220,16 @@ abstract class RendererGetter
     /**
      * Returns true if teacher not exists in course.
      * 
-     * @param stdClass data 
-     * @param stdClass course
+     * @param stdClass course 
+     * @param stdClass teacher from database 
      * 
      * @return bool 
      */
-    private function is_teacher_not_exists(\stdClass $data, \stdClass $course) : bool 
+    private function is_teacher_not_exists(\stdClass $course, \stdClass $teacherDB) : bool 
     {
         foreach($course->teachers as $teacher)
         {
-            if($data->teacher->id == $teacher->id)
+            if($teacher->id == $teacherDB->id)
             {
                 return false;
             }
@@ -227,17 +241,19 @@ abstract class RendererGetter
     /**
      * Adds teacher to teachers array in course.
      * 
-     * @param stdClass data 
-     * @param stdClass course
+     * @param stdClass course 
+     * @param stdClass teacher from database 
      */
-    private function add_teacher_to_course(\stdClass $data, \stdClass $course) : void 
+    private function add_teacher_to_course(\stdClass $course, \stdClass $teacherDB) : void 
     {
         $teacher = new \stdClass;
-        $teacher->id = $data->teacher->id;
-        $teacher->name = $data->teacher->name;
-        $teacher->email = $data->teacher->email;
-        $teacher->phone1 = $data->teacher->phone1;
-        $teacher->phone2 = $data->teacher->phone2;
+        $teacher->id = $teacherDB->id;
+        $teacher->name = $teacherDB->name;
+        $teacher->email = $teacherDB->email;
+        $teacher->phone1 = $teacherDB->phone1;
+        $teacher->phone2 = $teacherDB->phone2;
+        $teacher->unchecked = $teacherDB->unchecked;
+        $teacher->unreaded = $teacherDB->unreaded;
         $teacher->activities = array();
 
         $course->teachers[] = $teacher;
@@ -246,22 +262,23 @@ abstract class RendererGetter
     /**
      * Adds activity teacher in course if necessary.
      * 
-     * @param stdClass data 
-     * @param stdClass entity
+     * @param stdClass course from database 
+     * @param stdClass teacher from database 
+     * @param stdClass activity from database  
      */
-    private function add_activity_if_necessary(\stdClass $data, \stdClass $entity) : void 
+    private function add_activity_if_necessary(\stdClass $courseDB, \stdClass $teacherDB, \stdClass $activityDB) : void 
     {
         foreach($this->courses as $course)
         {
-            if($course->id == $entity->courseId)
+            if($course->id == $courseDB->courseid)
             {
                 foreach($course->teachers as $teacher)
                 {
-                    if($teacher->id == $data->teacher->id)
+                    if($teacher->id == $teacherDB->id)
                     {
-                        if($this->is_activity_not_exists($teacher, $entity))
+                        if($this->is_activity_not_exists($teacher, $activityDB))
                         {
-                            $this->add_activity_to_course($teacher, $entity);
+                            $this->add_activity_to_course($teacher, $activityDB);
                         }
                     }
                 }
@@ -273,11 +290,11 @@ abstract class RendererGetter
      * Returns true if teacher not exists in teacher.
      * 
      * @param stdClass teacher 
-     * @param stdClass entity
+     * @param stdClass activity from database 
      * 
      * @return bool 
      */
-    private function is_activity_not_exists(\stdClass $teacher, \stdClass $entity) : bool 
+    private function is_activity_not_exists(\stdClass $teacher, \stdClass $activityDB) : bool 
     {
         if(count($teacher->activities))
         {
@@ -286,7 +303,7 @@ abstract class RendererGetter
 
         foreach($teacher->activities as $activity)
         {
-            if(($activity->id == $entity->id) && ($activity->type == $entity->type))
+            if(($activity->id == $activityDB->id) && ($activity->type == $activityDB->type))
             {
                 return false;
             }
@@ -299,27 +316,21 @@ abstract class RendererGetter
      * Adds entity to activities in teacher.
      * 
      * @param stdClass teacher
-     * @param stdClass entity 
+     * @param stdClass activity from database  
      */
-    private function add_activity_to_course(\stdClass $teacher, \stdClass $entity) : void 
+    private function add_activity_to_course(\stdClass $teacher, \stdClass $activityDB) : void 
     {
         $activity = new \stdClass;
-        $activity->id = $entity->id;
-        $activity->name = $entity->name;
-        $activity->cmid = $entity->cmid;
+        $activity->id = $activityDB->id;
+        $activity->name = $activityDB->name;
+        $activity->cmid = $activityDB->cmid;
         $activity->type = $this->componentType;
-        $activity->link = $this->get_link_to_activity( $entity);
-
-        if($this->componentType == Enums::FORUM)
-        {
-            $activity->unreadMessages = $entity->unreadedMessages;
-        }
-        else 
-        {
-            $activity->uncheckedWorks = $entity->needtocheck;
-        }
+        $activity->link = $this->get_link_to_activity($activityDB);
+        $activity->unchecked = $activityDB->unchecked;
+        $activity->unreaded = $activityDB->unreaded;
 
         $teacher->activities[] = $activity;
     }
+
 
 }
