@@ -26,12 +26,14 @@ abstract class RendererGetter
      * @param stdClass block instance params
      * @param array teachers whose data needs to be extracted
      * @param array courses which are needed to render the block
+     * @param bool my work 
      */
-    function __construct($params, $teachers, $courses)
+    function __construct($params, $teachers, $courses, $myWork)
     {
         $this->params = $params;
         $this->teachers = $teachers;
         $this->courses = $courses;
+        $this->myWork = $myWork;
 
         $this->componentType = $this->get_component_type();
         $this->add_component_to_courses();
@@ -85,8 +87,17 @@ abstract class RendererGetter
             {
                 foreach($teacherDB->activities as $activityDB)
                 {
-                    if($this->is_teacher_it_absent_checker($teacherDB->id) 
-                        || $this->is_teacher_belongs_to_block_instance($teacherDB->id))
+                    if(
+                        ($this->myWork && $this->is_teacher_belongs_to_block_instance($teacherDB->id))
+                        ||
+                        (
+                            (!$this->myWork) && (
+                                $this->is_teacher_it_absent_checker($teacherDB->id) 
+                                ||
+                                $this->is_teacher_belongs_to_block_instance($teacherDB->id)
+                            )
+                        )
+                    )
                     {
                         $this->add_course_if_necessary($courseDB);
                         $this->add_teacher_if_necessary($courseDB, $teacherDB);

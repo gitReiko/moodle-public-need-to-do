@@ -4,6 +4,8 @@ namespace NTD\Classes\Renderer\Activities;
 
 require_once 'main.php';
 
+use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
+use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
 use \NTD\Classes\Lib\Common as cLib;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -29,6 +31,30 @@ class MyWork extends Main
     protected function get_course_cell_unique_classes() : string
     {
         return ' ntd-my-work-activity-course-cell ';
+    }
+
+    /**
+     * Returns courses with added forums.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    protected function add_forums_data() : ?array 
+    {
+        $myWork = true;
+        $forum = new ForumGetter($this->params, $this->teachers, $this->courses, $myWork);
+        return $forum->get_courses_with_component_data();
+    }
+
+    /**
+     * Returns courses with added quizes.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    protected function add_quizes_data() : ?array 
+    {
+        $myWork = true;
+        $quiz = new QuizGetter($this->params, $this->teachers, $this->courses, $myWork);
+        return $quiz->get_courses_with_component_data();
     }
 
     /**

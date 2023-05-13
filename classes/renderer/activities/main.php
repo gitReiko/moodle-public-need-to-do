@@ -7,8 +7,6 @@ require_once __DIR__.'/../../components/forum/renderer/getter.php';
 require_once __DIR__.'/../../components/quiz/renderer/getter.php';
 require_once 'locallib.php';
 
-use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
-use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 use \NTD\Classes\Lib\Common as cLib;
 
@@ -157,6 +155,20 @@ abstract class Main
     }
 
     /**
+     * Returns courses with added quizes.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    abstract protected function add_quizes_data() : ?array ;
+
+    /**
+     * Returns courses with added forums.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    abstract protected function add_forums_data() : ?array ;
+
+    /**
      * Prepares data necessary for render.
      */
     private function init_courses_for_renderer() : void 
@@ -167,28 +179,6 @@ abstract class Main
 
         $this->count_total_works();
         $this->sort_all_data();
-    }
-
-    /**
-     * Returns courses with added forums.
-     * 
-     * @return array courses which are needed to render the block
-     */
-    private function add_forums_data() 
-    {
-        $forum = new ForumGetter($this->params, $this->teachers, $this->courses);
-        return $forum->get_courses_with_component_data();
-    }
-
-    /**
-     * Returns courses with added quizes.
-     * 
-     * @return array courses which are needed to render the block
-     */
-    private function add_quizes_data() 
-    {
-        $quiz = new QuizGetter($this->params, $this->teachers, $this->courses);
-        return $quiz->get_courses_with_component_data();
     }
 
     /**
