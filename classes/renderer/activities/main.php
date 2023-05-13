@@ -91,7 +91,7 @@ abstract class Main
      * 
      * @return strings child cells 
      */
-    abstract protected function get_child_cells(\stdClass $course, string $childClass) : string ;
+    abstract protected function get_child_cells(\stdClass $course, string $childClass, int $i) : string ;
 
     /**
      * Returns entity unread forum messages label.
@@ -228,7 +228,7 @@ abstract class Main
             }
 
             $list.= $this->get_course_cell($course, $class);
-            $list.= $this->get_child_cells($course, $childClass);
+            $list.= $this->get_child_cells($course, $childClass, $i);
 
             $i++;
         }

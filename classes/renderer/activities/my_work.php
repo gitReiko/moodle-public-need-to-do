@@ -4,6 +4,7 @@ namespace NTD\Classes\Renderer\Activities;
 
 require_once 'main.php';
 
+use \NTD\Classes\Lib\Common as cLib;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -38,7 +39,7 @@ class MyWork extends Main
      * 
      * @return strings child cells 
      */
-    protected function get_child_cells(\stdClass $course, string $childClass) : string
+    protected function get_child_cells(\stdClass $course, string $childClass, int $i) : string
     {
         $cells = '';
 
@@ -46,7 +47,7 @@ class MyWork extends Main
         {
             foreach($teacher->activities as $activity)
             {
-                $cells.= $this->get_activities_cell($course, $activity);
+                $cells.= $this->get_activities_cell($course, $activity, $i);
             }
         }
 
@@ -57,14 +58,22 @@ class MyWork extends Main
      * Returns activities cells.
      * 
      * @param stdClass course
-     * @param stdClass activity 
+     * @param stdClass activity
+     * @param int iteration
      * 
      * @return string activity cells
      */
-    private function get_activities_cell(\stdClass $course, \stdClass $activity) : string 
+    private function get_activities_cell(\stdClass $course, \stdClass $activity, int $i) : string 
     {
+        $classes = 'ntd-level-2-my-activities ntd-tooltip ntd-cursor-pointer ';
+
+        if(cLib::is_item_number_too_large($i)) 
+        {
+            $classes .= 'ntd-hidden-box ';
+        }
+
         $attr = array(
-            'class' => 'ntd-level-2-my-activities ntd-tooltip ntd-cursor-pointer',
+            'class' => $classes,
             'data-course-cell' => $course->id,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => $this->whoseWork,

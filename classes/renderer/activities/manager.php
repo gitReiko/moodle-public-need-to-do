@@ -40,7 +40,7 @@ class Manager extends Main
      * 
      * @return strings child cells 
      */
-    protected function get_child_cells(\stdClass $course, string $childClass) : string
+    protected function get_child_cells(\stdClass $course, string $childClass, int $i) : string
     {
         $cells = '';
 
