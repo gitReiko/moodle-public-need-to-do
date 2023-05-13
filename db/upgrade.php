@@ -44,5 +44,17 @@ function xmldb_block_needtodo_upgrade($oldversion)
         upgrade_block_savepoint(true, 2022112401, 'needtodo');
     }
 
+    if ($oldversion < 2023051305)
+    {
+        $table = new xmldb_table('block_needtodo');
+        $field = new xmldb_field('teacherid');
+
+        if($dbman->field_exists($table, $field))
+        {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'component');
+            $dbman->rename_field($table, $field, 'entityid');
+        }
+    }
+
     return true;
 }

@@ -68,7 +68,7 @@ class Manager extends Main
             $sql = "SELECT * 
             FROM {block_needtodo} 
             WHERE component = ? 
-            AND teacherid {$teachersInCondition}";
+            AND entityid {$teachersInCondition}";
 
             $params = array(Enums::MESSANGER);
 

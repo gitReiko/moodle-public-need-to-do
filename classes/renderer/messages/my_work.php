@@ -30,7 +30,7 @@ class MyWork extends Main
 
         $where = array(
             'component' => Enums::MESSANGER,
-            'teacherid' => $USER->id
+            'entityid' => $USER->id
         );
 
         $this->data = json_decode($DB->get_field('block_needtodo', 'info', $where));

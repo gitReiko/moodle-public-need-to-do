@@ -51,7 +51,7 @@ abstract class DatabaseWriter
         {
             $needtodo = $this->get_needtodo_record($dataEntity);
 
-            if($this->is_needtodo_record_exists_in_database($needtodo->teacherid))
+            if($this->is_needtodo_record_exists_in_database($needtodo->entityid))
             {
                 $needtodo->id = $this->get_needtodo_record_id($needtodo);
                 $this->update_needtodo_record_in_database($needtodo);
@@ -91,7 +91,7 @@ abstract class DatabaseWriter
 
         $where = array(
             'component' => $this->componentName,
-            'teacherid' => $teacherId
+            'entityid' => $teacherId
         );
 
         return $DB->record_exists('block_needtodo', $where);
@@ -109,7 +109,7 @@ abstract class DatabaseWriter
         global $DB;
         $where = array(
             'component' => $this->componentName,
-            'teacherid' => $needtodo->teacherid
+            'entityid' => $needtodo->entityid
         );
         return $DB->get_field('block_needtodo', 'id', $where);
     }
@@ -168,7 +168,7 @@ abstract class DatabaseWriter
         
         $where = array(
             'component' => $this->componentName, 
-            'teacherid' => $teacherId
+            'entityid' => $teacherId
         );
 
         return $DB->record_exists('block_needtodo', $where);
@@ -205,7 +205,7 @@ abstract class DatabaseWriter
 
         $where = array(
             'component' => $this->componentName, 
-            'teacherid' => $teacherId
+            'entityid' => $teacherId
         );
 
         $DB->delete_records('block_needtodo', $where);

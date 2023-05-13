@@ -93,7 +93,7 @@ class Teachers
     {
         foreach($course->teachers as $teacher)
         {
-            if($teacher->id == $this->unreadPost->teacherid)
+            if($teacher->id == $this->unreadPost->entityid)
             {
                 $teacher->unreaded += $this->unreadPost->unreaded;
             }

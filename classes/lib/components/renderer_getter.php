@@ -153,7 +153,7 @@ abstract class RendererGetter
      * 
      * @return bool 
      */
-    private function is_teacher_it_absent_checker(int $teacherId) : bool 
+    private function is_teacher_it_absent_checker(?int $teacherId) : bool 
     {
         if($teacherId == Enums::ABSENT_CHECKER_ID)
         {

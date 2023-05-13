@@ -40,7 +40,7 @@ class Main extends DatabaseWriter
     {
         $needtodo = new \stdClass;
         $needtodo->component = $this->componentName;
-        $needtodo->teacherid = $dataEntity->teacher->id;
+        $needtodo->entityid = $dataEntity->teacher->id;
         $needtodo->info = json_encode($dataEntity);
         $needtodo->updatetime = time();
         return $needtodo;

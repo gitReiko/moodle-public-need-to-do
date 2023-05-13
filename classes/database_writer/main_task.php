@@ -120,7 +120,7 @@ class MainTask extends Main
     {
         foreach($this->teachers as $teacher)
         {
-            if($value->teacherid == $teacher->id)
+            if($value->entityid == $teacher->id)
             {
                 return false;
             }
