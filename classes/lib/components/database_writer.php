@@ -2,6 +2,9 @@
 
 namespace NTD\Classes\Lib\Components;
 
+require_once 'cleaner/main.php';
+
+use \NTD\Classes\Lib\Components\Cleaner\Main as Cleaner;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums;
 
@@ -143,72 +146,11 @@ abstract class DatabaseWriter
     /** Clears outdated data. */
     protected function clear_outdated_data() : void 
     {
-        foreach($this->teachers as $teacher)
-        {
-            if($this->is_teacher_data_exists_in_database($teacher->id))
-            {
-                if($this->is_teacher_not_need_to_do_component($teacher->id))
-                {
-                    $this->delete_outdated_teacher_data($teacher->id);
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns true if teacher data exists in database. 
-     * 
-     * @param int teacher id
-     * 
-     * @return bool  
-     */
-    private function is_teacher_data_exists_in_database(int $teacherId) : bool 
-    {
-        global $DB;
-        
-        $where = array(
-            'component' => $this->componentName, 
-            'entityid' => $teacherId
+        $cleaner = new Cleaner(
+            $this->teachers, 
+            $this->componentName
         );
-
-        return $DB->record_exists('block_needtodo', $where);
-    }
-
-    /**
-     * Returns true if teacher need to do component work.
-     * 
-     * @param int teacher id
-     * 
-     * @return bool 
-     */
-    private function is_teacher_not_need_to_do_component(int $teacherId) : bool 
-    {
-        foreach($this->data as $entity) 
-        {
-            if($entity->teacher->id == $teacherId)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns true if teacher data exists in database. 
-     * 
-     * @param int teacher id
-     */
-    private function delete_outdated_teacher_data(int $teacherId) : void 
-    {
-        global $DB;
-
-        $where = array(
-            'component' => $this->componentName, 
-            'entityid' => $teacherId
-        );
-
-        $DB->delete_records('block_needtodo', $where);
+        $cleaner->clear_outdated_data();
     }
 
 }
