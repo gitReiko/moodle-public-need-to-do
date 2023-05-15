@@ -38,8 +38,10 @@ class Course extends CourseSkeleton
         $course = new \stdClass;
         $course->courseid = $this->rawEntity->courseid;
         $course->coursename = $this->rawEntity->coursename;
-        $course->unchecked = 1;
-        $course->unreaded = 0;
+        $course->untimelyCheck = $this->rawEntity->untimelyCheck;
+        $course->timelyCheck = $this->rawEntity->timelyCheck;
+        $course->untimelyRead = 0;
+        $course->timelyRead = 0;
         $course->teachers = array();
 
         $this->courses[] = $course;
@@ -54,7 +56,8 @@ class Course extends CourseSkeleton
         {
             if($course->courseid == $this->rawEntity->courseid)
             {
-                $course->unchecked++;
+                $course->untimelyCheck += $this->rawEntity->untimelyCheck;
+                $course->timelyCheck += $this->rawEntity->timelyCheck;
             }
         }
     }

@@ -28,6 +28,7 @@ class Main extends DatabaseWriter
     protected function prepare_neccessary_data() : void 
     {
         $attempts = $this->get_unchecked_attempts();
+        $attempts = $this->determine_timely_check($attempts);
 
         foreach($attempts as $attempt)
         {
@@ -82,7 +83,8 @@ class Main extends DatabaseWriter
         $sql = 'SELECT qa.id AS attemptid, qa.userid AS studentid, 
                 c.id AS courseid, c.fullname AS coursename, 
                 cm.id AS coursemoduleid, 
-                q.id AS quizid, q.name AS quizname
+                q.id AS quizid, q.name AS quizname, 
+                qa.timemodified AS senttime 
                 FROM {quiz_attempts} AS qa 
                 INNER JOIN {user} u 
                 ON qa.userid = u.id 
@@ -103,6 +105,37 @@ class Main extends DatabaseWriter
         $params = array('finished', $this->moduleId);
 
         return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Determines the timely and untimely of the attempt.
+     * 
+     * @param array attempts
+     * 
+     * @return array attempts
+     */
+    private function determine_timely_check(?array $attempts) : ?array 
+    {
+        $untimelyPeriod = get_config('block_needtodo', 'days_to_check') * Enums::SECONDS_IN_DAY;
+        $currentTime = time();
+
+        foreach($attempts as &$attempt)
+        {
+            $untimely = $attempt->senttime + $untimelyPeriod;
+
+            if($currentTime > $untimely)
+            {
+                $attempt->untimelyCheck = 1;
+                $attempt->timelyCheck = 0;
+            }
+            else 
+            {
+                $attempt->untimelyCheck = 0;
+                $attempt->timelyCheck = 1; 
+            }
+        }
+
+        return $attempts;
     }
 
     /**

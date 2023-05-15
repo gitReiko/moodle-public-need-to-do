@@ -101,8 +101,10 @@ class Teachers
                     $checker->email = $teacher->email;
                     $checker->phone1 = $teacher->phone1;
                     $checker->phone2 = $teacher->phone2;
-                    $checker->unchecked = 1;
-                    $checker->unreaded = 0;
+                    $checker->untimelyCheck = $this->attempt->untimelyCheck;
+                    $checker->timelyCheck = $this->attempt->timelyCheck;
+                    $checker->untimelyRead = 0;
+                    $checker->timelyRead = 0;
                     $checker->activities = array();
 
                     $checkers[] = $checker;
@@ -248,7 +250,10 @@ class Teachers
         {
             if($cTeacher->id == $teacher->id)
             {
-                $cTeacher->unchecked++;
+                $cTeacher->untimelyCheck += $this->attempt->untimelyCheck;
+                $cTeacher->timelyCheck += $this->attempt->timelyCheck;
+                $cTeacher->untimelyRead = 0;
+                $cTeacher->timelyRead = 0;
             }
         }
     }
@@ -286,7 +291,10 @@ class Teachers
         {
             if($teacher->id === Enums::ABSENT_CHECKER_ID)
             {
-                $teacher->unchecked++;
+                $teacher->untimelyCheck += $this->attempt->untimelyCheck;
+                $teacher->timelyCheck += $this->attempt->timelyCheck;
+                $teacher->untimelyRead = 0;
+                $teacher->timelyRead = 0;
             }
         }
     }
@@ -304,8 +312,10 @@ class Teachers
         $absentChecker->email = null;
         $absentChecker->phone1 = null;
         $absentChecker->phone2 = null;
-        $absentChecker->unchecked = 1;
-        $absentChecker->unreaded = 0;
+        $absentChecker->untimelyCheck = $this->attempt->untimelyCheck;
+        $absentChecker->timelyCheck = $this->attempt->timelyCheck;
+        $absentChecker->untimelyRead = 0;
+        $absentChecker->timelyRead = 0;
         $absentChecker->activities = array();
 
         $course->teachers[] = $absentChecker;

@@ -97,7 +97,8 @@ class Activities
         {
             if($activity->id == $this->attempt->quizid)
             {
-                $activity->unchecked++;
+                $activity->untimelyCheck += $this->attempt->untimelyCheck;
+                $activity->timelyCheck += $this->attempt->timelyCheck;
             }
         }
     }
@@ -113,8 +114,10 @@ class Activities
         $activity->id = $this->attempt->quizid;
         $activity->cmid = $this->attempt->coursemoduleid;
         $activity->name = $this->attempt->quizname;
-        $activity->unchecked = 1;
-        $activity->unreaded = 0;
+        $activity->untimelyCheck = $this->attempt->untimelyCheck;
+        $activity->timelyCheck = $this->attempt->timelyCheck;
+        $activity->untimelyRead = 0;
+        $activity->timelyRead = 0;
 
         $teacher->activities[] = $activity;
     }

@@ -24,6 +24,7 @@ class Enums
     // Unique intities 
     /** A absent checker is an entity representing attempts that have no one to check. */
     const ABSENT_CHECKER_ID = 0;
+    const SECONDS_IN_DAY = 86400;
 
     // More button
     const MORE = 'ntd-more-';
