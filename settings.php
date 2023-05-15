@@ -10,3 +10,12 @@ $settings->add(
     )
 );
 
+$settings->add(
+    new admin_setting_configtext(
+        'block_needtodo/days_to_check', 
+        get_string('days_to_check', 'block_needtodo'), 
+        get_string('days_to_check_tool', 'block_needtodo'), 
+        8, 
+        PARAM_INT
+    )
+);
