@@ -1,6 +1,6 @@
 <?php 
 
-namespace NTD\Classes\Lib\Components\DatabaseWriter;
+namespace NTD\Classes\Lib\Components\DatabaseWriter\Template;
 
 /**
  * Processes an entity at the course level. 

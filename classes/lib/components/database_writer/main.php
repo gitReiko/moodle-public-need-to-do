@@ -1,17 +1,18 @@
 <?php 
 
-namespace NTD\Classes\Lib\Components;
+namespace NTD\Classes\Lib\Components\DatabaseWriter;
+
 
 require_once 'cleaner/main.php';
 
-use \NTD\Classes\Lib\Components\Cleaner\Main as Cleaner;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Cleaner\Main as Cleaner;
 use \NTD\Classes\Lib\Getters\Common as cGetter;
 use \NTD\Classes\Lib\Enums as Enums;
 
 /**
  * An abstract class that implements common database writer functions.
  */
-abstract class DatabaseWriter 
+abstract class Main  
 {
 
     /** All teachers whose work is monitored by the block */

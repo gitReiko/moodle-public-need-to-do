@@ -1,6 +1,6 @@
 <?php 
 
-namespace NTD\Classes\Lib\Components\Cleaner;
+namespace NTD\Classes\Lib\Components\DatabaseWriter\Cleaner;
 
 use \NTD\Classes\Lib\Enums as Enums;
 

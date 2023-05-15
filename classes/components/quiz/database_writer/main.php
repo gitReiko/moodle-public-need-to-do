@@ -2,11 +2,11 @@
 
 namespace NTD\Classes\Components\Quiz\DatabaseWriter;
 
-require_once __DIR__.'/../../../lib/components/database_writer.php';
+require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 require_once 'course.php';
 require_once 'teachers.php';
 
-use \NTD\Classes\Lib\Components\DatabaseWriter;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 class Main extends DatabaseWriter 

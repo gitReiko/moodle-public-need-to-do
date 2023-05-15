@@ -2,9 +2,9 @@
 
 namespace NTD\Classes\Components\Forum\DatabaseWriter;
 
-require_once __DIR__.'/../../../lib/components/database_writer/course.php';
+require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
 
-use \NTD\Classes\Lib\Components\DatabaseWriter\Course as CourseSkeleton;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course as CourseSkeleton;
 
 /**
  * Processes an entity at the course level. 

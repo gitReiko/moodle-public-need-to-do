@@ -3,9 +3,9 @@
 namespace NTD\Classes\Components\Messanger\DatabaseWriter;
 
 require_once 'teacherMessages.php';
-require_once __DIR__.'/../../../lib/components/database_writer.php';
+require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 
-use \NTD\Classes\Lib\Components\DatabaseWriter;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
