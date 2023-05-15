@@ -78,7 +78,8 @@ class MainWeb extends Main
     {
         $messangerWriter = new MessangerDatabaseWriter(
             $this->teachers,
-            $this->updateLevel
+            $this->updateLevel,
+            $this->params
         );
         $messangerWriter->write();
     }
@@ -92,7 +93,8 @@ class MainWeb extends Main
     {
         $forumWriter = new ForumDatabaseWriter(
             $this->teachers,
-            $this->updateLevel
+            $this->updateLevel, 
+            $this->params
         );
         $forumWriter->write();
     }
@@ -106,7 +108,8 @@ class MainWeb extends Main
     {
         $quizWriter = new QuizDatabaseWriter(
             $this->teachers,
-            $this->updateLevel
+            $this->updateLevel,
+            $this->params
         );
         $quizWriter->write();
     }

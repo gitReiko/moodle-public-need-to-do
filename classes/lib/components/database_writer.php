@@ -19,6 +19,9 @@ abstract class DatabaseWriter
 
     /** Level on which data must be updated. */
     protected $updateLevel;
+
+    /** Block instance params. */
+    protected $params;
     
     /** The name of the component that uses the class to write to the database.  */
     protected $componentName;
@@ -32,10 +35,11 @@ abstract class DatabaseWriter
      * @param array of all teachers whose work is monitored by the block
      * @param string level at which data should be updated.
      */
-    function __construct(array $teachers, string $updateLevel)
+    function __construct(array $teachers, string $updateLevel, \stdClass $params = null)
     {
         $this->teachers = $teachers;
         $this->updateLevel = $updateLevel;
+        $this->params = $params;
 
         $this->set_component_name();
         $this->prepare_neccessary_data();
@@ -48,7 +52,10 @@ abstract class DatabaseWriter
      */
     public function write() : void 
     {
-        //$this->clear_outdated_data();
+        if($this->is_data_needs_to_be_cleared())
+        {
+            $this->clear_outdated_data();
+        }
 
         foreach($this->data as $dataEntity)
         {
@@ -143,11 +150,36 @@ abstract class DatabaseWriter
         $DB->insert_record('block_needtodo', $needtodo);
     }
 
+    /**
+     * Returns true if data need to be cleared. 
+     * 
+     * @return bool 
+     */
+    private function is_data_needs_to_be_cleared() : bool 
+    {
+        if($this->updateLevel == Enums::UPDATE_DATA_ON_SITE_LEVEL)
+        {
+            return true;
+        }
+        else if(
+            isset($this->params->use_local_settings) 
+            && empty($this->params->use_local_settings)
+        )
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
     /** Clears outdated data. */
     protected function clear_outdated_data() : void 
     {
         $cleaner = new Cleaner(
             $this->teachers, 
+            $this->data, 
             $this->componentName
         );
         $cleaner->clear_outdated_data();

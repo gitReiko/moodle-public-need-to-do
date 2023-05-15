@@ -2,6 +2,7 @@
 
 namespace NTD\Classes\Lib\Components\Cleaner;
 
+require_once 'activities.php';
 require_once 'messanger.php';
 
 use \NTD\Classes\Lib\Enums as Enums;
@@ -11,12 +12,16 @@ class Main
     /** All teachers whose work is monitored by the block */
     private $teachers;
 
+    /** Data to be written to the database.  */
+    private $data;
+
     /** The name of the component that uses the class to write to the database.  */
     private $componentName;
 
-    function __construct(?array $teachers, string $componentName)
+    function __construct(?array $teachers, ?array $data, string $componentName)
     {
         $this->teachers = $teachers;
+        $this->data = $data;
         $this->componentName = $componentName;
     }
 
@@ -31,7 +36,7 @@ class Main
         }
         else 
         {
-            // activity
+            $this->clean_activities_data();
         }
     }
 
@@ -40,10 +45,17 @@ class Main
      */
     private function clean_messanger_data() : void 
     {
-        $messanger = new Messanger($this->teachers);
+        $messanger = new Messanger($this->teachers, $this->data);
         $messanger->clear_outdated_data();
     }
 
-
+    /**
+     * Cleans outdated data related to activities components.
+     */
+    private function clean_activities_data() : void 
+    {
+        $messanger = new Activities($this->data, $this->componentName);
+        $messanger->clear_outdated_data();
+    }
 
 }

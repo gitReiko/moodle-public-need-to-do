@@ -9,9 +9,13 @@ class Messanger
     /** All teachers whose work is monitored by the block */
     private $teachers;
 
-    function __construct(?array $teachers)
+    /** Data to be written to the database.  */
+    private $data;
+
+    function __construct(?array $teachers, ?array $data)
     {
         $this->teachers = $teachers;
+        $this->data = $data;
     }
 
     /**
