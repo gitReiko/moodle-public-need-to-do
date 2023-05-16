@@ -3,6 +3,7 @@
 namespace NTD\Classes\Components\Forum\DatabaseWriter;
 
 use NTD\Classes\Lib\Getters\Common as cGetter;
+use \NTD\Classes\Lib\Enums as Enums;
 
 /**
  * Forums getter for forum component.
@@ -179,10 +180,24 @@ class Forum
      * 
      * @return array discussion posts if exists
      */
-    private function get_discussion_posts(int $discussionId)
+    private function get_discussion_posts(int $discussionId) : ?array 
+    {
+        $posts = $this->get_discussion_posts_from_database($discussionId);
+        $posts = $this->determine_timely_read($posts);
+        return $posts;
+    }
+
+    /**
+     * Returns discussion posts from database.
+     * 
+     * @param int $discussionId
+     * 
+     * @return array discussion posts if exists
+     */
+    private function get_discussion_posts_from_database(int $discussionId) : ?array 
     {
         global $DB;
-        $sql = 'SELECT id 
+        $sql = 'SELECT id, modified AS senttime  
                 FROM {forum_posts} 
                 WHERE discussion = ?
                 AND modified > ?
@@ -190,5 +205,37 @@ class Forum
         $params = array($discussionId, $this->outdatedPostTime);
         return $DB->get_records_sql($sql, $params);
     }
+
+    /**
+     * Determines the timely and untimely of the post reading.
+     * 
+     * @param array posts
+     * 
+     * @return array posts
+     */
+    private function determine_timely_read(?array $posts) : ?array 
+    {
+        $untimelyPeriod = get_config('block_needtodo', 'days_to_check') * Enums::SECONDS_IN_DAY;
+        $currentTime = time();
+
+        foreach($posts as &$post)
+        {
+            $untimely = $post->senttime + $untimelyPeriod;
+
+            if($currentTime > $untimely)
+            {
+                $post->untimelyRead = 1;
+                $post->timelyRead = 0;
+            }
+            else 
+            {
+                $post->untimelyRead = 0;
+                $post->timelyRead = 1; 
+            }
+        }
+
+        return $posts;
+    }
+
 
 }

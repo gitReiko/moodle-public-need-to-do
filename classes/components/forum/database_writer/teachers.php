@@ -77,8 +77,10 @@ class Teachers
         $teacher->email = $this->unreadPost->teacheremail;
         $teacher->phone1 = $this->unreadPost->teacherphone1;
         $teacher->phone2 = $this->unreadPost->teacherphone2;
-        $teacher->unchecked = 0;
-        $teacher->unreaded = $this->unreadPost->unreaded;
+        $teacher->untimelyCheck = 0;
+        $teacher->timelyCheck = 0;
+        $teacher->untimelyRead = $this->unreadPost->untimelyRead;
+        $teacher->timelyRead = $this->unreadPost->timelyRead;
         $teacher->activities = array();
 
         $course->teachers[] = $teacher;
@@ -95,7 +97,8 @@ class Teachers
         {
             if($teacher->id == $this->unreadPost->entityid)
             {
-                $teacher->unreaded += $this->unreadPost->unreaded;
+                $teacher->untimelyRead += $this->unreadPost->untimelyRead;
+                $teacher->timelyRead += $this->unreadPost->timelyRead;
             }
         }
     }

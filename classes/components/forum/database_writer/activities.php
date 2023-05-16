@@ -81,8 +81,10 @@ class Activities
         $activity->id = $this->unreadPost->forumid;
         $activity->cmid = $this->unreadPost->forumcmid;
         $activity->name = $this->unreadPost->forumname;
-        $activity->unchecked = 0;
-        $activity->unreaded = $this->unreadPost->unreaded;
+        $activity->untimelyCheck = 0;
+        $activity->timelyCheck = 0;
+        $activity->untimelyRead = $this->unreadPost->untimelyRead;
+        $activity->timelyRead = $this->unreadPost->timelyRead;
 
         $teacher->activities[] = $activity;
     }
@@ -98,7 +100,8 @@ class Activities
         {
             if($activity->id == $this->unreadPost->forumid)
             {
-                $activity->unreaded += $this->unreadPost->unreaded;
+                $activity->untimelyRead += $this->unreadPost->untimelyRead;
+                $activity->timelyRead += $this->unreadPost->timelyRead;
             }
         }
     }

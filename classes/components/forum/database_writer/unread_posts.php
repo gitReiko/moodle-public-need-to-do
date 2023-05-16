@@ -64,16 +64,17 @@ class UnreadPosts
 
             foreach($this->forums as $forum)
             {
-                $unread = $this->get_teacher_unreaded_forum_messages($teacher, $forum);
+                $messages = $this->get_teacher_unreaded_forum_messages($teacher, $forum);
 
-                if($unread)
+                if($messages->timelyRead || $messages->untimelyRead)
                 {
-                    $post->forumid = $unread->id;
-                    $post->forumname = $unread->name;
-                    $post->forumcmid = $unread->cmid;
-                    $post->courseid = $unread->courseId;
-                    $post->coursename = $unread->courseName;
-                    $post->unreaded = $unread->unreadedMessages;
+                    $post->forumid = $forum->id;
+                    $post->forumname = $forum->name;
+                    $post->forumcmid = $forum->cmid;
+                    $post->courseid = $forum->courseid;
+                    $post->coursename = $forum->coursename;
+                    $post->untimelyRead = $messages->untimelyRead;
+                    $post->timelyRead = $messages->timelyRead;
     
                     $this->unreadMessages[] = $post;
                 }
@@ -87,15 +88,18 @@ class UnreadPosts
      * @param stdClass teacher 
      * @param stdClass forum
      * 
-     * @return stdClass $forum
+     * @return stdClass unread messages
      */
-    private function get_teacher_unreaded_forum_messages($teacher, $forum)  
+    private function get_teacher_unreaded_forum_messages($teacher, $forum) : \stdClass 
     {
+        $subscribedToForum = false;
+
+        $msgs = new \stdClass; 
+        $msgs->timelyRead = 0;
+        $msgs->untimelyRead = 0;
+        
         if($this->is_user_has_access_to_forum($forum->cmid, $teacher->id))
         {
-            $subscribedToForum = false;
-            $unreadedMessages = 0;
-    
             if($forum->forcesubscribe) 
             {                
                 $subscribedToForum = true;
@@ -109,27 +113,22 @@ class UnreadPosts
             {
                 if($subscribedToForum)
                 {
-                    $unreadedMessages += $this->unread_discussion_posts($teacher->id, $forum->id, $discussion);
+                    $unread = $this->unread_discussion_posts($teacher->id, $forum->id, $discussion);
+
+                    $msgs->timelyRead = $unread->timelyRead;
+                    $msgs->untimelyRead = $unread->untimelyRead;
                 }
                 else if($this->is_user_subscribed_to_discussion($teacher->id, $forum->id, $discussion->id))
                 {
-                    $unreadedMessages += $this->unread_discussion_posts($teacher->id, $forum->id, $discussion);
+                    $unread = $this->unread_discussion_posts($teacher->id, $forum->id, $discussion);
+
+                    $msgs->timelyRead = $unread->timelyRead;
+                    $msgs->untimelyRead = $unread->untimelyRead;
                 }
             }
-    
-            if($unreadedMessages)
-            {
-                return $this->get_forum_with_unread_messages($teacher, $forum, $unreadedMessages);
-            }
-            else 
-            {
-                return null;
-            }
         }
-        else 
-        {
-            return null;
-        }
+        
+        return $msgs;
     }
 
     /**
@@ -190,27 +189,30 @@ class UnreadPosts
     }
 
     /**
-     * Returns count of unreaded discussion posts.
+     * Returns unread teacher posts from discussion.
      * 
      * @param int $teacherId
      * @param int $forumId
      * @param stdClass $discussion
      * 
-     * @return int count of unreaded discussion posts 
+     * @return stdClass unreaded posts 
      */
-    private function unread_discussion_posts(int $teacherId, int $forumId, \stdClass $discussion) : int 
+    private function unread_discussion_posts(int $teacherId, int $forumId, \stdClass $discussion) : \stdClass 
     {
-        $unreaded = 0;
+        $unreadPosts = new \stdClass; 
+        $unreadPosts->timelyRead = 0;
+        $unreadPosts->untimelyRead = 0;
 
         foreach($discussion->posts as $post)
         {
             if($this->is_user_didnt_read_post($teacherId, $forumId, $discussion->id, $post->id))
             {
-                $unreaded++;
+                $unreadPosts->timelyRead += $post->timelyRead;
+                $unreadPosts->untimelyRead += $post->untimelyRead;
             }
         }
 
-        return $unreaded;
+        return $unreadPosts;
     }
 
     /**
@@ -235,28 +237,6 @@ class UnreadPosts
         );
 
         return !$DB->record_exists('forum_read', $where);
-    }
-
-    /**
-     * Returns forum with unreaded messages to teacher. 
-     * 
-     * @param stdClass $teacher
-     * @param stdClass $forum 
-     * @param int $unreadedMessages
-     * 
-     * @return stdClass 
-     */
-    private function get_forum_with_unread_messages(\stdClass $teacher, \stdClass $forum, int $unreadedMessages)  
-    {
-        $teacherForum = new \stdClass;
-        $teacherForum->id = $forum->id;
-        $teacherForum->name = $forum->name;
-        $teacherForum->cmid = $forum->cmid;
-        $teacherForum->courseId = $forum->courseid;
-        $teacherForum->courseName = $forum->coursename;
-        $teacherForum->unreadedMessages = $unreadedMessages;
-
-        return $teacherForum;
     }
 
 }
