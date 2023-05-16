@@ -100,10 +100,18 @@ abstract class Main
      */
     protected function get_unread_forum_messages_label(\stdClass $entity) : string 
     {
+        $label = '';
+
+        $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
+        $text.= $entity->timelyRead + $entity->untimelyRead;
+        $label.=\html_writer::tag('span', $text);
+
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
-        $text.= $entity->unreaded;
-        return \html_writer::tag('span', $text, $attr);
+        $text.= $entity->untimelyRead;
+        $label.=\html_writer::tag('span', $text, $attr);
+
+        return $label;
     }
 
     /**
@@ -115,10 +123,18 @@ abstract class Main
      */
     protected function get_unckeched_works_label(\stdClass $entity) : string 
     {
+        $label = '';
+
+        $text = ' <i class="fa fa-book" aria-hidden="true"></i> ';
+        $text.= $entity->timelyCheck + $entity->untimelyCheck;
+        $label.=\html_writer::tag('span', $text);
+
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-book" aria-hidden="true"></i> ';
-        $text.= $entity->unchecked;
-        return \html_writer::tag('span', $text, $attr);
+        $text.= $entity->untimelyCheck;
+        $label.=\html_writer::tag('span', $text, $attr);
+
+        return $label;
     }
 
     /**
@@ -139,16 +155,20 @@ abstract class Main
 
         $title.= $activity->name;
 
-        if($activity->unreaded)
+        if($activity->timelyRead || $activity->untimelyRead)
         {
-            $title.= '<br>'.get_string('unread_forum_messages', 'block_needtodo');
-            $title.= $activity->unreaded;       
+            $title.= '<br>'.get_string('total_unread_messages', 'block_needtodo');
+            $title.= $activity->timelyRead + $activity->untimelyRead;
+            $title.= '<br>'.get_string('untimely_unread_messages', 'block_needtodo');
+            $title.= $activity->untimelyRead;      
         }
 
-        if($activity->unchecked)
+        if($activity->timelyCheck || $activity->untimelyCheck)
         {
-            $title.= '<br>'.get_string('unchecked_activities_works', 'block_needtodo');
-            $title.= $activity->unchecked;       
+            $title.= '<br>'.get_string('total_unchecked_works', 'block_needtodo');
+            $title.= $activity->timelyCheck + $activity->untimelyCheck;
+            $title.= '<br>'.get_string('untimely_unchecked_works', 'block_needtodo');
+            $title.= $activity->untimelyCheck;     
         }
 
         return $title;
@@ -287,14 +307,18 @@ abstract class Main
 
         if(LocalLib::is_unread_messages_exists($course))
         {
-            $title.= '<br>'.get_string('unread_forum_messages', 'block_needtodo');
-            $title.= $course->unreaded;  
+            $title.= '<br>'.get_string('total_unread_messages', 'block_needtodo');
+            $title.= $course->timelyRead + $course->untimelyRead;
+            $title.= '<br>'.get_string('untimely_unread_messages', 'block_needtodo');
+            $title.= $course->untimelyRead;
         }
 
-        if($course->unchecked)
+        if($course->timelyCheck || $course->untimelyCheck)
         {
-            $title.= '<br>'.get_string('unchecked_activities_works', 'block_needtodo');
-            $title.= $course->unchecked;       
+            $title.= '<br>'.get_string('total_unchecked_works', 'block_needtodo');
+            $title.= $course->timelyCheck + $course->untimelyCheck;
+            $title.= '<br>'.get_string('untimely_unchecked_works', 'block_needtodo');
+            $title.= $course->untimelyCheck;     
         }
      
         return $title;
@@ -345,29 +369,30 @@ abstract class Main
     {
         foreach($this->courses as $course)
         {
-            $course->unreaded = 0;
-            $course->unchecked = 0;
+            $course->timelyRead = 0;
+            $course->untimelyRead = 0;
+            $course->timelyCheck = 0;
+            $course->untimelyCheck = 0;
 
             foreach($course->teachers as $teacher)
             {
-                $teacher->unreaded = 0;
-                $teacher->unchecked = 0;
+                $teacher->timelyRead = 0;
+                $teacher->untimelyRead = 0;
+                $teacher->timelyCheck = 0;
+                $teacher->untimelyCheck = 0;
 
                 foreach($teacher->activities as $activity)
                 {
-                    if(isset($activity->unreaded))
-                    {
-                        $teacher->unreaded += $activity->unreaded;
-                    }
-
-                    if(isset($activity->unchecked))
-                    {
-                        $teacher->unchecked += $activity->unchecked;
-                    }
+                    $teacher->timelyRead += $activity->timelyRead;
+                    $teacher->untimelyRead += $activity->untimelyRead;
+                    $teacher->timelyCheck += $activity->timelyCheck;
+                    $teacher->untimelyCheck += $activity->untimelyCheck;
                 }
 
-                $course->unreaded += $teacher->unreaded;
-                $course->unchecked += $teacher->unchecked;
+                $course->timelyRead += $teacher->timelyRead;
+                $course->untimelyRead += $teacher->untimelyRead;
+                $course->timelyCheck += $teacher->timelyCheck;
+                $course->untimelyCheck += $teacher->untimelyCheck;
             }
         }
     }

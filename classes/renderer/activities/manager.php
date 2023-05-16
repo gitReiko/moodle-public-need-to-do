@@ -120,14 +120,18 @@ class Manager extends Main
 
         if(LocalLib::is_unread_messages_exists($teacher))
         {
-            $unreadText.= get_string('unread_forum_messages', 'block_needtodo');
-            $unreadText.= $teacher->unreaded;
+            $unreadText.= '<br>'.get_string('total_unread_messages', 'block_needtodo');
+            $unreadText.= $teacher->timelyRead + $teacher->untimelyRead;
+            $unreadText.= '<br>'.get_string('untimely_unread_messages', 'block_needtodo');
+            $unreadText.= $teacher->untimelyRead;
         }
 
-        if($teacher->unchecked)
+        if($teacher->timelyCheck || $teacher->untimelyCheck)
         {
-            $unreadText.= get_string('unchecked_activities_works', 'block_needtodo');
-            $unreadText.= $teacher->unchecked;
+            $unreadText.= '<br>'.get_string('total_unchecked_works', 'block_needtodo');
+            $unreadText.= $teacher->timelyCheck + $teacher->untimelyCheck;
+            $unreadText.= '<br>'.get_string('untimely_unchecked_works', 'block_needtodo');
+            $unreadText.= $teacher->untimelyCheck;     
         }
 
         return cLib::get_teacher_contacts($teacher, $unreadText);

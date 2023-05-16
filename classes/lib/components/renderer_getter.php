@@ -239,8 +239,10 @@ abstract class RendererGetter
         $course = new \stdClass;
         $course->id = $courseDB->courseid;
         $course->name = $courseDB->coursename;
-        $course->unchecked = $courseDB->unchecked;
-        $course->unreaded = $courseDB->unreaded;
+        $course->timelyCheck = $courseDB->timelyCheck;
+        $course->untimelyCheck = $courseDB->untimelyCheck;
+        $course->timelyRead = $courseDB->timelyRead;
+        $course->untimelyRead = $courseDB->untimelyRead;
         $course->teachers = array();
 
         $this->courses[] = $course;
@@ -301,8 +303,10 @@ abstract class RendererGetter
         $teacher->email = $teacherDB->email;
         $teacher->phone1 = $teacherDB->phone1;
         $teacher->phone2 = $teacherDB->phone2;
-        $teacher->unchecked = $teacherDB->unchecked;
-        $teacher->unreaded = $teacherDB->unreaded;
+        $teacher->timelyCheck = $teacherDB->timelyCheck;
+        $teacher->untimelyCheck = $teacherDB->untimelyCheck;
+        $teacher->timelyRead = $teacherDB->timelyRead;
+        $teacher->untimelyRead = $teacherDB->untimelyRead;
         $teacher->activities = array();
 
         $course->teachers[] = $teacher;
@@ -375,8 +379,10 @@ abstract class RendererGetter
         $activity->cmid = $activityDB->cmid;
         $activity->type = $this->componentType;
         $activity->link = $this->get_link_to_activity($activityDB);
-        $activity->unchecked = $activityDB->unchecked;
-        $activity->unreaded = $activityDB->unreaded;
+        $activity->timelyCheck = $activityDB->timelyCheck;
+        $activity->untimelyCheck = $activityDB->untimelyCheck;
+        $activity->timelyRead = $activityDB->timelyRead;
+        $activity->untimelyRead = $activityDB->untimelyRead;
 
         $teacher->activities[] = $activity;
     }
