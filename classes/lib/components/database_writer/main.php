@@ -92,17 +92,17 @@ abstract class Main
     /**
      * Returns true if needtodo record exists in database.
      * 
-     * @param int teacher id
+     * @param int entity id 
      * 
      * @return bool 
      */
-    private function is_needtodo_record_exists_in_database(int $teacherId) : bool 
+    private function is_needtodo_record_exists_in_database(int $entityId) : bool 
     {
         global $DB;
 
         $where = array(
             'component' => $this->componentName,
-            'entityid' => $teacherId
+            'entityid' => $entityId
         );
 
         return $DB->record_exists('block_needtodo', $where);
