@@ -151,29 +151,13 @@ class Manager extends Main
     {
         $attr = array(
             'class' => 'ntd-expandable ntd-chat-teacher ntd-tooltip '.$className,
-            'data-teacher' => $fromUser->teacher->id,
+            'data-teacher' => $fromUser->teacherid,
             'data-block-instance' => $this->params->instance,
             'data-whose-work' => Enums::NOT_MY_WORK,
-            'title' => self::get_teacher_contacts($fromUser->teacher, $fromUser->unreadedMessages->count)
+            'title' => cLib::get_teacher_contacts($fromUser, $fromUser->teachername)
         );
-        $text = $fromUser->teacher->name.$this->get_unread_count($fromUser->unreadedMessages->count);
+        $text = $fromUser->teachername.$this->get_unread_count($fromUser);
         return \html_writer::tag('div', $text, $attr);
-    }
-
-    /**
-     * Returns teacher contacts prepared for render.
-     * 
-     * @param stdClass teacher 
-     * @param int unread count 
-     * 
-     * @return string contacts prepared for render
-     */
-    private function get_teacher_contacts(\stdClass $teacher, int $unreadCount) : string 
-    {
-        $unreadText = get_string('unread_chat_messages', 'block_needtodo');
-        $unreadText.= $unreadCount;
-
-        return cLib::get_teacher_contacts($teacher, $unreadText);
     }
 
     /**
@@ -188,7 +172,7 @@ class Manager extends Main
     {
         $messages = '';
 
-        foreach($fromUser->unreadedMessages->fromUsers as $sender)
+        foreach($fromUser->senders as $sender)
         {
             $class = 'ntd-hidden-box ntd-level-2-other-activities ';
             $class.= 'ntd-cursor-default ntd-tooltip '.$className;
@@ -196,12 +180,12 @@ class Manager extends Main
             $attr = array(
                 'class' => $class,
                 'title' => $this->get_student_title($sender),
-                'data-teacher' => $fromUser->teacher->id,
+                'data-teacher' => $fromUser->teacherid,
                 'data-block-instance' => $this->params->instance,
                 'data-whose-work' => Enums::NOT_MY_WORK,
                 'data-user' => $sender->id
             );
-            $text = $sender->name.$this->get_unread_count($sender->count);
+            $text = $sender->name.$this->get_unread_count($sender);
 
             $messages.= \html_writer::tag('div', $text, $attr);
         }

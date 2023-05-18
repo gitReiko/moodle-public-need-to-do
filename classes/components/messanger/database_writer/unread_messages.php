@@ -123,7 +123,7 @@ class UnreadMessages
     {
         $unread = new \stdClass;
         $unread->teacherid = $teacher->id;
-        $unread->name = $teacher->fullname;
+        $unread->teachername = $teacher->fullname;
         $unread->email = $teacher->email;
         $unread->phone1 = $teacher->phone1;
         $unread->phone2 = $teacher->phone2;

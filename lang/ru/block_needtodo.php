@@ -54,7 +54,6 @@ $string['show_more'] = 'Показать больше...';
 $string['to_the_course'] = 'к курсу';
 $string['total_unchecked_works'] = 'Всего непроверено работ: ';
 $string['total_unread_messages'] = 'Всего непрочитано сообщений: ';
-$string['unread_chat_messages'] = 'Непрочитано сообщений чата: ';
 $string['untimely_unchecked_works'] = 'Несвоевременно непроверено работ: ';
 $string['untimely_unread_messages'] = 'Несвоевременно непрочитано сообщений: ';
 $string['update_data'] = 'Обновить данные';

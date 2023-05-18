@@ -56,7 +56,7 @@ class MyWork extends Main
         $messages = '';
 
         $i = 0;
-        foreach($this->data->unreadedMessages->fromUsers as $fromUser)
+        foreach($this->data->senders as $sender)
         {
             $class = $this->get_message_class();
             $tooMuchClass = $this->get_hidden_elements_class_for_more_button();
@@ -69,10 +69,10 @@ class MyWork extends Main
             $attr = array(
                 'class' => $class,
                 'onclick' => 'window.location.replace("/message/index.php");', // redirect to link 
-                'title' => $this->get_student_title($fromUser)
+                'title' => $this->get_student_title($sender)
             );
 
-            $text = $fromUser->name.$this->get_unread_count($fromUser->count);
+            $text = $sender->name.$this->get_unread_count($sender);
             $messages.= \html_writer::tag('div', $text, $attr);
 
             $i++;

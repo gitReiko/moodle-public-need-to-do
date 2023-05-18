@@ -82,7 +82,7 @@ class Manager extends Main
                 'data-teacher-cell' => $teacher->id,
                 'data-block-instance' => $this->params->instance,
                 'data-whose-work' => $this->whoseWork,
-                'title' => $this->get_teacher_contacts($teacher)
+                'title' => cLib::get_teacher_contacts($teacher, $teacher->name)
             );
             $text = $teacher->name;
 
@@ -105,36 +105,6 @@ class Manager extends Main
         }
 
         return $cells;
-    }
-
-    /**
-     * Returns teacher contacts prepared for render.
-     * 
-     * @param stdClass teacher 
-     * 
-     * @return string contacts prepared for render
-     */
-    private function get_teacher_contacts(\stdClass $teacher) : string 
-    {
-        $unreadText = '';
-
-        if(LocalLib::is_unread_messages_exists($teacher))
-        {
-            $unreadText.= '<br>'.get_string('total_unread_messages', 'block_needtodo');
-            $unreadText.= $teacher->timelyRead + $teacher->untimelyRead;
-            $unreadText.= '<br>'.get_string('untimely_unread_messages', 'block_needtodo');
-            $unreadText.= $teacher->untimelyRead;
-        }
-
-        if($teacher->timelyCheck || $teacher->untimelyCheck)
-        {
-            $unreadText.= '<br>'.get_string('total_unchecked_works', 'block_needtodo');
-            $unreadText.= $teacher->timelyCheck + $teacher->untimelyCheck;
-            $unreadText.= '<br>'.get_string('untimely_unchecked_works', 'block_needtodo');
-            $unreadText.= $teacher->untimelyCheck;     
-        }
-
-        return cLib::get_teacher_contacts($teacher, $unreadText);
     }
 
     /**

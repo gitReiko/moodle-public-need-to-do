@@ -68,10 +68,10 @@ abstract class Main
     {
         $title = get_string('message_sent_by', 'block_needtodo').': ';
         $title.= $fromUser->name.'<br>';
-        $title.= get_string('unread_chat_messages', 'block_needtodo');
-        $title.= $fromUser->count.'<br>';
-        $title.= get_string('last_name_sent', 'block_needtodo').': ';
-        $title.= $fromUser->lasttime;
+        $title.= get_string('total_unread_messages', 'block_needtodo');
+        $title.= $fromUser->timelyCheck+$fromUser->untimelyCheck.'<br>';
+        $title.= get_string('untimely_unread_messages', 'block_needtodo');
+        $title.= $fromUser->untimelyRead;
 
         return $title;
     }
@@ -79,16 +79,24 @@ abstract class Main
     /**
      * Returns unread messages count.
      * 
-     * @param int unreadMessagesCount
+     * @param stdClass entity
      * 
      * @return string unread messages count
      */
-    protected function get_unread_count(int $unreadMessagesCount) : string 
+    protected function get_unread_count(\stdClass $entity) : string 
     {
+        $label = '';
+
+        $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
+        $text.= $entity->timelyRead + $entity->untimelyRead;
+        $label.=\html_writer::tag('span', $text);
+
         $attr = array('class' => 'ntd-undone-work');
         $text = ' <i class="fa fa-comments" aria-hidden="true"></i> ';
-        $text.= $unreadMessagesCount;
-        return \html_writer::tag('span', $text, $attr);
+        $text.= $entity->untimelyRead;
+        $label.=\html_writer::tag('span', $text, $attr);
+
+        return $label;
     }
 
     /**

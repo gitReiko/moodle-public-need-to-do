@@ -65,19 +65,30 @@ class Common
      * Returns teacher contacts prepared for render.
      * 
      * @param stdClass teacher 
-     * @param string undone count 
+     * @param stdClass teacher name
      * 
      * @return string contacts prepared for render
      */
-    public static function get_teacher_contacts(\stdClass $teacher, string $undoneCount) : string 
+    public static function get_teacher_contacts(\stdClass $teacher, string $teachername) : string 
     {
         $newline = '<br>';
 
-        $contacts = $teacher->name.$newline;
+        $contacts = $teachername.$newline;
 
-        if( ! empty($undoneCount))
+        if($teacher->timelyRead || $teacher->untimelyRead)
         {
-            $contacts.= $undoneCount.$newline;
+            $contacts.= get_string('total_unread_messages', 'block_needtodo');
+            $contacts.= $teacher->timelyRead + $teacher->untimelyRead;
+            $contacts.= $newline.get_string('untimely_unread_messages', 'block_needtodo');
+            $contacts.= $teacher->untimelyRead.$newline;
+        }
+
+        if($teacher->timelyCheck || $teacher->untimelyCheck)
+        {
+            $contacts.= get_string('total_unchecked_works', 'block_needtodo');
+            $contacts.= $teacher->timelyCheck + $teacher->untimelyCheck;
+            $contacts.= $newline.get_string('untimely_unchecked_works', 'block_needtodo');
+            $contacts.= $teacher->untimelyCheck.$newline;     
         }
 
         if(!empty($teacher->email))

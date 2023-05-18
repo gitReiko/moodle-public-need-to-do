@@ -55,7 +55,6 @@ $string['show_more'] = 'Show more...';
 $string['to_the_course'] = 'to the course';
 $string['total_unchecked_works'] = 'Total unchecked works: ';
 $string['total_unread_messages'] = 'Total unread messages: ';
-$string['unread_chat_messages'] = 'Unread chat messages: ';
 $string['untimely_unchecked_works'] = 'Untimely unchecked works: ';
 $string['untimely_unread_messages'] = 'Untimely unread messages: ';
 $string['update_data'] = 'Update data';
