@@ -65,7 +65,7 @@ class Messanger
     {
         foreach($this->data as $entity) 
         {
-            if($entity->teacher->id == $teacherId)
+            if($entity->teacherid == $teacherId)
             {
                 return false;
             }
