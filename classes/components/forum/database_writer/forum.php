@@ -141,22 +141,45 @@ class Forum
      */
     private function get_outdated_posts_time()
     {
-        $days = $this->get_old_post_days();
-        return time() - ($days * 24 * 3600);
+        $forumDays = $this->get_forum_outdated_days();
+        $blockDays = $this->get_block_outdated_days();
+
+        if($forumDays < $blockDays)
+        {
+            $outdated = $forumDays;
+        }
+        else 
+        {
+            $outdated = $blockDays;
+        }
+
+        return time() - ($outdated * Enums::SECONDS_IN_DAY);
     }
 
     /**
      * Returns count of days after which a post will be outdated.
      * 
+     * Forum setting.
+     * 
      * Outdated post is considered read.
      * 
      * @return int count of days
      */
-    private function get_old_post_days() : int 
+    private function get_forum_outdated_days() : int 
     {
         global $DB;
         $where = array('name' => 'forum_oldpostdays');
         return $DB->get_field('config', 'value', $where);
+    }
+
+    /**
+     * Returns block outdated time 
+     * 
+     * @return int timestamp
+     */
+    private function get_block_outdated_days() : int 
+    {
+        return get_config('block_needtodo', 'working_past_days');
     }
 
     /**
@@ -196,6 +219,7 @@ class Forum
      */
     private function get_discussion_posts_from_database(int $discussionId) : ?array 
     {
+        // !!!!!!!!!!!!!!!!
         global $DB;
         $sql = 'SELECT id, modified AS senttime  
                 FROM {forum_posts} 

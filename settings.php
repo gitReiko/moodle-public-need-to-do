@@ -19,3 +19,13 @@ $settings->add(
         PARAM_INT
     )
 );
+
+$settings->add(
+    new admin_setting_configtext(
+        'block_needtodo/working_past_days', 
+        get_string('working_past_days', 'block_needtodo'), 
+        get_string('working_past_days_tool', 'block_needtodo'), 
+        180, 
+        PARAM_INT
+    )
+);

@@ -17,10 +17,16 @@ class Main extends DatabaseWriter
     /** An array of courses that have attempts. */
     private $courses = array();
 
+    /** Outdated timestamp. Defines by global setting "working_past_days" */
+    private $outdatedTimestamp;
+
     /** Sets component name. */
     protected function set_component_name() : void
     {
         $this->componentName = Enums::QUIZ;
+
+        $this->outdatedTimestamp = time() - (get_config('block_needtodo', 'working_past_days') * Enums::SECONDS_IN_DAY);
+
         $this->moduleId = $this->get_module_id();
     }
 
@@ -100,9 +106,10 @@ class Main extends DatabaseWriter
                 AND cm.visible = 1 
                 AND u.deleted = 0 
                 AND u.suspended = 0 
+                AND qa.timemodified > ? 
                 ORDER BY c.fullname, q.name ';
 
-        $params = array('finished', $this->moduleId);
+        $params = array('finished', $this->moduleId, $this->outdatedTimestamp);
 
         return $DB->get_records_sql($sql, $params);
     }

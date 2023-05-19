@@ -58,3 +58,6 @@ $string['untimely_unchecked_works'] = 'Несвоевременно непров
 $string['untimely_unread_messages'] = 'Несвоевременно непрочитано сообщений: ';
 $string['update_data'] = 'Обновить данные';
 $string['use_settings_below'] = 'Использовать приведённые ниже настройки';
+$string['working_past_days_tool'] = 'Эта настройка определяет количество дней, с которыми работает блок, от теперешнего дня до указанных прошедших дней.';
+$string['working_past_days'] = 'Работать с прошедшими днями';
+

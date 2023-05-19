@@ -19,6 +19,9 @@ class UnreadMessages
     /** Current timestamp. */
     private $currentTimestamp;
 
+    /** Outdated timestamp. Defines by global setting "working_past_days" */
+    private $outdatedTimestamp;
+
     /**
      * Prepares data for class.
      * 
@@ -28,8 +31,11 @@ class UnreadMessages
     {
         $this->teachers = $teachers;
 
-        $this->untimelyTimestampPeriod = get_config('block_needtodo', 'days_to_check') * Enums::SECONDS_IN_DAY;
         $this->currentTime = time();
+
+        $this->untimelyTimestampPeriod = get_config('block_needtodo', 'days_to_check') * Enums::SECONDS_IN_DAY;
+        
+        $this->outdatedTimestamp = $this->currentTime - (get_config('block_needtodo', 'working_past_days') * Enums::SECONDS_IN_DAY);
 
         $this->init_unread_messages();
     }
@@ -67,17 +73,20 @@ class UnreadMessages
 
                         foreach($conversation->messages as $message)
                         {
-                            $untimely = $message->timecreated + $this->untimelyTimestampPeriod;
+                            if($this->is_message_not_outdated($message))
+                            {
+                                $untimely = $message->timecreated + $this->untimelyTimestampPeriod;
                             
-                            if($this->currentTime > $untimely)
-                            {
-                                $sender->untimelyRead++;
-                                $unread->untimelyRead++;
-                            }
-                            else 
-                            {
-                                $sender->timelyRead++;
-                                $unread->timelyRead++;
+                                if($this->currentTime > $untimely)
+                                {
+                                    $sender->untimelyRead++;
+                                    $unread->untimelyRead++;
+                                }
+                                else 
+                                {
+                                    $sender->timelyRead++;
+                                    $unread->timelyRead++;
+                                }
                             }
                         }
 
@@ -105,7 +114,15 @@ class UnreadMessages
         {
             if(!empty($conversation->unreadcount))
             {
-                return true;
+                foreach($conversation->messages as $message)
+                {
+                    if($this->is_message_not_outdated($message))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
         }
 
@@ -173,6 +190,27 @@ class UnreadMessages
         $sender->untimelyRead = 0;     
 
         return $sender;
+    }
+
+    /**
+     * Returns true if message not outdated. 
+     * 
+     * Outdated date defines by global setting "working_past_days".
+     * 
+     * @param stdClass message
+     * 
+     * @return bool 
+     */
+    private function is_message_not_outdated(\stdClass $message) : bool 
+    {
+        if($message->timecreated > $this->outdatedTimestamp)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
     }
     
 }
