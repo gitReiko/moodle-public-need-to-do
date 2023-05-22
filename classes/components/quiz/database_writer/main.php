@@ -5,6 +5,7 @@ namespace NTD\Classes\Components\Quiz\DatabaseWriter;
 require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
 require_once 'teachers.php';
+require_once __DIR__.'/../../../lib/components/database_writer/template/activities.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course;
@@ -90,7 +91,7 @@ class Main extends DatabaseWriter
         $sql = 'SELECT qa.id AS attemptid, qa.userid AS studentid, 
                 c.id AS courseid, c.fullname AS coursename, 
                 cm.id AS coursemoduleid, 
-                q.id AS quizid, q.name AS quizname, 
+                q.id AS entityid, q.name AS entityname, 
                 qa.timemodified AS senttime 
                 FROM {quiz_attempts} AS qa 
                 INNER JOIN {user} u 

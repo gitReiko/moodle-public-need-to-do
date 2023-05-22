@@ -3,9 +3,9 @@
 namespace NTD\Classes\Components\Quiz\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer/template/teachers.php';
-require_once 'activities.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Teachers as TeachersTemplate;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Activities;
 
 /**
  * Processes an entity at the teacher level. 
