@@ -141,6 +141,9 @@ class Main extends DatabaseWriter
                 $attempt->untimelyCheck = 0;
                 $attempt->timelyCheck = 1; 
             }
+
+            $attempt->untimelyRead = 0;
+            $attempt->timelyRead = 0;
         }
 
         return $attempts;
