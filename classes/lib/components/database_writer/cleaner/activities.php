@@ -74,7 +74,7 @@ class Activities
     private function delete_outdated_data(\stdClass $current) : void
     {
         global $DB;
-        $where = array('id' => $this->current->id);
+        $where = array('id' => $current->id);
         $DB->delete_records('block_needtodo', $where);
     }
 

@@ -44,8 +44,8 @@ class Main extends DatabaseWriter
             $this->process_teachers_level($submission);
             // process actvities level is in teacher level
         }
-        
-        print_r($this->courses);
+
+        $this->data = $this->courses;
     }
 
     /**
@@ -57,7 +57,12 @@ class Main extends DatabaseWriter
      */
     protected function get_needtodo_record(\stdClass $dataEntity) : \stdClass 
     {
-
+        $needtodo = new \stdClass;
+        $needtodo->component = $this->componentName;
+        $needtodo->entityid = $dataEntity->courseid;
+        $needtodo->info = json_encode($dataEntity);
+        $needtodo->updatetime = time();
+        return $needtodo;
     }
 
     /**
