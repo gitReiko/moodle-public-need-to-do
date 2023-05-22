@@ -4,6 +4,7 @@ namespace NTD\Classes\Components\Assign\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
+require_once 'teachers.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course;
@@ -39,7 +40,7 @@ class Main extends DatabaseWriter
         foreach($submissions as $submission)
         {
             $this->process_course_level($submission);
-            //$this->process_teachers_level($work);
+            $this->process_teachers_level($submission);
             // process actvities level is in teacher level
         }
         
@@ -83,8 +84,8 @@ class Main extends DatabaseWriter
 
         $sql = 'SELECT asu.id AS submissionid, 
                 a.id AS assignid, a.name AS assignname, 
-                cm.id AS cmid, c.id AS courseid, c.fullname AS coursename, 
-                asu.timemodified AS senttime 
+                cm.id AS coursemoduleid, c.id AS courseid, c.fullname AS coursename, 
+                asu.timemodified AS senttime, asu.userid AS studentid 
                 FROM {assign} AS a 
                 INNER JOIN {course_modules} AS cm 
                 ON a.id = cm.instance 
@@ -138,6 +139,9 @@ class Main extends DatabaseWriter
                 $submission->untimelyCheck = 0;
                 $submission->timelyCheck = 1; 
             }
+
+            $submission->untimelyRead = 0;
+            $submission->timelyRead = 0;
         }
 
         return $submissions;
@@ -152,6 +156,17 @@ class Main extends DatabaseWriter
     {
         $course = new Course($this->courses, $submission);
         $this->courses = $course->process_level();
+    }
+
+    /**
+     * Process assign submission on teachers level.
+     * 
+     * @param stdClass assign submission 
+     */
+    private function process_teachers_level(\stdClass $submission) : void 
+    {
+        $teachers = new Teachers($this->courses, $this->teachers, $submission);
+        $this->courses = $teachers->process_level(); 
     }
 
 }
