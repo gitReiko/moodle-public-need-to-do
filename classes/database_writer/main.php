@@ -3,6 +3,7 @@
 namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../components/messanger/database_writer/main.php';
+require_once __DIR__.'/../components/assign/database_writer/main.php';
 require_once __DIR__.'/../components/forum/database_writer/main.php';
 require_once __DIR__.'/../components/quiz/database_writer/main.php';
 require_once __DIR__.'/../lib/getters/teachers.php';
@@ -47,7 +48,7 @@ abstract class Main
             $this->write_messsanger();
             $this->write_forum();
             $this->write_quiz();
-            // assign works
+            $this->write_assign();
         }
     }
 
@@ -72,5 +73,11 @@ abstract class Main
      */
     abstract protected function write_quiz() : void ;
 
+    /**
+     * Writes data related to assign into database.
+     * 
+     * @return void
+     */
+    abstract protected function write_assign() : void ;
 
 }

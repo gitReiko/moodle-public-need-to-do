@@ -6,6 +6,7 @@ require_once __DIR__.'/../lib/enums.php';
 require_once __DIR__.'/main.php';
 
 use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWriter;
+use \NTD\Classes\Components\Assign\DatabaseWriter\Main as AssignDatabaseWriter;
 use \NTD\Classes\Components\Forum\DatabaseWriter\Main as ForumDatabaseWriter;
 use \NTD\Classes\Components\Quiz\DatabaseWriter\Main as QuizDatabaseWriter;
 use \NTD\Classes\Lib\Getters\Teachers as tGet;
@@ -107,6 +108,21 @@ class MainWeb extends Main
     protected function write_quiz() : void 
     {
         $quizWriter = new QuizDatabaseWriter(
+            $this->teachers,
+            $this->updateLevel,
+            $this->params
+        );
+        $quizWriter->write();
+    }
+
+    /**
+     * Writes data related to assign into database.
+     * 
+     * @return void
+     */
+    protected function write_assign() : void 
+    {
+        $quizWriter = new AssignDatabaseWriter(
             $this->teachers,
             $this->updateLevel,
             $this->params
