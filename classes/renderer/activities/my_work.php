@@ -4,6 +4,7 @@ namespace NTD\Classes\Renderer\Activities;
 
 require_once 'main.php';
 
+use \NTD\Classes\Components\Assign\Renderer\Getter as AssignGetter;
 use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
 use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
 use \NTD\Classes\Lib\Common as cLib;
@@ -31,6 +32,18 @@ class MyWork extends Main
     protected function get_course_cell_unique_classes() : string
     {
         return ' ntd-my-work-activity-course-cell ';
+    }
+
+    /**
+     * Returns courses with added assigns.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    protected function add_assigns_data() : ?array 
+    {
+        $myWork = true;
+        $quiz = new AssignGetter($this->params, $this->teachers, $this->courses, $myWork);
+        return $quiz->get_courses_with_component_data();
     }
 
     /**

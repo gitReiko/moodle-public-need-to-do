@@ -3,6 +3,7 @@
 namespace NTD\Classes\Renderer\Activities;
 
 require_once __DIR__.'/../../lib/components/renderer_getter.php';
+require_once __DIR__.'/../../components/assign/renderer/getter.php';
 require_once __DIR__.'/../../components/forum/renderer/getter.php';
 require_once __DIR__.'/../../components/quiz/renderer/getter.php';
 require_once 'locallib.php';
@@ -175,11 +176,11 @@ abstract class Main
     }
 
     /**
-     * Returns courses with added quizes.
+     * Returns courses with added assigns.
      * 
      * @return array courses which are needed to render the block
      */
-    abstract protected function add_quizes_data() : ?array ;
+    abstract protected function add_assigns_data() : ?array ;
 
     /**
      * Returns courses with added forums.
@@ -189,11 +190,19 @@ abstract class Main
     abstract protected function add_forums_data() : ?array ;
 
     /**
+     * Returns courses with added quizes.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    abstract protected function add_quizes_data() : ?array ;
+
+    /**
      * Prepares data necessary for render.
      */
     private function init_courses_for_renderer() : void 
     {
         $this->courses = array();
+        $this->courses = $this->add_assigns_data();
         $this->courses = $this->add_forums_data();
         $this->courses = $this->add_quizes_data();
 
