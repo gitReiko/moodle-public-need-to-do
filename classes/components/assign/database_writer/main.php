@@ -3,12 +3,21 @@
 namespace NTD\Classes\Components\Assign\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer/main.php';
+require_once 'course.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 class Main extends DatabaseWriter 
 {
+    /** Id of quiz module. */
+    private $moduleId;
+
+    /** An array of courses that have attempts. */
+    private $courses = array();
+
+    /** Outdated timestamp. Defines by global setting "working_past_days" */
+    private $outdatedTimestamp;
 
     /** Sets component name. */
     protected function set_component_name() : void 
@@ -23,17 +32,17 @@ class Main extends DatabaseWriter
     /** Prepares data neccessary for database writer. */
     protected function prepare_neccessary_data() : void 
     {
-        $works = $this->get_unchecked_submissions();
-        $works = $this->determine_timely_check($works);
+        $submissions = $this->get_unchecked_submissions();
+        $submissions = $this->determine_timely_check($submissions);
 
-        foreach($works as $work)
+        foreach($submissions as $submission)
         {
-            //$this->process_course_level($work);
+            $this->process_course_level($submission);
             //$this->process_teachers_level($work);
             // process actvities level is in teacher level
         }
         
-        print_r($works);
+        print_r($this->courses);
     }
 
     /**
@@ -131,6 +140,17 @@ class Main extends DatabaseWriter
         }
 
         return $submissions;
+    }
+
+    /**
+     * Process submission on course level.
+     * 
+     * @param stdClass submission 
+     */
+    private function process_course_level(\stdClass $submission) : void 
+    {
+        $course = new Course($this->courses, $submission);
+        $this->courses = $course->process_level();
     }
 
 }
