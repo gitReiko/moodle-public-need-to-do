@@ -3,9 +3,9 @@
 namespace NTD\Classes\Components\Assign\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer/template/teachers.php';
-//require_once 'activities.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Teachers as TeachersTemplate;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Activities;
 
 /**
  * Processes an entity at the teacher level. 
@@ -42,10 +42,8 @@ class Teachers extends TeachersTemplate
      */
     protected function process_activities_level(\stdClass &$course, int $checkingTeacherId) : void 
     {
-        /*
-        $activities = new Activities($course, $checkingTeacherId, $this->attempt);
+        $activities = new Activities($course, $checkingTeacherId, $this->rawEntity);
         $activities->process_level();
-        */
     }
 
 }

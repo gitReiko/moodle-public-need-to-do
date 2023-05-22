@@ -5,6 +5,7 @@ namespace NTD\Classes\Components\Assign\DatabaseWriter;
 require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
 require_once 'teachers.php';
+require_once __DIR__.'/../../../lib/components/database_writer/template/activities.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course;
@@ -83,7 +84,7 @@ class Main extends DatabaseWriter
         global $DB;
 
         $sql = 'SELECT asu.id AS submissionid, 
-                a.id AS assignid, a.name AS assignname, 
+                a.id AS entityid, a.name AS entityname, 
                 cm.id AS coursemoduleid, c.id AS courseid, c.fullname AS coursename, 
                 asu.timemodified AS senttime, asu.userid AS studentid 
                 FROM {assign} AS a 
