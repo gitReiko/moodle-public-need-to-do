@@ -5,7 +5,7 @@ namespace NTD\Classes\Lib\Components\DatabaseWriter\Template;
 /**
  * Processes an entity at the course level. 
  */
-abstract class Course  
+class Course  
 {
     /** An array of courses that have entity. */
     protected $courses;
@@ -46,16 +46,49 @@ abstract class Course
      * 
      * @return bool 
      */
-    abstract protected function is_course_not_exists() : bool ;
+    protected function is_course_not_exists() : bool 
+    {
+        foreach($this->courses as $course)
+        {
+            if($course->courseid == $this->rawEntity->courseid)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Adds course to array. 
      */
-    abstract protected function add_course_to_array() : void ;
+    protected function add_course_to_array() : void 
+    {
+        $course = new \stdClass;
+        $course->courseid = $this->rawEntity->courseid;
+        $course->coursename = $this->rawEntity->coursename;
+        $course->untimelyCheck = $this->rawEntity->untimelyCheck;
+        $course->timelyCheck = $this->rawEntity->timelyCheck;
+        $course->untimelyRead = 0;
+        $course->timelyRead = 0;
+        $course->teachers = array();
+
+        $this->courses[] = $course;
+    }
 
     /**
      * Increases unckecked value of course by 1. 
      */
-    abstract protected function increase_course_unchecked() : void ;
+    protected function increase_course_unchecked() : void 
+    {
+        foreach($this->courses as $course)
+        {
+            if($course->courseid == $this->rawEntity->courseid)
+            {
+                $course->untimelyCheck += $this->rawEntity->untimelyCheck;
+                $course->timelyCheck += $this->rawEntity->timelyCheck;
+            }
+        }
+    }
 
 }

@@ -3,9 +3,10 @@
 namespace NTD\Classes\Components\Assign\DatabaseWriter;
 
 require_once __DIR__.'/../../../lib/components/database_writer/main.php';
-require_once 'course.php';
+require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
+use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 class Main extends DatabaseWriter 
