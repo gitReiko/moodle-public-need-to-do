@@ -50,15 +50,15 @@ class Content
      */
     public function get_content() : string 
     {
-        $content = $this->get_update_button();
-        $content.= $this->get_my_work();
+        $manager = $this->get_manager_part_of_block();
 
-        if(cLib::is_user_can_monitor_other_users())
-        {
-            $content.= $this->get_manager_part_of_block();
-        }
+        if($manager) $isManager = true;
+        else $isManager = false;
 
-        return $content;
+        $button = $this->get_update_button($isManager);
+        $mywork = $this->get_my_work();
+
+        return $button.$mywork.$manager;
     }
 
     /**
@@ -128,11 +128,13 @@ class Content
     /**
      * Returns update button in html format.
      * 
+     * @param bool isManager
+     * 
      * @return string button in html format
      */
-    private function get_update_button() : string 
+    private function get_update_button(bool $isManager) : string 
     {
-        $renderer = new UpdateButton($this->params);
+        $renderer = new UpdateButton($this->params, $isManager);
         return $renderer->get_update_button();
     }
 

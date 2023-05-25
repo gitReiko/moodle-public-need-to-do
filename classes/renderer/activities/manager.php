@@ -72,6 +72,26 @@ class Manager extends Main
     }
 
     /**
+     * Filters courses if necessary. 
+     */
+    protected function filter_courses_if_necessary() : void  
+    {
+        $filtered = array();
+
+        foreach($this->courses as $course)
+        {
+            $coursecontext = \context_course::instance($course->id);
+
+            if(has_capability('block/needtodo:monitorteachersincourse', $coursecontext)) 
+            {
+                $filtered[] = $course;
+            }
+        }
+
+        $this->courses = $filtered;
+    }
+
+    /**
      * Returns course child cells.
      * 
      * @param stdClass course 

@@ -197,6 +197,11 @@ abstract class Main
     abstract protected function add_quizes_data() : ?array ;
 
     /**
+     * Filters courses if necessary. 
+     */
+    abstract protected function filter_courses_if_necessary() : void ;
+
+    /**
      * Prepares data necessary for render.
      */
     private function init_courses_for_renderer() : void 
@@ -206,6 +211,7 @@ abstract class Main
         $this->courses = $this->add_forums_data();
         $this->courses = $this->add_quizes_data();
 
+        $this->filter_courses_if_necessary();
         $this->count_total_works();
         $this->sort_all_data();
     }

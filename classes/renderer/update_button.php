@@ -12,19 +12,22 @@ use NTD\Classes\Lib\Enums as Enums;
 class UpdateButton 
 {
 
-    /**
-     * Block instance params.
-     */
+    /** Block instance params. */
     private $params;
+
+    /** Is manager part of block exists. */
+    private $isManager;
 
     /**
      * Prepares data and updates data if necessary.
-     * 
+     *  
      * @param stdClass params of block instance
+     * @param bool is manager part exists
      */
-    function __construct(\stdClass $params)
+    function __construct(\stdClass $params, bool $isManager)
     {
         $this->params = $params;
+        $this->isManager = $isManager;
     }
 
     /**
@@ -36,7 +39,7 @@ class UpdateButton
     {
         $btn = $this->get_html_form_start();
 
-        if(cLib::is_user_can_monitor_other_users())
+        if($this->isManager)
         {
             $btn.= $this->get_param_update_data_on_block_instance_level();
         }

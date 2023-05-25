@@ -8,27 +8,6 @@ class Common
 {
 
     /**
-     * Return true if user can monitor other users.
-     * 
-     * @return bool 
-     */
-    public static function is_user_can_monitor_other_users() : bool 
-    {
-        if(self::is_user_can_monitor_all_courses()) 
-        {
-            return true;
-        }
-        else if(self::is_user_can_monitor_any_course_category())
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    /**
      * Returns true if user can monitor all courses. 
      * 
      * @return bool 
@@ -36,29 +15,6 @@ class Common
     public static function is_user_can_monitor_all_courses() : bool 
     {
         return has_capability('block/needtodo:monitorteachersonsite', \context_system::instance());
-    }
-
-    /**
-     * Returns true if user can monitor any course category. 
-     * 
-     * @return bool 
-     */
-    public static function is_user_can_monitor_any_course_category() : bool 
-    {
-        global $DB;
-        $courseCategories = $DB->get_records('course_categories', array(), '', 'id');
-
-        foreach($courseCategories as $category)
-        {
-            $categorycontext = \context_coursecat::instance($category->id);
-
-            if(has_capability('block/needtodo:monitorteachersincategory', $categorycontext)) 
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

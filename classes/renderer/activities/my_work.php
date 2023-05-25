@@ -69,6 +69,14 @@ class MyWork extends Main
         $quiz = new QuizGetter($this->params, $this->teachers, $this->courses, $myWork);
         return $quiz->get_courses_with_component_data();
     }
+    
+    /**
+     * Filters courses if necessary. 
+     */
+    protected function filter_courses_if_necessary() : void
+    {
+
+    }
 
     /**
      * Returns course child cells.

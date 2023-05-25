@@ -8,6 +8,7 @@ require_once 'messages/manager.php';
 use \NTD\Classes\Renderer\Activities\Manager as Activities;
 use \NTD\Classes\Renderer\Messages\Manager as Messanger;
 use \NTD\Classes\Lib\Getters\Teachers as tGet;
+use \NTD\Classes\Lib\Common as cLib;
 use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
@@ -36,9 +37,15 @@ class Manager
      */
     public function get_manager_part() : string 
     {
-        $manager = $this->get_manager_header();
-        $manager.= $this->get_messanger_part();
-        $manager.= $this->get_activities_part();
+        $manager = '';
+        $activities = $this->get_activities_part();
+
+        if(cLib::is_user_can_monitor_all_courses() || $activities)
+        {
+            $manager.= $this->get_manager_header();
+            $manager.= $this->get_messanger_part();
+            $manager.= $this->get_activities_part();
+        }
 
         return $manager;
     }
