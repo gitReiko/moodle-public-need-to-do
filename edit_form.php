@@ -63,6 +63,28 @@ class block_needtodo_edit_form extends block_edit_form
         $mform->setDefault('config_local_cohort', reset($cohortsoptions));
         $mform->addHelpButton('config_local_cohort', 'config_local_cohort', 'block_needtodo');
 
+        // Course categories selector 
+        $categories = $DB->get_records('course_categories', array(), 'name', 'id,name,coursecount');
+
+        $categoriesoptions = array();
+        
+        if($categories === null)
+        {
+            $categoriesoptions += array(0 => get_string('categories_not_exist', 'block_needtodo'));
+        }
+        else 
+        {
+            foreach($categories as $category)
+            {
+                $categoriesoptions += array($category->id => $category->name.' ('.$category->coursecount.')');
+            }
+        }
+
+        $orderbylabel = get_string('config_local_course_category', 'block_needtodo');
+        $mform->addElement('select', 'config_local_course_category', $orderbylabel, $categoriesoptions);
+        $mform->setDefault('config_local_course_category', reset($categoriesoptions));
+        $mform->addHelpButton('config_local_course_category', 'config_local_course_category', 'block_needtodo');
+
 
     }
 
