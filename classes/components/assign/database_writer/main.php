@@ -110,7 +110,7 @@ class Main extends DatabaseWriter
                 AND asu.timemodified > ? 
                 AND asu.attemptnumber = ag.attemptnumber 
                 AND asu.userid = ag.userid 
-                AND ag.grade IS NULL 
+                AND ag.grade = -1.00000
                 AND u.deleted = 0 
                 AND u.suspended = 0 ';
 
