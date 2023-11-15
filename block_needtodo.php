@@ -117,6 +117,7 @@ class block_needtodo extends block_base {
             $params->name = get_string('pluginname', 'block_needtodo');
             $params->cohort = get_config('block_needtodo', 'monitored_teachers_cohort');
             $params->use_local_settings = false;
+            $params->course_category = false;
         }
         else 
         {
@@ -124,6 +125,7 @@ class block_needtodo extends block_base {
             $params->name = $this->config->block_name;
             $params->cohort = $this->config->local_cohort;
             $params->use_local_settings = true;
+            $params->course_category = $this->config->local_course_category;
         }
 
         return $params;

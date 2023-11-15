@@ -115,13 +115,61 @@ abstract class RendererGetter
      */
     private function get_component_data() : ?array 
     {
-        // from all courses or from category courses
-        // for now only from all courses 
-        $data = $this->get_component_data_from_all_courses();
+        if($this->is_block_use_local_course_category())
+        {
+            $data = $this->get_component_data_from_category_courses();
+        }
+        else 
+        {
+            $data = $this->get_component_data_from_all_courses();
+        }
 
         $data = $this->decode_data_from_json($data);
 
         return $data;
+    }
+
+    /**
+     * Returns true if block uses local course category.
+     * 
+     * @return bool
+     */
+    private function is_block_use_local_course_category() : bool 
+    {
+        if(empty($this->params->course_category))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * Returns component data from local courses category.
+     * 
+     * @return array data 
+     */
+    private function get_component_data_from_category_courses() : ?array 
+    {
+        global $DB;
+
+        $sql = 'SELECT bn.* 
+                FROM {block_needtodo} AS bn 
+                INNER JOIN {course} AS c 
+                ON bn.entityid = c.id 
+                WHERE bn.component <> ?
+                AND bn.component = ? 
+                AND c.category = ?';
+
+        $params = array(
+            Enums::MESSANGER, 
+            $this->componentType, 
+            $this->params->course_category
+        );
+
+        return $DB->get_records_sql($sql, $params);
     }
 
     /**
@@ -133,9 +181,14 @@ abstract class RendererGetter
     {
         global $DB;
 
-        $where = array('component' => $this->componentType);
+        $sql = 'SELECT bn.* 
+                FROM {block_needtodo} AS bn 
+                WHERE bn.component <> ?
+                AND bn.component = ?';
 
-        return $DB->get_records('block_needtodo', $where);
+        $params = array(Enums::MESSANGER, $this->componentType);
+
+        return $DB->get_records_sql($sql, $params);
     }
 
     /**
