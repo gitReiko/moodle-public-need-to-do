@@ -63,6 +63,7 @@
     left:-2000px;
     background:transparent;
     padding:5px;
+    display: none;
 }
 
 .ntd-tooltip-box p
