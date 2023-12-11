@@ -62,6 +62,6 @@ $string['untimely_unchecked_works'] = 'Untimely checked works: ';
 $string['untimely_unread_messages'] = 'Untimely read messages: ';
 $string['update_data'] = 'Update data';
 $string['use_settings_below'] = 'Use the settings below';
-$string['working_past_days_tool'] = 'This setting determines the number of days the block works with, from today to the specified days in the past.';
+$string['working_past_days_tool'] = 'This setting determines the number of days the block works with. Data oldest for a defined date are not handled.';
 $string['working_past_days'] = 'Work with days gone';
 
