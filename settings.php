@@ -1,6 +1,14 @@
 <?php
 
 $settings->add(
+    new admin_setting_heading(
+        'block_needtodo/general_settings',
+        get_string('general_settings', 'block_needtodo'),
+        ''
+    )
+);
+
+$settings->add(
     new admin_setting_configtext(
         'block_needtodo/monitored_teachers_cohort', 
         get_string('monitored_teachers_cohort', 'block_needtodo'), 
@@ -27,5 +35,22 @@ $settings->add(
         get_string('working_past_days_tool', 'block_needtodo'), 
         180, 
         PARAM_INT
+    )
+);
+
+$settings->add(
+    new admin_setting_heading(
+        'block_needtodo/components',
+        get_string('enabling_components', 'block_needtodo'),
+        ''
+    )
+);
+
+$settings->add(
+    new admin_setting_configcheckbox(
+        'block_needtodo/enable_chat_messages',
+        get_string('site_messenger', 'block_needtodo'),
+        get_string('site_messenger_desc', 'block_needtodo'),
+        '1'
     )
 );
