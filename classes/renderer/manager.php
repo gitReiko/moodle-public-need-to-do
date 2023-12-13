@@ -43,7 +43,12 @@ class Manager
         if(cLib::is_user_can_monitor_all_courses() || $activities)
         {
             $manager.= $this->get_manager_header();
-            $manager.= $this->get_messanger_part();
+
+            if(get_config('block_needtodo', 'enable_chat_messages'))
+            {
+                $manager.= $this->get_messanger_part();
+            }
+            
             $manager.= $this->get_activities_part();
         }
 

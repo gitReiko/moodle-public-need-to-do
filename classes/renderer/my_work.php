@@ -85,10 +85,17 @@ class MyWork
      * 
      * @return string messanger part of block
      */
-    private function get_messanger_part() : string 
+    private function get_messanger_part() : ?string 
     {
-        $renderer = new Messanger($this->params);
-        return $renderer->get_messanger_part();
+        if(get_config('block_needtodo', 'enable_chat_messages'))
+        {
+            $renderer = new Messanger($this->params);
+            return $renderer->get_messanger_part();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
