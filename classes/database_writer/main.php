@@ -45,7 +45,11 @@ abstract class Main
     {
         if(is_array($this->teachers))
         {
-            $this->write_messsanger();
+            if(get_config('block_needtodo', 'enable_chat_messages'))
+            {
+                $this->write_messsanger();
+            }
+            
             $this->write_forum();
             $this->write_quiz();
             $this->write_assign();
