@@ -23,6 +23,48 @@ class Messanger
      */
     public function clear_outdated_data() : void 
     {
+        if($this->is_messanger_component_disabled())
+        {
+            $this->clean_all_teachers_data();
+        }
+        else 
+        {
+            $this->clean_only_outdated_data();
+        }
+    }
+
+    /**
+     * Returns true if messanger component disabled.
+     * 
+     * @return bool
+     */
+    private function is_messanger_component_disabled() : bool 
+    {
+        if(get_config('block_needtodo', 'enable_chat_messages'))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * Cleans all messanger data from database.
+     */
+    private function clean_all_teachers_data() : void 
+    {
+        global $DB;
+        $where = array('component' => Enums::MESSANGER);
+        $DB->delete_records('block_needtodo', $where);
+    }
+
+    /** 
+     * Cleans only outdated messanger data from database. 
+     */
+    private function clean_only_outdated_data() : void 
+    {
         foreach($this->teachers as $teacher)
         {
             if($this->is_teacher_data_exists_in_database($teacher->id))
