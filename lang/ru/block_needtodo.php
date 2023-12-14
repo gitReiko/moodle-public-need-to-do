@@ -24,6 +24,8 @@
  */
 
 $string['all_done'] = 'Всё сделано.';
+$string['assign_desc'] = 'Мониторинг проверки работ в активностях типа Задание.';
+$string['assign'] = 'Задание';
 $string['block_instance_name'] = 'Название экземпляра блока';
 $string['block_instance_setup'] = 'Настройка экземпляра блока';
 $string['cache_data'] = 'Кэширование данных для блока Нужно сделать';

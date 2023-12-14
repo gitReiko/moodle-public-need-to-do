@@ -54,3 +54,12 @@ $settings->add(
         '1'
     )
 );
+
+$settings->add(
+    new admin_setting_configcheckbox(
+        'block_needtodo/enable_assign',
+        get_string('assign', 'block_needtodo'),
+        get_string('assign_desc', 'block_needtodo'),
+        '1'
+    )
+);

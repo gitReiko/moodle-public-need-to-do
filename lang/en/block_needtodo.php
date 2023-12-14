@@ -24,6 +24,8 @@
  */
 
 $string['all_done'] = 'All done.';
+$string['assign_desc'] = 'Monitor the checking of work in assignment type activities.';
+$string['assign'] = 'Assignment';
 $string['block_instance_name'] = 'Block instance name';
 $string['block_instance_setup'] = 'Block instance setup';
 $string['cache_data'] = 'Data caching for block Need to do block';
