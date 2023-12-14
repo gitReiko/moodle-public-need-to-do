@@ -207,7 +207,12 @@ abstract class Main
     private function init_courses_for_renderer() : void 
     {
         $this->courses = array();
-        $this->courses = $this->add_assigns_data();
+
+        if(get_config('block_needtodo', 'enable_assign'))
+        {
+            $this->courses = $this->add_assigns_data();
+        }
+
         $this->courses = $this->add_forums_data();
         $this->courses = $this->add_quizes_data();
 

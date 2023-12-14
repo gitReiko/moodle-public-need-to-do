@@ -71,6 +71,11 @@ class Main
         {
             $this->clean_all_messanger_data();
         }
+
+        if($this->is_assign_component_disabled())
+        {
+            $this->clean_all_assign_data();
+        }
     }
 
     /**
@@ -97,6 +102,33 @@ class Main
     {
         global $DB;
         $where = array('component' => Enums::MESSANGER);
+        $DB->delete_records('block_needtodo', $where);
+    }
+
+    /**
+     * Returns true if messanger component disabled.
+     * 
+     * @return bool
+     */
+    private function is_assign_component_disabled() : bool 
+    {
+        if(get_config('block_needtodo', 'enable_assign'))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * Cleans all messanger data from database.
+     */
+    private function clean_all_assign_data() : void 
+    {
+        global $DB;
+        $where = array('component' => Enums::ASSIGN);
         $DB->delete_records('block_needtodo', $where);
     }
 

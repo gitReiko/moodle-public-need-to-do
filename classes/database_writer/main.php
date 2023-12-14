@@ -52,7 +52,11 @@ abstract class Main
             
             $this->write_forum();
             $this->write_quiz();
-            $this->write_assign();
+
+            if(get_config('block_needtodo', 'enable_assign'))
+            {
+                $this->write_assign();
+            }
         }
     }
 
