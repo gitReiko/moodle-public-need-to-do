@@ -3,6 +3,7 @@
 namespace NTD\Classes\Lib\Components\DatabaseWriter\Cleaner;
 
 require_once 'activities.php';
+require_once 'disabled.php';
 require_once 'messanger.php';
 
 use \NTD\Classes\Lib\Enums as Enums;
@@ -30,10 +31,8 @@ class Main
      */
     public function clear_outdated_data() : void 
     {
-        echo $this->componentName.'<hr>';
         if($this->componentName == Enums::MESSANGER)
         {
-            echo 'dsvdsdsdsvdsvdsvdsv';
             $this->clean_messanger_data();
         }
         else 
@@ -67,69 +66,8 @@ class Main
      */
     private function clear_disabled_components_data() : void 
     {
-        if($this->is_messanger_component_disabled())
-        {
-            $this->clean_all_messanger_data();
-        }
-
-        if($this->is_assign_component_disabled())
-        {
-            $this->clean_all_assign_data();
-        }
-    }
-
-    /**
-     * Returns true if messanger component disabled.
-     * 
-     * @return bool
-     */
-    private function is_messanger_component_disabled() : bool 
-    {
-        if(get_config('block_needtodo', 'enable_chat_messages'))
-        {
-            return false;
-        }
-        else 
-        {
-            return true;
-        }
-    }
-
-    /**
-     * Cleans all messanger data from database.
-     */
-    private function clean_all_messanger_data() : void 
-    {
-        global $DB;
-        $where = array('component' => Enums::MESSANGER);
-        $DB->delete_records('block_needtodo', $where);
-    }
-
-    /**
-     * Returns true if messanger component disabled.
-     * 
-     * @return bool
-     */
-    private function is_assign_component_disabled() : bool 
-    {
-        if(get_config('block_needtodo', 'enable_assign'))
-        {
-            return false;
-        }
-        else 
-        {
-            return true;
-        }
-    }
-
-    /**
-     * Cleans all messanger data from database.
-     */
-    private function clean_all_assign_data() : void 
-    {
-        global $DB;
-        $where = array('component' => Enums::ASSIGN);
-        $DB->delete_records('block_needtodo', $where);
+        $cleaner = new DisabledComponentsCleaner();
+        $cleaner->clean_disabled_components_data();
     }
 
 }
