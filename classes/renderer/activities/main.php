@@ -218,7 +218,10 @@ abstract class Main
             $this->courses = $this->add_forums_data();
         }
 
-        $this->courses = $this->add_quizes_data();
+        if(get_config('block_needtodo', 'enable_quiz'))
+        {
+            $this->courses = $this->add_quizes_data();
+        }
 
         $this->filter_courses_if_necessary();
         $this->count_total_works();

@@ -72,3 +72,12 @@ $settings->add(
         '1'
     )
 );
+
+$settings->add(
+    new admin_setting_configcheckbox(
+        'block_needtodo/enable_quiz',
+        get_string('quiz', 'block_needtodo'),
+        get_string('quiz_desc', 'block_needtodo'),
+        '1'
+    )
+);

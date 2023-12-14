@@ -29,6 +29,11 @@ class DisabledComponentsCleaner
         {
             $this->clean_all_forum_data();
         }
+
+        if($this->is_quiz_component_disabled())
+        {
+            $this->clean_all_quiz_data();
+        }
     }
 
     /**
@@ -109,6 +114,33 @@ class DisabledComponentsCleaner
     {
         global $DB;
         $where = array('component' => Enums::FORUM);
+        $DB->delete_records('block_needtodo', $where);
+    }
+
+    /**
+     * Returns true if quiz component disabled.
+     * 
+     * @return bool
+     */
+    private function is_quiz_component_disabled() : bool 
+    {
+        if(get_config('block_needtodo', 'enable_quiz'))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * Cleans all messanger data from database.
+     */
+    private function clean_all_quiz_data() : void 
+    {
+        global $DB;
+        $where = array('component' => Enums::QUIZ);
         $DB->delete_records('block_needtodo', $where);
     }
 

@@ -24,7 +24,7 @@
  */
 
 $string['all_done'] = 'All done.';
-$string['assign_desc'] = 'Monitor the checking of work in assignment type activities.';
+$string['assign_desc'] = 'Monitor the checking of work in Assignment type activities.';
 $string['assign'] = 'Assignment';
 $string['block_instance_name'] = 'Block instance name';
 $string['block_instance_setup'] = 'Block instance setup';
@@ -59,6 +59,8 @@ $string['pluginname:addinstance'] = 'Add a new Need to do block';
 $string['pluginname:myaddinstance'] = 'Add a new Need to do block to the My Moodle page';
 $string['pluginname'] = 'Need to do block';
 $string['pluginname'] = 'Need to do';
+$string['quiz_desc'] = 'Monitor the checking of work in Quiz type activities.';
+$string['quiz'] = 'Quiz';
 $string['show_more'] = 'Show more...';
 $string['site_messenger_desc'] = 'This is a messenger that is available throughout the site. It is usually located on the right side of the site\'s header.';
 $string['site_messenger'] = 'Site messenger';

@@ -54,8 +54,11 @@ abstract class Main
             {
                 $this->write_forum();
             }
-            
-            $this->write_quiz();
+
+            if(get_config('block_needtodo', 'enable_quiz'))
+            {
+                $this->write_quiz();
+            }
 
             if(get_config('block_needtodo', 'enable_assign'))
             {
