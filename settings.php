@@ -63,3 +63,12 @@ $settings->add(
         '1'
     )
 );
+
+$settings->add(
+    new admin_setting_configcheckbox(
+        'block_needtodo/enable_forum',
+        get_string('forum', 'block_needtodo'),
+        get_string('forum_desc', 'block_needtodo'),
+        '1'
+    )
+);

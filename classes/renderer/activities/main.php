@@ -213,7 +213,11 @@ abstract class Main
             $this->courses = $this->add_assigns_data();
         }
 
-        $this->courses = $this->add_forums_data();
+        if(get_config('block_needtodo', 'enable_forum'))
+        {
+            $this->courses = $this->add_forums_data();
+        }
+
         $this->courses = $this->add_quizes_data();
 
         $this->filter_courses_if_necessary();

@@ -24,6 +24,11 @@ class DisabledComponentsCleaner
         {
             $this->clean_all_assign_data();
         }
+
+        if($this->is_forum_component_disabled())
+        {
+            $this->clean_all_forum_data();
+        }
     }
 
     /**
@@ -77,6 +82,33 @@ class DisabledComponentsCleaner
     {
         global $DB;
         $where = array('component' => Enums::ASSIGN);
+        $DB->delete_records('block_needtodo', $where);
+    }
+
+    /**
+     * Returns true if forum component disabled.
+     * 
+     * @return bool
+     */
+    private function is_forum_component_disabled() : bool 
+    {
+        if(get_config('block_needtodo', 'enable_forum'))
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * Cleans all messanger data from database.
+     */
+    private function clean_all_forum_data() : void 
+    {
+        global $DB;
+        $where = array('component' => Enums::FORUM);
         $DB->delete_records('block_needtodo', $where);
     }
 

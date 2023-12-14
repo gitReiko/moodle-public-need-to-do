@@ -40,6 +40,7 @@ $string['course'] = 'Курс: ';
 $string['days_to_check_tool'] = 'Вызначае тэрмін, празь які праца будзе лічыцца несвоечасова праверанай ці прачытанай.';
 $string['days_to_check'] = 'Дзён на праверку';
 $string['enabling_components'] = 'Уключэньне/адключэньне кампанентаў блока';
+$string['forum_desc'] = 'Адсочвае прачытанасьць паведамленьняў Форума.';
 $string['forum'] = 'Форум: ';
 $string['general_settings'] = 'Агульныя налады';
 $string['hide_more'] = 'Паказаць меней...';

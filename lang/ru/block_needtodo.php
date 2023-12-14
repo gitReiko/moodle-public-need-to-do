@@ -40,6 +40,7 @@ $string['course'] = 'Курс: ';
 $string['days_to_check_tool'] = 'Определяет через какой период считать что-то несвоевременно проверенным или прочитаным.';
 $string['days_to_check'] = 'Дней на проверку';
 $string['enabling_components'] = 'Включение/отключение компонентов блока';
+$string['forum_desc'] = 'Отслеживает прочитанность сообщений Форума.';
 $string['forum'] = 'Форум: ';
 $string['general_settings'] = 'Общие настройки';
 $string['hide_more'] = 'Показать меньше...';

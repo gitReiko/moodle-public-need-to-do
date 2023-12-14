@@ -40,6 +40,7 @@ $string['course'] = 'Course: ';
 $string['days_to_check_tool'] = 'Determines after what period to consider something untimely checked or read.';
 $string['days_to_check'] = 'Days to check';
 $string['enabling_components'] = 'Enabling/disabling block components';
+$string['forum_desc'] = 'Tracks the readability of Forum posts.';
 $string['forum'] = 'Forum: ';
 $string['general_settings'] = 'General settings';
 $string['hide_more'] = 'Hide more...';
