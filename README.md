@@ -1,54 +1,57 @@
-## Што гэта?
+[Па-беларуску](https://github.com/gitReiko/moodle-public-need-to-do/blob/main/README_BY.md)
 
-Блок Трэба зрабіць для Moodle 4.1
+## What is this?
 
-## Прызначэньне
+Block type plugin *Need to do* for Moodle 4.1
 
-Паданьне інфармацыі пра праверку прац і камунікаваньне у зручным фармаце дзеля:
+## Purpose
 
-- агляду працы, якую трэба зрабіць
-- спрашчэньня праверкі прац
-- кантролю за своечасовасьцю праверкі прац
+Providing information about work checks and communication in a convenient format for:
 
-## З чым умее працаваць блок
+- an overview of the work that needs to be done
+- simplifying the checks of works
+- control over the timeliness of work checks
 
-- тэстамі
-- заданьнямі
-- форумамі (толькі прачытваньне паведамленьняў)
-- чатам сайту
+## Block can work with
 
-## Іншыя магчымасьці
+- quizes
+- assignments
+- forums (only posts reading)
+- site chat
 
-- вызначэньне тэрміна своечасовай праверкі і тэрміна, празь які ня трэба правяраць працы
-- наладка адразу некалькіх блокаў, якія здольныя працаваць з рознымі катэгорымі курсаў ці рознымі кагортамі настаўнікаў.
-- магчымасьць адключэньня непатрэбных тыпаў праверкі
+## Other features
 
-## Усталёўка
+- determining the timeliness of the check 
+- determining the time after which the work should not be checked (ignoring work that has gone unchecked for a very long time)
+- setting up different instances of blocks that can work with different categories of courses and different cohorts of teachers
+- possibility of disabling unnecessary types of checks, e.g. forums or assignments
 
-1. стварыце кагорту (глабальную групу) з настаўнікамі, што будуць працаваць з гэтым блокам.
-2. спампуйце архіў з github (кнопка Код)
-3. перайдзіце на старонку ўсталёўкі плагінаў Moodle
-4. запампуйце архіў
-5. выконвайце інструкцыі ўсталёўніка
-6. увядзіце кагорту з настаўнікамі
-7. цяпер блок льга разьмясьціць у пажаданым месьце
+## Installation
 
-## Як працаваць?
+1. сreate a cohort with teachers who will work with the block
+2. download the archive from github (Сode button)
+3. go to the Moodle plugins installation page
+4. upload plugin archive
+5. follow the instructions of the installer
+6. choose a cohort with teachers
+7. now you can place the block in the desired location
 
-**Увага!!! Блок лічыць, што настаўнік мусіць праверыць працу студэнта ў наступных умовах:**
+## About the block's operation
 
-1. настаўнік мусіць быць запісаным у кагорту (глабальную групу), зь якой працуе блок
-2. настаўнік і студэнт мусяць быць запісаныя ў адную групу **курса**
-3. настаўнік мусіць мець дазвол на праверку прац (роля настаўнік мае ўсе патрэбныя дазволы)
-4. карыстальнікі ня мусяць быць заблакаванымі (suspended)
+**Attention!!! The block considers that the teacher checks the work when the following conditions are met:**
 
-Дзеля абнаўленьня дадзеных льга нацьснуць кнопку Абнавіць дадзеныя, ці пачакаць пакуль выканаецца заданьне **\block_needtodo\task\cache_data**. Звычайна яно выконваецца 1 раз на гадзіну. Частату абнаўленьня льга зьмяніць на іншую ў наладах раскладу заданьняў.
+1. the teacher must be enrolled in the cohort the block is working with
+2. teacher and student must be enrolled in the same **course group**
+3. the teacher must have the permission to check the work (teacher's role is giving all the necessary permissions)
+4. the teacher should not be blocked (suspended)
 
-## Аўтар
+To update the data, you need to click the *Update data* button or wait for the task to complete (**\block_needtodo\task\cache_data**). The task is usually performed once per hour. You can change the update frequency in the task schedule.
+
+## Author
 
 Denis Makouski (Reiko)
 
-## Ліцэнзія
+## License
 
 Apache-2.0 License
 
