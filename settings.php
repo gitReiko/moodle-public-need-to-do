@@ -8,13 +8,22 @@ $settings->add(
     )
 );
 
-$settings->add(
-    new admin_setting_configtext(
-        'block_needtodo/monitored_teachers_cohort', 
+$cohorts = $DB->get_records('cohort', array(), 'name', 'id,name');
+
+$options = array();
+foreach($cohorts as $cohort)
+{
+    $membersCount = $DB->count_records('cohort_members', array('cohortid'=>$cohort->id));
+    $cohort->name .= ' ('.$membersCount.')';
+    $options = array_merge($options, array($cohort->id => $cohort->name));
+}
+
+$settings->add(new admin_setting_configselect(
+        'block_accessreview/monitored_teachers_cohort',
         get_string('monitored_teachers_cohort', 'block_needtodo'), 
-        get_string('monitored_teachers_cohort_tool', 'block_needtodo'), 
-        1, 
-        PARAM_INT
+        get_string('monitored_teachers_cohort_tool', 'block_needtodo'),
+        key($options),
+        $options
     )
 );
 
