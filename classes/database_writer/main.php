@@ -4,11 +4,13 @@ namespace NTD\Classes\DatabaseWriter;
 
 require_once __DIR__.'/../components/messanger/database_writer/main.php';
 require_once __DIR__.'/../components/assign/database_writer/main.php';
+require_once __DIR__.'/../components/coursework/database_writer/main.php';
 require_once __DIR__.'/../components/forum/database_writer/main.php';
 require_once __DIR__.'/../components/quiz/database_writer/main.php';
 require_once __DIR__.'/../lib/getters/teachers.php';
 
-use NTD\Classes\Lib\Enums as Enums; 
+use \NTD\Classes\Lib\Common as cLib;
+use \NTD\Classes\Lib\Enums as Enums; 
 
 /**
  * Writes data to the database.
@@ -64,6 +66,14 @@ abstract class Main
             {
                 $this->write_assign();
             }
+
+            if(cLib::is_coursework_module_installed())
+            {
+                if(get_config('block_needtodo', 'enable_coursework'))
+                {
+                    $this->write_coursework();
+                }
+            }
         }
     }
 
@@ -94,5 +104,12 @@ abstract class Main
      * @return void
      */
     abstract protected function write_assign() : void ;
+
+    /**
+     * Writes data related to coursework into database.
+     * 
+     * @return void
+     */
+    abstract protected function write_coursework() : void ;
 
 }

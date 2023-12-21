@@ -2,8 +2,8 @@
 
 namespace NTD\Classes\Lib\Components\DatabaseWriter\Cleaner;
 
-use \NTD\Classes\Lib\Enums as Enums;
 use \NTD\Classes\Lib\Common as cLib;
+use \NTD\Classes\Lib\Enums as Enums;
 
 /**
  * This class is responsible for deleting data of disabled components from the database.

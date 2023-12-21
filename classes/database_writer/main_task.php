@@ -11,6 +11,7 @@ use \NTD\Classes\Components\Messanger\DatabaseWriter\Main as MessangerDatabaseWr
 use \NTD\Classes\Components\Assign\DatabaseWriter\Main as AssignDatabaseWriter;
 use \NTD\Classes\Components\Forum\DatabaseWriter\Main as ForumDatabaseWriter;
 use \NTD\Classes\Components\Quiz\DatabaseWriter\Main as QuizDatabaseWriter;
+use \NTD\Classes\Components\Coursework\DatabaseWriter\Main as CourseworkDatabaseWriter;
 use \NTD\Classes\Lib\Getters\Teachers as tGet;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -86,11 +87,25 @@ class MainTask extends Main
      */
     protected function write_assign() : void 
     {
-        $quizWriter = new AssignDatabaseWriter(
+        $assignWriter = new AssignDatabaseWriter(
             $this->teachers,
             Enums::UPDATE_DATA_ON_SITE_LEVEL
         );
-        $quizWriter->write();
+        $assignWriter->write();
+    }
+
+    /**
+     * Writes data related to coursework into database.
+     * 
+     * @return void
+     */
+    protected function write_coursework() : void 
+    {
+        $courseworkWriter = new CourseworkDatabaseWriter(
+            $this->teachers,
+            Enums::UPDATE_DATA_ON_SITE_LEVEL
+        );
+        $courseworkWriter->write();
     }
 
 }
