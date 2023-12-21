@@ -101,4 +101,17 @@ class Common
         return \html_writer::tag('p', $text, $attr);
     }
 
+
+    /**
+     * Returns true if coursework module installed.
+     * 
+     * @return bool 
+     */
+    public static function is_coursework_module_installed() : bool 
+    {
+        global $DB;
+        $where = array('name' => Enums::COURSEWORK);
+        return $DB->record_exists('modules', $where);
+    }
+
 }

@@ -14,6 +14,7 @@ class Enums
     // Components
     const COMPONENT = 'component';
     const ASSIGN = 'assign';
+    const COURSEWORK = 'coursework';
     const FORUM = 'forum';
     const MESSANGER = 'messanger';
     const QUIZ = 'quiz';
