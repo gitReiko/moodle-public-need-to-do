@@ -5,7 +5,7 @@ namespace NTD\Classes\Components\Coursework\DatabaseWriter;
 require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/activities.php';
-//require_once 'teachers.php';
+require_once 'courseworks.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course;
@@ -35,6 +35,8 @@ class Main extends DatabaseWriter
     /** Prepares data neccessary for database writer. */
     protected function prepare_neccessary_data() : void 
     {
+
+        $courseworks = new Coursework($this->outdatedTimestamp);
 
         /*
         $submissions = $this->get_unchecked_submissions();
