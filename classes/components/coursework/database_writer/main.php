@@ -35,8 +35,11 @@ class Main extends DatabaseWriter
     /** Prepares data neccessary for database writer. */
     protected function prepare_neccessary_data() : void 
     {
-
         $courseworks = new Coursework($this->outdatedTimestamp);
+        $undone = $courseworks->get_undone_teacher_work();
+
+
+        print_r($undone);
 
         /*
         $submissions = $this->get_unchecked_submissions();
