@@ -16,10 +16,15 @@ class Coursework
     {
         $this->outdatedTimestamp = $outdatedTimestamp;
 
-        $unchecked = $this->get_unchecked_courseworks_statuses();
+        $courseworks = $this->get_sent_for_check_courseworks();
+        $courseworks = $this->filter_out_ready_courseworks($courseworks);
+
+        
 
 
-        print_r($unchecked);
+        print_r($courseworks);
+
+        //echo '<hr>'.$this->outdatedTimestamp;
 
 
 
@@ -36,11 +41,11 @@ class Coursework
     }
 
     /**
-     * Returns unchecked courseworks.
+     * Returns sent for check courseworks.
      * 
-     * @return array unchecked courseworks
+     * @return array sent for check courseworks
      */
-    private function get_unchecked_courseworks_statuses() : ?array 
+    private function get_sent_for_check_courseworks() : ?array 
     {
         global $DB;
 
@@ -61,8 +66,56 @@ class Coursework
         return $DB->get_records_sql($sql, $params);
     }
 
+    /**
+     * Returns only unchecked courseworks.
+     * 
+     * @param array sent for check courseworks
+     * 
+     * @return array not checked courseworks
+     */
+    private function filter_out_ready_courseworks(?array $courseworks) : ?array 
+    {
+        $unchecked = array();
+
+        foreach($courseworks as $coursework)
+        {
+            if($this->is_coursework_not_checked($coursework))
+            {
+                $unchecked[] = $coursework;
+            }
+        }
+
+        return $unchecked;
+    }
 
 
+    /**
+     * Returns true if coursework not checked.
+     * 
+     * @param stdClass coursework
+     * 
+     * @return bool 
+     */
+    private function is_coursework_not_checked(\stdClass $coursework) : bool 
+    {
+        global $DB;
+
+        $sql = 'SELECT id 
+                FROM {coursework_students_statuses}
+                WHERE coursework = ?
+                AND student = ? 
+                AND status = ? 
+                AND changetime > ?';
+
+        $params = array(
+            $coursework->coursework, 
+            $coursework->student, 
+            'ready',
+            $coursework->senttime
+        );
+
+        return !$DB->record_exists_sql($sql, $params);
+    }
 
 
 
