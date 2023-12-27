@@ -53,7 +53,7 @@ class Main extends DatabaseWriter
         }
         */
 
-        $this->data = $this->courses;
+        //$this->data = $this->courses;
     }
 
     /**

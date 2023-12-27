@@ -146,6 +146,8 @@ class Coursework
                 $this->moduleId,
                 $coursework->entityid
             );
+
+            $coursework->teacherid = $data->teacher;
         }
 
         return $courseworks;
@@ -218,7 +220,8 @@ class Coursework
     {
         global $DB;
 
-        $sql = 'SELECT id, coursework, userto, sendtime, userfrom as student 
+        $sql = 'SELECT id, coursework, userto, 
+                sendtime as senttime, userfrom as student 
                 FROM {coursework_chat} 
                 WHERE readed = ?
                 AND sendtime > ?';
