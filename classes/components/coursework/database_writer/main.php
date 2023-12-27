@@ -6,6 +6,7 @@ require_once __DIR__.'/../../../lib/components/database_writer/main.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/course.php';
 require_once __DIR__.'/../../../lib/components/database_writer/template/activities.php';
 require_once 'courseworks.php';
+require_once 'teachers.php';
 
 use \NTD\Classes\Lib\Components\DatabaseWriter\Main as DatabaseWriter;
 use \NTD\Classes\Lib\Components\DatabaseWriter\Template\Course;
@@ -38,20 +39,18 @@ class Main extends DatabaseWriter
         $courseworks = new Coursework($this->outdatedTimestamp);
         $undone = $courseworks->get_undone_teacher_work();
 
-
-        print_r($undone);
-
-        /*
-        $submissions = $this->get_unchecked_submissions();
-        $submissions = $this->determine_timely_check($submissions);
-
-        foreach($submissions as $submission)
+        foreach($undone as $coursework)
         {
-            $this->process_course_level($submission);
-            $this->process_teachers_level($submission);
+            $this->process_course_level($coursework);
+            $this->process_teachers_level($coursework);
             // process actvities level is in teacher level
         }
-        */
+
+
+        print_r($this->courses);
+
+
+
 
         //$this->data = $this->courses;
     }
@@ -92,21 +91,25 @@ class Main extends DatabaseWriter
      * 
      * @param stdClass submission 
      */
-    private function process_course_level(\stdClass $submission) : void 
+    private function process_course_level(\stdClass $coursework) : void 
     {
-        $course = new Course($this->courses, $submission);
+        $course = new Course($this->courses, $coursework);
         $this->courses = $course->process_level();
     }
 
     /**
      * Process assign submission on teachers level.
      * 
+     * !!! A unique non-standard Teachers class.
+     * 
      * @param stdClass assign submission 
      */
-    private function process_teachers_level(\stdClass $submission) : void 
+    private function process_teachers_level(\stdClass $coursework) : void 
     {
-        $teachers = new Teachers($this->courses, $this->teachers, $submission);
-        $this->courses = $teachers->process_level(); 
+        $teachers = new Teachers($this->courses, $coursework);
+        //$this->courses = $teachers->process_level(); 
+
+        $teachers->process_level(); 
     }
 
 }
