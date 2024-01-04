@@ -113,7 +113,7 @@ class Teachers
                 $teacher->timelyRead += (int)$this->coursework->timelyRead;
                 $teacher->untimelyRead += (int)$this->coursework->untimelyRead;
 
-                // add activity level
+                $this->update_activity_in_course_teachers($teacher);
             }
         }
     }
@@ -138,11 +138,87 @@ class Teachers
         $teacher->untimelyCheck = (int)$this->coursework->untimelyCheck;
         $teacher->timelyRead = (int)$this->coursework->timelyRead;
         $teacher->untimelyRead = (int)$this->coursework->untimelyRead;
-        $teacher->activities = array();
 
-        // add activity level
+        $teacher->activities = array();
+        $teacher->activities[] = $this->get_new_activity();
 
         $course->teachers[] = $teacher;
+    }
+
+    /**
+     * Returns prepared activity for teacher.
+     * 
+     * @return stdClass prepared activity
+     */
+    private function get_new_activity() : \stdClass 
+    {
+        $activity = new \stdClass;
+
+        $activity->id = (int)$this->coursework->entityid;
+        $activity->cmid = (int)$this->coursework->coursemoduleid;
+        $activity->name = (string)$this->coursework->entityname;
+        $activity->timelyCheck = (int)$this->coursework->timelyCheck;
+        $activity->untimelyCheck = (int)$this->coursework->untimelyCheck;
+        $activity->timelyRead = (int)$this->coursework->timelyRead;
+        $activity->untimelyRead = (int)$this->coursework->untimelyRead;
+
+        return $activity;
+    }
+
+    /**
+     * Updates teachers activities.
+     * 
+     * @param stdClass teacher
+     */
+    private function update_activity_in_course_teachers(\stdClass &$teacher) : void 
+    {
+        if($this->is_teacher_doesnt_have_activity($teacher))
+        {
+            $teacher->activities[] = $this->get_new_activity();
+        }
+        else 
+        {
+            foreach($teacher->activities as $activity)
+            {
+                if($activity->id == (int)$this->coursework->entityid)
+                {
+                    $this->update_teacher_activity($activity);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns true if teacher doesn't have activity. 
+     * 
+     * @param stdClass teacher 
+     * 
+     * @return bool 
+     */
+    private function is_teacher_doesnt_have_activity(\stdClass $teacher) : bool 
+    {
+        foreach($teacher->activities as $activity)
+        {
+            if($activity->id == (int)$this->coursework->entityid)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Updates teacher activity.
+     * 
+     * @param stdClass $activity
+     */
+    private function update_teacher_activity(\stdClass &$activity) : void 
+    {
+        $activity->timelyCheck += (int)$this->coursework->timelyCheck;
+        $activity->untimelyCheck += (int)$this->coursework->untimelyCheck;
+        $activity->timelyRead += (int)$this->coursework->timelyRead;
+        $activity->untimelyRead += (int)$this->coursework->untimelyRead;
     }
 
 

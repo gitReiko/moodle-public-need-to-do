@@ -46,13 +46,7 @@ class Main extends DatabaseWriter
             // process actvities level is in teacher level
         }
 
-
-        print_r($this->courses);
-
-
-
-
-        //$this->data = $this->courses;
+        $this->data = $this->courses;
     }
 
     /**
