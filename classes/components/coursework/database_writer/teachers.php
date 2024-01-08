@@ -132,6 +132,7 @@ class Teachers
         $teacher = new \stdClass;
         $teacher->id = $user->id;
         $teacher->name = fullname($user, true);
+        $teacher->email = $user->email;
         $teacher->phone1 = $user->phone1;
         $teacher->phone2 = $user->phone2;
         $teacher->timelyCheck = (int)$this->coursework->timelyCheck;

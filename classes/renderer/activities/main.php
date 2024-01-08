@@ -4,6 +4,7 @@ namespace NTD\Classes\Renderer\Activities;
 
 require_once __DIR__.'/../../lib/components/renderer_getter.php';
 require_once __DIR__.'/../../components/assign/renderer/getter.php';
+require_once __DIR__.'/../../components/coursework/renderer/getter.php';
 require_once __DIR__.'/../../components/forum/renderer/getter.php';
 require_once __DIR__.'/../../components/quiz/renderer/getter.php';
 require_once 'locallib.php';
@@ -197,6 +198,13 @@ abstract class Main
     abstract protected function add_quizes_data() : ?array ;
 
     /**
+     * Returns courses with added courseworks.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    abstract protected function add_coursework_data() : ?array ;
+
+    /**
      * Filters courses if necessary. 
      */
     abstract protected function filter_courses_if_necessary() : void ;
@@ -221,6 +229,11 @@ abstract class Main
         if(get_config('block_needtodo', 'enable_quiz'))
         {
             $this->courses = $this->add_quizes_data();
+        }
+
+        if(get_config('block_needtodo', 'enable_coursework'))
+        {
+            $this->courses = $this->add_coursework_data();
         }
 
         $this->filter_courses_if_necessary();

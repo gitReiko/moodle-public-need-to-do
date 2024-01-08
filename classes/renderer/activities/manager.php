@@ -8,6 +8,7 @@ require_once 'locallib.php';
 use \NTD\Classes\Components\Assign\Renderer\Getter as AssignGetter;
 use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
 use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
+use \NTD\Classes\Components\Coursework\Renderer\Getter as CourseworkGetter;
 use \NTD\Classes\Lib\Enums as Enums; 
 use \NTD\Classes\Lib\Common as cLib;
 
@@ -69,6 +70,18 @@ class Manager extends Main
         $myWork = false;
         $quiz = new QuizGetter($this->params, $this->teachers, $this->courses, $myWork);
         return $quiz->get_courses_with_component_data();
+    }
+
+    /**
+     * Returns courses with added courseworks.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    protected function add_coursework_data() : ?array 
+    {
+        $myWork = false;
+        $cw = new CourseworkGetter($this->params, $this->teachers, $this->courses, $myWork);
+        return $cw->get_courses_with_component_data();
     }
 
     /**

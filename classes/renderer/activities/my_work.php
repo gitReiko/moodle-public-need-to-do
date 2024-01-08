@@ -7,6 +7,7 @@ require_once 'main.php';
 use \NTD\Classes\Components\Assign\Renderer\Getter as AssignGetter;
 use \NTD\Classes\Components\Forum\Renderer\Getter as ForumGetter;
 use \NTD\Classes\Components\Quiz\Renderer\Getter as QuizGetter;
+use \NTD\Classes\Components\Coursework\Renderer\Getter as CourseworkGetter;
 use \NTD\Classes\Lib\Common as cLib;
 use \NTD\Classes\Lib\Enums as Enums; 
 
@@ -68,6 +69,18 @@ class MyWork extends Main
         $myWork = true;
         $quiz = new QuizGetter($this->params, $this->teachers, $this->courses, $myWork);
         return $quiz->get_courses_with_component_data();
+    }
+
+    /**
+     * Returns courseworks with added quizes.
+     * 
+     * @return array courses which are needed to render the block
+     */
+    protected function add_coursework_data() : ?array 
+    {
+        $myWork = true;
+        $coursework = new CourseworkGetter($this->params, $this->teachers, $this->courses, $myWork);
+        return $coursework->get_courses_with_component_data();
     }
     
     /**
