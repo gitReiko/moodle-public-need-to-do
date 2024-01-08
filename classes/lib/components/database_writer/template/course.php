@@ -69,8 +69,8 @@ class Course
         $course->coursename = $this->rawEntity->coursename;
         $course->untimelyCheck = $this->rawEntity->untimelyCheck;
         $course->timelyCheck = $this->rawEntity->timelyCheck;
-        $course->untimelyRead = 0;
-        $course->timelyRead = 0;
+        $course->untimelyRead = (int)$this->rawEntity->untimelyRead;
+        $course->timelyRead = (int)$this->rawEntity->timelyRead;
         $course->teachers = array();
 
         $this->courses[] = $course;
@@ -87,6 +87,8 @@ class Course
             {
                 $course->untimelyCheck += $this->rawEntity->untimelyCheck;
                 $course->timelyCheck += $this->rawEntity->timelyCheck;
+                $course->untimelyRead += (int)$this->rawEntity->untimelyRead;
+                $course->timelyRead += (int)$this->rawEntity->timelyRead;
             }
         }
     }
