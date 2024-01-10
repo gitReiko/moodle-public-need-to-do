@@ -67,10 +67,43 @@ class Course
         $course = new \stdClass;
         $course->courseid = $this->rawEntity->courseid;
         $course->coursename = $this->rawEntity->coursename;
-        $course->untimelyCheck = $this->rawEntity->untimelyCheck;
-        $course->timelyCheck = $this->rawEntity->timelyCheck;
-        $course->untimelyRead = (int)$this->rawEntity->untimelyRead;
-        $course->timelyRead = (int)$this->rawEntity->timelyRead;
+
+        if(isset($this->rawEntity->untimelyCheck))
+        {
+            $course->untimelyCheck = $this->rawEntity->untimelyCheck;
+        }
+        else 
+        {
+            $course->untimelyCheck = 0;
+        }
+
+        if(isset($this->rawEntity->timelyCheck))
+        {
+            $course->timelyCheck = $this->rawEntity->timelyCheck;
+        }
+        else 
+        {
+            $course->timelyCheck = 0;
+        }
+
+        if(isset($this->rawEntity->untimelyRead))
+        {
+            $course->untimelyRead = (int)$this->rawEntity->untimelyRead;
+        }
+        else 
+        {
+            $course->untimelyRead = 0;
+        }
+
+        if(isset($this->rawEntity->timelyRead))
+        {
+            $course->timelyRead = (int)$this->rawEntity->timelyRead;
+        }
+        else 
+        {
+            $course->timelyRead = 0;
+        }
+
         $course->teachers = array();
 
         $this->courses[] = $course;
@@ -85,10 +118,25 @@ class Course
         {
             if($course->courseid == $this->rawEntity->courseid)
             {
-                $course->untimelyCheck += $this->rawEntity->untimelyCheck;
-                $course->timelyCheck += $this->rawEntity->timelyCheck;
-                $course->untimelyRead += (int)$this->rawEntity->untimelyRead;
-                $course->timelyRead += (int)$this->rawEntity->timelyRead;
+                if(isset($this->rawEntity->untimelyCheck))
+                {
+                    $course->untimelyCheck += $this->rawEntity->untimelyCheck;
+                }
+
+                if(isset($this->rawEntity->timelyCheck))
+                {
+                    $course->timelyCheck += $this->rawEntity->timelyCheck;
+                }
+
+                if(isset($this->rawEntity->untimelyRead))
+                {
+                    $course->untimelyRead += (int)$this->rawEntity->untimelyRead;
+                }
+
+                if(isset($this->rawEntity->timelyRead))
+                {
+                    $course->timelyRead += (int)$this->rawEntity->timelyRead;
+                }
             }
         }
     }
