@@ -106,21 +106,34 @@ class Coursework
     {
         global $DB;
 
-        $sql = 'SELECT id 
+        $sql = 'SELECT * 
                 FROM {coursework_students_statuses}
-                WHERE coursework = ?
+                WHERE coursework = ? 
                 AND student = ? 
-                AND status = ? 
-                AND changetime > ?';
-
+                AND changetime > ? 
+                ORDER BY changetime';
         $params = array(
             $coursework->coursework, 
             $coursework->student, 
-            'ready',
             $coursework->senttime
         );
 
-        return !$DB->record_exists_sql($sql, $params);
+        $statuses = $DB->get_records_sql($sql, $params);
+
+        $notChecked = true;
+        foreach($statuses as $state)
+        {
+            if($state->status == 'ready')
+            {
+                $notChecked = false;
+            }
+            else if($state->status == 'returned_for_rework')
+            {
+                $notChecked = false;
+            }
+        }
+
+        return $notChecked;
     }
 
     /**
