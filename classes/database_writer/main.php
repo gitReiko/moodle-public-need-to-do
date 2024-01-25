@@ -8,6 +8,7 @@ require_once __DIR__.'/../components/coursework/database_writer/main.php';
 require_once __DIR__.'/../components/forum/database_writer/main.php';
 require_once __DIR__.'/../components/quiz/database_writer/main.php';
 require_once __DIR__.'/../lib/getters/teachers.php';
+require_once __DIR__.'/../lib/common.php';
 
 use \NTD\Classes\Lib\Common as cLib;
 use \NTD\Classes\Lib\Enums as Enums; 
